@@ -1,0 +1,127 @@
+##Parameters for the Particle Swarm Optimization
+
+##RunOn = EKPSL5 | EKPSL5 | NAFSL5 | NAFSL6
+RunOn=EKPSL6
+
+## Swarm Parameters
+NParticles=10
+NIterations=10
+wIneratia=0.729
+wMemory=1.49445
+wSwarm=1.49445
+
+##FOM = ROCIntegral | Separation | rejB_vs_effS_0.1 | rejB_vs_effS_0.3 |rejB_vs_effS_0.5
+FOM=ROCIntegral
+KSThreshold=0.1
+MaxVariablesInCombination=14
+##only add variable if new FOM > ImprovementThreshold*FOM
+ImprovementThreshold=1.05
+
+##Following not implemented Yet->experimentally
+##repeat each training n times with different random seeds, Resulting
+##NOTYET FOM=HarmonicMean(FOM)????
+##NOTYET RepeatTrainingNTimes=0
+DrawNRandomAsStartingVars=0
+##NOTYET SaveTrainingsToTrees=False
+
+##TMVA Options
+FactoryString=!V:Silent:Color:!DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification
+PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
+##if you want to limit the number of events do it eiter PreparationString or here
+nTrain_Signal=
+nTrain_Background=
+nTest_Signal=
+nTest_Background=
+##Weight expression, might need to be declared in WeightVariables furhter down
+## probably same syntax as in TTree::Draw 
+SignalWeightExpression=Weight_XS
+BackgroundWeightExpression=Weight_XS
+
+
+##Method to train and test
+##only tested with BDT so far
+## you might want to think abount you handle NEGATIVE WEIGHTS
+##Parameters in MethodParams will be overwritten if they span the search space
+MethodType=TMVA::Types::kBDT
+MethodParams=!H:!V:NTrees=100:BoostType=Grad:Shrinkage=0.01:UseBaggedGrad:GradBaggingFraction=0.5:nCuts=10:MaxDepth=2
+
+
+## search space
+##coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
+##if min and max value are the same the value is not varied
+coord=["NTrees",200,2000,50,"int"]
+coord=["Shrinkage",0.001,0.05,0.002,"float"]
+coord=["GradBaggingFraction",0.1,0.9,0.05,"float"]
+coord=["nCuts",10,80,4,"int"]
+##coord=["MaxDepth",2,3,1,"int"]
+
+
+##--------------------------------------------------
+##Source Trees:
+SelectionString=""
+
+SourceSignalFile=/storage/a/karimel/AllCats8TeV/SBT_ttGE0774_htGE09_htSBHGE092_greed111_clean3SBT_clean2SBH/ForTraining/Even/tthbb.root
+SourceSignalTree=MVATree
+
+SourceBackgroundFile=/storage/a/karimel/AllCats8TeV/SBT_ttGE0774_htGE09_htSBHGE092_greed111_clean3SBT_clean2SBH/ForTraining/Even/Training_ttbar.root
+SourceBackgroundTree=MVATree
+
+
+##------------------------------------------------
+##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]
+##variables the optimization starts with
+InitialVariables:
+["CSV2","F","","CSV2"]
+["CSV3","F","","CSV3"]
+["Detamax_Lepton_Jet2","F","","Detamax_Lepton_Jet2"]
+["MaxDeta_Jet_AveEtaJet","F","","MaxDeta_Jet_AveEtaJet"]
+["JetPtOverJetE","F","","JetPtOverJetE"]
+["PtTaggedOverJetE","F","","PtTaggedOverJetE"]
+["Sphericity","F","","Sphericity"]
+["HT","F","","HT"]
+["H0","F","","H0"]
+EndVariables
+
+##---------------------------------------------------
+## variables the swarm can try
+AdditionalVariables:
+#["Deta_MaxDetaTaggedJetTaggedJetsAverage","F","","Deta_MaxDetaTaggedJetTaggedJetsAverage"]
+["M_2TaggedJetsAverage","F","","M_2TaggedJetsAverage"]
+["Deta_MaxDetaTaggedJet_AverageDetaJets","F","","Deta_MaxDetaTaggedJet_AverageDetaJets"]
+#["M_TaggedJetsAverage","F","","M_TaggedJetsAverage"]
+["M_W_TopHadCandidate_SBT","F","","M_W_TopHadCandidate_SBT"]
+["M_BW1_TopHadCandidate_SBT","F","","M_BW1_TopHadCandidate_SBT"]
+["M_BW2_TopHadCandidate_SBT","F","","M_BW2_TopHadCandidate_SBT"]
+#["M_MedianTaggedJets","F","","M_MedianTaggedJets"]
+["MaxAbsEta_TaggedJet","F","","MaxAbsEta_TaggedJet"]
+["MaxAbsEta_Jet","F","","MaxAbsEta_Jet"]
+["Dr_TaggedJetsAverage","F","","Dr_TaggedJetsAverage"]
+#["Dr_JetsAverage","F","","Dr_JetsAverage"]
+["H3","F","","H3"]
+["H1","F","","H1"]
+#["H2","F","","H2"]
+#["M2_HiggsCandidate_TopLikelihood","F","","M2_HiggsCandidate_TopLikelihood"]
+#["Deta_MaxDetaTaggedJetJetsAverage","F","","Deta_MaxDetaTaggedJetJetsAverage"]
+#["Pt_B_TopHadCandidate_SBT","F","","Pt_B_TopHadCandidate_SBT"]
+#["Aplanarity","F","","Aplanarity"]
+#["Pt_W1_TopHadCandidate_SBT","F","","Pt_W1_TopHadCandidate_SBT"]
+["M_MinDeltaRTaggedJets","F","","M_MinDeltaRTaggedJets"]
+#["Dr_MinDeltaRTaggedJets","F","","Dr_MinDeltaRTaggedJets"]
+#["M23_TopJet","F","","M23_TopJet"]
+["CSV_B_TopHadCandidate_SBT1","F","","max(CSV_B_TopHadCandidate_SBT, -1.1)"]
+#["CSV_Min","F","","CSV_Min"]
+#["M3","F","","M3"]
+#["M_MinDeltaRLeptonTaggedJet","F","","M_MinDeltaRLeptonTaggedJet"]
+#["M_TaggedJetsClosestTo125","F","","M_TaggedJetsClosestTo125"]
+["M2_HiggsCandidate_SBT","F","","M2_HiggsCandidate_SBT"]
+#["M_Top_TopHadCandidate_SBT","F","","M_Top_TopHadCandidate_SBT"]
+EndVariables
+
+##---------------------------------------------------
+## variables used for reweighting and stuff
+WeightVariables:
+["Weight_XS","F","","Weight_XS"]
+["Weight","F","","Weight"]
+EndVariables
+##---------------------------------------------------
+
