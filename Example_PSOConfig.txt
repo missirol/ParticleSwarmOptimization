@@ -73,6 +73,7 @@ SourceBackgroundTree=MVATree
 
 ##------------------------------------------------
 ##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]
+##IMPORTANT dont leave a blank line between the last variable and the end variables line
 ##variables the optimization starts with
 InitialVariables:
 ["BDTOhio_v2_input_h2","F","","BDTOhio_v2_input_h2"]
