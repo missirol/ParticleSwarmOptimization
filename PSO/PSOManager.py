@@ -41,6 +41,7 @@ class PSOManager:
       self.RepeatTrainingNTimes=0
       self.DrawNRandomAsStartingVars=0
       self.SaveTrainingsToTrees="False"
+      self.UseEvenOddSplitting=0
       
       initialVariables=[]
       additionalVariables=[]
@@ -110,7 +111,7 @@ class PSOManager:
           self.vp=float(line.split("=",1)[1])
         if "wSwarm" in line:
           self.vg=float(line.split("=",1)[1])
-        if "FOM" in line:
+        if "FOM=" in line:
           self.FOM=line.split("=",1)[1]
         if "KSThreshold" in line:
           self.KSThreshold=float(line.split("=",1)[1])
@@ -146,6 +147,8 @@ class PSOManager:
           self.MethodType=line.split("=",1)[1]
         if "MethodParams" in line:
           self.MethodParams=line.split("=",1)[1]
+        if "UseEvenOddSplitting" in line:
+          self.UseEvenOddSplitting=line.split("=",1)[1]
         if "SourceBackgroundTree" in line:
           self.BackgroundTreeName=line.split("=",1)[1]
         if "SourceSignalTree" in line:
@@ -219,7 +222,8 @@ class PSOManager:
                          self.ImprovementThreshold,
                          self.RepeatTrainingNTimes,
                          self.DrawNRandomAsStartingVars,
-                         self.SaveTrainingsToTrees)
+                         self.SaveTrainingsToTrees,
+                         self.UseEvenOddSplitting)
         #particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)
         

@@ -8,6 +8,7 @@ string SignalTree;
 string BackgroundFile;
 string BackgroundTree;
 string Selection="";
+bool UseEvenOddSplitting=false;
 
 // read config file
 std::ifstream config(configName.c_str());
@@ -44,6 +45,10 @@ while(readline){
   if(linebuffer.find(searchedString)!=std::string::npos){
     Selection=linebuffer.substr(searchedString.length());
   }
+  searchedString="UseEvenOddSplitting=1";
+  if(linebuffer.find(searchedString)!=std::string::npos){
+    UseEvenOddSplitting=true;
+  }
     
   //look for InitialVariables
   searchedString="InitialVariables";
@@ -71,7 +76,7 @@ while(readline){
       id1=linebuffer.find("\"",id2+1);
       id2=linebuffer.find("\"",id1+1);
       expression=linebuffer.substr(id1+1,id2-id1-1);
-//       std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
+      std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
 //       if(size=="")std::cout<<"zero"<<std::endl;
       AddVar(name,type,size,expression );
     }
@@ -141,9 +146,19 @@ while(readline){
 }
 config.close();
 
-
+if(UseEvenOddSplitting){
+  string selEven = "("+Selection+")*(Evt_Odd==0)";
+  std::cout<<selEven<<std::endl;
+  string selOdd = "("+Selection+")*(Evt_Odd==1)";
+  AddSample("Signal_Train",SignalFile,SignalTree,selOdd);
+  AddSample("Background_Train",BackgroundFile,BackgroundTree,selOdd);
+  AddSample("Signal_Test",SignalFile,SignalTree,selEven);
+  AddSample("Background_Test",BackgroundFile,BackgroundTree,selEven);
+}
+else{
 AddSample("Signal",SignalFile,SignalTree,Selection);
 AddSample("Background",BackgroundFile,BackgroundTree,Selection);
+}
 
 AddBin("all","all","");
 bool flatTrees = false;

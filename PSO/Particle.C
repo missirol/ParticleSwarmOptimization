@@ -22,6 +22,13 @@
 #include "TMVA/ResultsClassification.h"
 #include "TMVA/Factory.h"
 #include "TMVA/Tools.h"
+#include "TVirtualFitter.h"
+
+TH1D* SignalForChi2;
+TH1D* BackgroundForChi2;
+bool Chi2ScaleBackground=true;
+bool Chi2ScaleSignal=true;
+bool Chi2DoSplusB=false;
 
 class BDTVar :public TObject {
   public:
@@ -43,7 +50,118 @@ BDTVar::BDTVar(){
  BDTVar::~BDTVar(){
  }
 
- void DoTraining(std::vector<BDTVar*> UsedVars,std::vector<BDTVar*> UnUsedVars,TString FOMType, TString FactoryString, TString PrepString, TString SigWeight, TString BkgWeight, TString SignalTreeName, TString BackgroundTreeName, TString MethodType, TString MethodString, int particleNumber, Double_t* testFOM, Double_t* testKS, TString PlotName="NONE" ){
+
+double SimpleChi2(TH1D* histoData, TH1D* histoModel){
+  double chi2=0.0;
+  int nBins=histoData->GetNbinsX();
+  for(int i=1;i<=nBins;i++){
+    double d=histoData->GetBinContent(i);
+    double m=histoModel->GetBinContent(i);
+    double tmp = (d-m)*(d-m)/m;
+    chi2+=tmp;
+  }
+  return chi2;
+}
+
+void myFCN(Int_t & nPar, Double_t * grad, Double_t &fval, Double_t *p, Int_t flag){
+  Double_t scaleB=1.0;
+  Double_t scaleS=1.0;
+  
+  if(Chi2ScaleBackground==true){scaleB=p[0];}
+  if(Chi2ScaleSignal==true){scaleS=p[0];}
+  
+  TH1D* histoData=(TH1D*)BackgroundForChi2->Clone("histoData");
+  if(Chi2DoSplusB==true){
+    histoData->Add(SignalForChi2,1.0);
+  }
+  
+  TH1D* histoModel=(TH1D*)BackgroundForChi2->Clone("histoData");
+  histoModel->Scale(scaleB);
+  histoModel->Add(SignalForChi2,scaleS);
+  
+  Double_t chi2=0.0;
+  chi2=SimpleChi2(histoData,histoModel);
+  fval=chi2;
+}
+
+Double_t GetChi2Value(Double_t bestMu){
+  Double_t scaleB=1.0;
+  Double_t scaleS=1.0;
+  
+  if(Chi2ScaleBackground==true){scaleB=bestMu;}
+  if(Chi2ScaleSignal==true){scaleS=bestMu;}
+  
+  TH1D* histoData=(TH1D*)BackgroundForChi2->Clone("histoData");
+  if(Chi2DoSplusB==true){
+    histoData->Add(SignalForChi2,1.0);
+  }
+  
+  TH1D* histoModel=(TH1D*)BackgroundForChi2->Clone("histoData");
+  histoModel->Scale(scaleB);
+  histoModel->Add(SignalForChi2,scaleS);
+  
+  Double_t chi2=0.0;
+  chi2=SimpleChi2(histoData,histoModel);
+  return chi2;
+}
+
+Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackground,Double_t BackgroundWeight,TString mode="Chi2_B_muSB"){
+  
+  //prepare histograms
+  Int_t nBinsForLimit=10;
+  SignalForChi2=(TH1D*)histoSignal->Clone("SignalForChi2");
+  BackgroundForChi2=(TH1D*)histoBackground->Clone("BackgroundForChi2");
+  SignalForChi2->Rebin(int(10000/nBinsForLimit));
+  BackgroundForChi2->Rebin(int(10000/nBinsForLimit));
+  
+  SignalForChi2->Scale(1.0/SignalForChi2->Integral());
+  SignalForChi2->Scale(2.0*SignalWeight);
+  BackgroundForChi2->Scale(1.0/BackgroundForChi2->Integral());
+  BackgroundForChi2->Scale(2.0*BackgroundWeight);
+  
+  std::cout<<"Signal Integral "<<SignalForChi2->Integral()<<std::endl;
+  std::cout<<"Background Integral "<<BackgroundForChi2->Integral()<<std::endl;
+
+  SignalForChi2->SaveAs("HistoSignalForChi2.root");
+  BackgroundForChi2->SaveAs("HistoBackgroundForChi2.root");
+
+  if(mode=="Chi2_B_muSB"){
+    Chi2DoSplusB=false;
+    Chi2ScaleSignal=true;
+    Chi2ScaleBackground=true;
+  }
+  else{std::cout<<"!!!!!!!!!!!!!!dont know chi2 mode!!!!!!!!!!!!!!!!!"<<std::endl;}
+  
+  //minimize
+  TVirtualFitter::SetDefaultFitter("Minuit");
+  TVirtualFitter * minuit = TVirtualFitter::Fitter(0,1);
+  double arglist[10];
+  double arglistVerbose[10];
+  arglist[0]=5000;
+  arglist[1]=0.01;
+  arglistVerbose[0]=-1.0;
+  minuit->ExecuteCommand("SET PRINT",arglistVerbose,2);
+  minuit->SetParameter(0,"mu",6.0,0.5,0.0001,20.0);
+  minuit->SetFCN(myFCN);
+  minuit->ExecuteCommand("MIGRAD",arglist,2);
+  Double_t bestMu = minuit->GetParameter(0);
+  
+  //get chi2 at minimal mu value
+  
+  if(mode=="Chi2_B_muSB"){
+    Chi2DoSplusB=false;
+    Chi2ScaleSignal=true;
+    Chi2ScaleBackground=true;
+  }
+  
+  Double_t fom = 0.0;
+  if(mode=="Chi2_B_muSB"){
+    fom = GetChi2Value(bestMu);
+  }
+  return fom;
+}
+
+ void DoTraining(std::vector<BDTVar*> UsedVars,std::vector<BDTVar*> UnUsedVars,TString FOMType, TString FactoryString, TString PrepString, TString SigWeight, TString BkgWeight, TString SignalTreeName, TString BackgroundTreeName, TString MethodType, TString MethodString, int particleNumber, Double_t* testFOM, Double_t* testKS,Int_t UseEvenOddSplitting, TString PlotName="NONE" ){
    std::cout<<"----------------------------------------------------------------"<<std::endl;
    
    //prepare TMVA
@@ -64,15 +182,50 @@ BDTVar::BDTVar(){
      factory->AddVariable(UsedVars.at(k)->name);
    }
 
-   TFile *inputS = TFile::Open( "Signal.root" );
-   TFile *inputB = TFile::Open( "Background.root" );
+   TFile *inputSTrain;
+   TFile *inputBTrain;
+   TTree *signalTrain;
+   TTree *backgroundTrain;
+   TFile *inputSTest;
+   TFile *inputBTest;
+   TTree *signalTest;
+   TTree *backgroundTest;
+   TFile *inputS;
+   TFile *inputB;
+   TTree *signal;
+   TTree *background;
+
+   Double_t wSfChi2=0.0;
+   Double_t wBfChi2=0.0;
+
+   if(UseEvenOddSplitting==1){
+   inputSTrain = TFile::Open( "Signal_Train.root" );
+   inputBTrain = TFile::Open( "Background_Train.root" );
+   signalTrain     = (TTree*)inputSTrain->Get(SignalTreeName);
+   backgroundTrain = (TTree*)inputBTrain->Get(BackgroundTreeName);
+   factory->AddSignalTree    ( signalTrain,     1.0,TMVA::Types::kTraining );
+   factory->AddBackgroundTree( backgroundTrain, 1.0,TMVA::Types::kTraining );
+   inputSTest = TFile::Open( "Signal_Test.root" );
+   inputBTest = TFile::Open( "Background_Test.root" );
+   signalTest     = (TTree*)inputSTest->Get(SignalTreeName);
+   backgroundTest = (TTree*)inputBTest->Get(BackgroundTreeName);
+   factory->AddSignalTree    ( signalTest,     1.0,TMVA::Types::kTesting );
+   factory->AddBackgroundTree( backgroundTest, 1.0,TMVA::Types::kTesting );
+   wSfChi2=signalTest->GetMinimum(SigWeight)*signalTest->GetEntries();
+   wBfChi2=backgroundTest->GetMinimum(BkgWeight)*backgroundTest->GetEntries();
+   }
+   else{
+   inputS = TFile::Open( "Signal.root" );
+   inputB = TFile::Open( "Background.root" );
  
-   TTree *signal     = (TTree*)inputS->Get(SignalTreeName);
-   TTree *background = (TTree*)inputB->Get(BackgroundTreeName);
+   signal     = (TTree*)inputS->Get(SignalTreeName);
+   background = (TTree*)inputB->Get(BackgroundTreeName);
+   wSfChi2=signal->GetMinimum(SigWeight)*signal->GetEntries();
+   wBfChi2=background->GetMinimum(BkgWeight)*background->GetEntries();
    
-   // Eventweights
    factory->AddSignalTree    ( signal,     1.0 );
    factory->AddBackgroundTree( background, 1.0 );
+   }
    factory->SetBackgroundWeightExpression( SigWeight );
    factory->SetSignalWeightExpression( BkgWeight );
 
@@ -107,8 +260,10 @@ BDTVar::BDTVar(){
    Double_t ROC = myMethod->GetEfficiency("",TMVA::Types::kTesting, err);
    //buff is needed for KS test
    Double_t buff = myMethod->GetTrainingEfficiency("Efficiency:0.5");
+std::cout<<"doing sep"<<std::endl;
    Double_t sep = myMethod->GetSeparation();
-   
+//    Double_t sep=0.0;
+
    TMVA::DataSet* myData = myMethod->Data();
    myData->SetCurrentType(TMVA::Types::kTesting);
    TMVA::ResultsClassification* mvaRes = dynamic_cast<TMVA::ResultsClassification*>
@@ -117,7 +272,17 @@ BDTVar::BDTVar(){
    TH1* mva_b = (TH1*) mvaRes->GetHist("MVA_B");
    TH1* mva_effS = (TH1*) mvaRes->GetHist("MVA_EFF_S");
    TH1* mva_effB = (TH1*) mvaRes->GetHist("MVA_EFF_B");
+   
+   TH1D* mva_s_high = (TH1D*) mvaRes->GetHist("MVA_HIGHBIN_S");
+   TH1D* mva_b_high = (TH1D*) mvaRes->GetHist("MVA_HIGHBIN_B");
 /*   TH1* mva_FOMCurve = (TH1*) mvaRes->GetHist("MVA_myMVA_rejBvsS");*/
+   
+   //do chi2 stuff
+   Double_t chi2FOM=0.0;
+   if(FOMType=="Chi2_B_muSB"){
+     chi2FOM=GetChi2FOM(mva_s_high,wSfChi2,mva_b_high,wBfChi2,"Chi2_B_muSB");
+   }
+   
    
    int roccNBins=mva_effS->GetNbinsX();
    TGraph* mva_ROCCurve_H = new TGraph(roccNBins);
@@ -182,10 +347,14 @@ BDTVar::BDTVar(){
    else if(FOMType=="rejB_vs_effS_0.5"){
      *testFOM=rejB_05;
    }
+   else if(FOMType=="Chi2_B_muSB"){
+     *testFOM=chi2FOM;
+   }
    else{
      std::cout<<"ERROR: Dont know the requested FOM"<<std::endl<<"Implement it !"<<std::endl;
      exit(1);
    }
+   std::cout<<"FOM "<<*testFOM<<std::endl;
 
 
 // free all the memory
@@ -205,14 +374,32 @@ BDTVar::BDTVar(){
 //    std::cout<<"here2"<<std::endl;
    delete factory;
 //    std::cout<<"here3"<<std::endl;
+   if(UseEvenOddSplitting==0){
    delete signal;
    delete background;
    inputS->Close();
    inputB->Close();
-   outputFile->Close();
 //    std::cout<<"here4"<<std::endl;
    delete inputS;
    delete inputB;
+   }
+   else{
+   delete signalTrain;
+   delete backgroundTrain;
+   inputSTrain->Close();
+   inputBTrain->Close();
+//    std::cout<<"here4"<<std::endl;
+   delete inputSTrain;
+   delete inputBTrain;
+   delete signalTest;
+   delete backgroundTest;
+   inputSTest->Close();
+   inputBTest->Close();
+//    std::cout<<"here4"<<std::endl;
+   delete inputSTest;
+   delete inputBTest;   
+   }
+   outputFile->Close();
    delete outputFile;
 
  }
@@ -235,6 +422,7 @@ void Particle()
  TString SignalTreeName="MVATree";
  TString BackgroundTreeName="MVATree";
  Int_t MaxVariablesInCombination=10;
+ Int_t MinVariablesInCombination=8;
  Double_t ImprovementThreshold=1.0;
  Int_t RepeatTrainingNTimes=0;
  TString MethodType="";
@@ -243,6 +431,7 @@ void Particle()
  std::vector<Double_t> coordValues;
  Double_t dumpVal;
  TString dumpName;
+ Int_t UseEvenOddSplitting=0;
  
    
   //read Config File
@@ -278,6 +467,8 @@ void Particle()
       config>>SignalTreeName;}
     if(dump=="BackgroundTreeName"){
       config>>BackgroundTreeName;}
+    if(dump=="UseEvenOddSplitting"){
+      config>>UseEvenOddSplitting;}
     if(dump=="MaxVariablesInCombination"){
       config>>MaxVariablesInCombination;}
     if(dump=="ImprovementThreshold"){
@@ -341,7 +532,7 @@ void Particle()
   std::vector<BDTVar*> BestUnusedVars;
 
   //do initial training
-  DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS);
+  DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
 
  
   //check different Variable Combinations
@@ -370,7 +561,6 @@ void Particle()
     }
   std::cout<<"Initial FOM , KS "<<BestKS<<", "<<BestFOM<<std::endl<<std::endl;
 
-        
     std::cout<<"Removing each Variable"<<std::endl;
     // remove worst Variable
     BDTVar* worstVar = new BDTVar;
@@ -380,7 +570,7 @@ void Particle()
       UsedVars.erase(UsedVars.begin()+k);
       UnusedVars.push_back(testVar);
        
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
 
       
       if(KS>KSThreshold and FOM>=BestFOM){
@@ -398,7 +588,7 @@ void Particle()
         }
         
       }
-      std::cout<<FOM<<std::endl;
+//       std::cout<<FOM<<std::endl;
       if(KS>0.0 and FOM>SecBestFOM){
         SecBestFOM=FOM;
         SecBestKS=KS;
@@ -415,7 +605,6 @@ void Particle()
     }
     std::cout<<"worst Variable "<<worstVar->name<<std::endl;
     std::cout<<BestKS<<" "<<BestFOM<<std::endl;
-
     if(BestFOM==0.0){
       BestVars.clear();
       for(int l=0;l<SecBestVars.size();l++){
@@ -433,12 +622,16 @@ void Particle()
       BestUnusedVars.back()->name=worstVar->name;
       
     }
+
+    
     
     //add one more Variable to improve result
     BDTVar* addedVar=new BDTVar;
     BDTVar* testVar=new BDTVar;
-
-    std::cout<<"add one"<<std::endl;
+    
+    if(BestVars.size()<MaxVariablesInCombination || BestVars.size()<MinVariablesInCombination){
+    
+    std::cout<<"adding one variable"<<std::endl;
     UsedVars.clear();
     for(int k=0;k<SecBestVars.size();k++){
       UsedVars.push_back(new BDTVar);
@@ -456,10 +649,10 @@ void Particle()
         UnusedVars.at(l)->name=OtherVars.at(l)->name; 
       }
        
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
 
       
-      if(KS>KSThreshold and FOM>=BestFOM){
+      if(KS>KSThreshold and FOM>=ImprovementThreshold*BestFOM){
         BestFOM=FOM;
         BestKS=KS;
         BestVars.clear();
@@ -485,7 +678,7 @@ void Particle()
 
     std::cout<<"Variable added "<<addedVar->name<<std::endl;
     std::cout<<BestKS<<" "<<BestFOM<<std::endl;
-
+    }
     //add another Variable to improve result
     
     
@@ -495,7 +688,7 @@ void Particle()
       std::cout<<"no improvement by adding variables"<<std::endl;
       dosecondTry=false;
     }
-    if(BestVars.size()>14){
+    if(BestVars.size()>=MaxVariablesInCombination){
       std::cout<<"maximal number of Variables to use reached "<<BestVars.size()<<std::endl;
       dosecondTry=false;
     }
@@ -532,10 +725,10 @@ void Particle()
       UnusedVars.erase(UnusedVars.begin()+k);
 //     std::cout<<"step 2"<<std::endl;
          
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
 
       
-      if(KS>KSThreshold and FOM>=BestFOM){
+      if(KS>KSThreshold and FOM>=ImprovementThreshold*BestFOM){
         BestFOM=FOM;
         BestKS=KS;
         BestVars.clear();
@@ -594,7 +787,7 @@ ROCFileName+=particleNumber;
 ROCFileName+="_Iteration";
 ROCFileName+=Iteration;
 
-DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS, ROCFileName);
+DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting, ROCFileName);
 
   BestFOM=FOM;
   BestKS=KS;

@@ -5,7 +5,7 @@ from subprocess import call
 import sys
 
 class Particle:
-    def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees):
+    def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseEvenOddSplitting):
 
       self.particleNumber=particleNumber
       self.Iteration=0
@@ -62,7 +62,8 @@ class Particle:
           print "unusedVariables\n", self.additionalVariables
           print il, len(self.initialVariables), len(self.additionalVariables)
       self.SaveTrainingsToTrees=SaveTrainingsToTrees
-
+      self.UseEvenOddSplitting=UseEvenOddSplitting
+     
       self.BestFOM=0.0
       self.BestKS=0.0
       self.BestFOMGlobal=0.0
@@ -101,6 +102,7 @@ class Particle:
       configfile.write("BackgroundWeightExpression "+str(self.BackgroundWeightExpression)+"\n")
       configfile.write("SignalTreeName "+str(self.SignalTreeName)+"\n")
       configfile.write("BackgroundTreeName "+str(self.BackgroundTreeName)+"\n")
+      configfile.write("UseEvenOddSplitting "+str(self.UseEvenOddSplitting)+"\n")
       configfile.write("MaxVariablesInCombination "+str(self.MaxVariablesInCombination)+"\n")
       configfile.write("ImprovementThreshold "+str(self.ImprovementThreshold)+"\n")
       configfile.write("RepeatTrainingNTimes "+str(self.RepeatTrainingNTimes)+"\n")
