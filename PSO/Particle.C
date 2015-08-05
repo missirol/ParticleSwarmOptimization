@@ -29,6 +29,12 @@ TH1D* BackgroundForChi2;
 bool Chi2ScaleBackground=true;
 bool Chi2ScaleSignal=true;
 bool Chi2DoSplusB=false;
+Double_t TimeTotal=0.0;
+Double_t TimeTreePreparation=0.0;
+Double_t TimeTraining=0.0;
+Double_t TimeTesting=0.0;
+
+
 
 class BDTVar :public TObject {
   public:
@@ -166,7 +172,12 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    
    //prepare TMVA
    TMVA::IMethod* im;
-  
+   //timing studies
+    TStopwatch* thisTimer = new TStopwatch();
+    Double_t thisTreeTime=0.0;
+    Double_t thisTrainingTime=0.0;
+    Double_t thisTestingTime=0.0;
+    
    TMVA::Tools::Instance();
    TString outfileName( "TMVAVars.root" );
    int nUsedVars=UsedVars.size();
@@ -182,6 +193,7 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
      factory->AddVariable(UsedVars.at(k)->name);
    }
 
+   thisTimer->Start();
    TFile *inputSTrain;
    TFile *inputBTrain;
    TTree *signalTrain;
@@ -246,8 +258,17 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
      exit(1);
    }
    
+   //timing studies
+   thisTreeTime=thisTimer->RealTime();
+   thisTimer->Start();
+      
    factory->TrainAllMethods();
    std::cout<<"--------Training Done------"<<std::endl;
+   
+   //timing studies
+   thisTrainingTime=thisTimer->RealTime();
+   thisTimer->Start();
+   
    
    // ---- Evaluate all MVAs using the set of test events
    factory->TestAllMethods();
@@ -357,6 +378,18 @@ std::cout<<"doing sep"<<std::endl;
    std::cout<<"FOM "<<*testFOM<<std::endl;
 
 
+   //timing studies
+   thisTestingTime=thisTimer->RealTime();
+   std::cout<<"*******************************************************"<<std::endl;
+   std::cout<<"* this Iteration Tree processing time "<<thisTreeTime<<std::endl;
+   std::cout<<"* this Iteration Training time "<<thisTrainingTime<<std::endl;
+   std::cout<<"* this Iteration Testing  time "<<thisTestingTime<<std::endl;
+   std::cout<<"*******************************************************"<<std::endl;
+   TimeTreePreparation+=thisTreeTime;
+   TimeTraining+=thisTrainingTime;
+   TimeTesting+=thisTestingTime;
+   delete thisTimer;
+
 // free all the memory
 // hopefully nothing is missed
 
@@ -407,6 +440,9 @@ std::cout<<"doing sep"<<std::endl;
  
 void Particle()
 {
+  TStopwatch* timerTotal=new TStopwatch();
+  timerTotal->Start();
+
  //set up variables
  std::vector<BDTVar*> InitialVars;
  std::vector<BDTVar*> OtherVars;
@@ -808,7 +844,16 @@ DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWei
     result<<"UnusedVars "<<BestUnusedVars.at(k)->name<<std::endl; 
   }
   result.close();
- 
+  
+  
+  TimeTotal=timerTotal->RealTime();
+    
+  std::cout<<"*******************************************************"<<std::endl;
+  std::cout<<"* Total Time: "<<TimeTotal<<std::endl;
+  std::cout<<"* Tree processing time : "<<TimeTreePreparation<< " "<<TimeTreePreparation/TimeTotal*100.0<<"%"<<std::endl;
+  std::cout<<"* Training time : "<<TimeTraining<< " "<<TimeTraining/TimeTotal*100.0<<"%"<<std::endl;
+  std::cout<<"* Testing time : "<<TimeTesting<< " "<<TimeTesting/TimeTotal*100.0<<"%"<<std::endl;
+  std::cout<<"*******************************************************"<<std::endl;
 }
 
 
