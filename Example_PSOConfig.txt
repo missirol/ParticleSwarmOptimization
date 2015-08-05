@@ -28,10 +28,10 @@ DrawNRandomAsStartingVars=0
 FactoryString=!V:Silent:Color:!DrawProgressBar:Transformations=I:AnalysisType=Classification
 PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
 ##if you want to limit the number of events do it eiter PreparationString or here
-nTrain_Signal=
-nTrain_Background=
-nTest_Signal=
-nTest_Background=
+nTrain_Signal=100
+nTrain_Background=100
+nTest_Signal=100
+nTest_Background=100
 ##Weight expression, might need to be declared in WeightVariables furhter down
 ## probably same syntax as in TTree::Draw 
 SignalWeightExpression=Weight_XS
@@ -58,22 +58,18 @@ coord=["nCuts",10,80,4,"int"]
 
 ##--------------------------------------------------
 ##Source Trees:
-## if UseEvenOddSplitting=1, the input trees will be split in training/testsample with Variable "Evt_Odd" 
-## maybe change the variable in PSO/PrepareTrees.C
-## else TMVA will use built in splitting
 UseEvenOddSplitting=1
 SelectionString=TMath::Abs(CSV[0])<=1.0
 
-SourceSignalFile=/storage/a/karimel/Spring15_Base16thJuly/ForTraining/Category_54/tthbb_nominal.root
+SourceSignalFile=/storage/a/karimel/Spring15_Base20thJuly/forFOMStudy/Category_64/tthbb_nominal.root
 SourceSignalTree=MVATree
 
-SourceBackgroundFile=/storage/a/karimel/Spring15_Base16thJuly/ForTraining/Category_54/ttbar_nominal.root
+SourceBackgroundFile=/storage/a/karimel/Spring15_Base20thJuly/forFOMStudy/Category_64/ttbar_nominal.root
 SourceBackgroundTree=MVATree
 
 
 ##------------------------------------------------
 ##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]
-##IMPORTANT dont leave a blank line between the last variable and the end variables line
 ##variables the optimization starts with
 InitialVariables:
 ["BDTOhio_v2_input_h2","F","","BDTOhio_v2_input_h2"]
@@ -110,10 +106,11 @@ AdditionalVariables:
 ["BDTOhio_v2_input_b","F","","BDTOhio_v2_input_h1"]
 ["BDTOhio_v2_input_closest_tagged_dijet_mass","F","","BDTOhio_v2_input_closest_tagged_dijet_mass"]
 ["BDTOhio_v2_input_tagged_dijet_mass_closest_to_125","F","","BDTOhio_v2_input_tagged_dijet_mass_closest_to_125"]
+["BDTOhio_v2_input_dEta_fn","F","","BDTOhio_v2_input_dEta_fn"]
 EndVariables
 
 ##---------------------------------------------------
-## additional variables used for reweighting and stuff
+## variables used for reweighting and stuff
 WeightVariables:
 ["Weight_XS","F","","Weight_XS"]
 ["Weight","F","","Weight"]

@@ -28,6 +28,7 @@ if MakeNewTrees==True:
   call(["root","-b","-q",command])
 
 PSO=PSOManager(currentPath,Verbose, PSOConfig)
+PSO.CompileAndSetupClientExecutable()
 PSO.SetupParticles()
 PSO.InitParticles()
 PSO.RunPSO()

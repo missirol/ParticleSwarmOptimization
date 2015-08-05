@@ -41,7 +41,6 @@ class PSOManager:
       self.RepeatTrainingNTimes=0
       self.DrawNRandomAsStartingVars=0
       self.SaveTrainingsToTrees="False"
-      self.UseEvenOddSplitting=0
       
       initialVariables=[]
       additionalVariables=[]
@@ -111,7 +110,7 @@ class PSOManager:
           self.vp=float(line.split("=",1)[1])
         if "wSwarm" in line:
           self.vg=float(line.split("=",1)[1])
-        if "FOM=" in line:
+        if "FOM" in line:
           self.FOM=line.split("=",1)[1]
         if "KSThreshold" in line:
           self.KSThreshold=float(line.split("=",1)[1])
@@ -147,8 +146,6 @@ class PSOManager:
           self.MethodType=line.split("=",1)[1]
         if "MethodParams" in line:
           self.MethodParams=line.split("=",1)[1]
-        if "UseEvenOddSplitting" in line:
-          self.UseEvenOddSplitting=line.split("=",1)[1]
         if "SourceBackgroundTree" in line:
           self.BackgroundTreeName=line.split("=",1)[1]
         if "SourceSignalTree" in line:
@@ -222,8 +219,7 @@ class PSOManager:
                          self.ImprovementThreshold,
                          self.RepeatTrainingNTimes,
                          self.DrawNRandomAsStartingVars,
-                         self.SaveTrainingsToTrees,
-                         self.UseEvenOddSplitting)
+                         self.SaveTrainingsToTrees)
         #particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)
         
@@ -376,7 +372,12 @@ class PSOManager:
 
       print "did the tests"
 
-
+    def CompileAndSetupClientExecutable(self):
+      print "Freshly Compiling PSO/Particle.C" 
+      call(["g++ -o PSO/Particle PSO/Particle.C `root-config --cflags --glibs` -lTMVA"],shell=True)
+      print "Copying the freshly compiled Particle exec to InitialData"
+      call(["cp","PSO/Particle","InitData/Particle"])
+      print "done"
 
 
 
