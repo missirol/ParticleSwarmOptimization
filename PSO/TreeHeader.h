@@ -87,7 +87,7 @@ string GetBDTVarString(string* BDTVarArray, int* BDTVarIndices, int nVar){
   string bdtVariables = "";
   
   for(int iVar=0;iVar<nVar;iVar++){
-    if(iVar!=0) bdtVariables += "§";
+    if(iVar!=0) bdtVariables += "&";
     bdtVariables += BDTVarArray[BDTVarIndices[iVar]];
   }
   
@@ -100,7 +100,7 @@ void AddBDTVar(string name, string size, string weights, string invariables){
   bdtvariableSizes.push_back(size);
   bdtvariableWeights.push_back(weights);
   
-  TObjArray* BDTvarArray = TString(invariables).Tokenize("§");
+  TObjArray* BDTvarArray = TString(invariables).Tokenize("&");
   bdtvariableVarNames.push_back(vector<string>());
   bdtvariableVarTypes.push_back(vector<string>());
   bdtvariableVariables.push_back(vector<string>());
