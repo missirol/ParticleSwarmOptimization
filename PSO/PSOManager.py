@@ -148,7 +148,7 @@ class PSOManager:
         if "MethodParams" in line:
           self.MethodParams=line.split("=",1)[1]
         if "UseEvenOddSplitting" in line:
--          self.UseEvenOddSplitting=line.split("=",1)[1]
+          self.UseEvenOddSplitting=line.split("=",1)[1]
         if "SourceBackgroundTree" in line:
           self.BackgroundTreeName=line.split("=",1)[1]
         if "SourceSignalTree" in line:
