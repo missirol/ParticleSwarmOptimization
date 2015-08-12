@@ -222,7 +222,7 @@ class PSOManager:
                          self.ImprovementThreshold,
                          self.RepeatTrainingNTimes,
                          self.DrawNRandomAsStartingVars,
-                         self.SaveTrainingsToTrees
+                         self.SaveTrainingsToTrees,
                          self.UseEvenOddSplitting)
         #particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)
