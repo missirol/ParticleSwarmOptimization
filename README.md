@@ -12,7 +12,8 @@ Utilizes batch system to parallelize classifier training.
 2) you might want to rebuild the executable which is run on the batch system  
    cd PSO  
    g++ -o ../InitData/Particle Particle.C `root-config --cflags --glibs` -lTMVA  
-   also do this if you change it  
+   also do this if you change it
+   -> this is done automatically now
 
 
 2) change Example_PSOConfig to suit your needs  
