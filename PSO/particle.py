@@ -64,6 +64,9 @@ class Particle:
       self.SaveTrainingsToTrees=SaveTrainingsToTrees
       self.UseEvenOddSplitting=UseEvenOddSplitting
      
+      self.AllVariablesAtStart=self.additionalVariables+self.initialVariables
+      self.AllVariablesAfterIteration=self.AllVariablesAtStart
+
       self.BestFOM=0.0
       self.BestKS=0.0
       self.BestFOMGlobal=0.0
@@ -182,8 +185,8 @@ class Particle:
         elif coord[4]=="float":
           newVel=float(newVel)
         newcoord=cc+newVel
-        newcoord=cmp(newcoord,0)*min(abs(newcoord),coord[2])
-        newcoord=cmp(newcoord,0)*max(abs(newcoord),coord[1])
+        newcoord=abs(cmp(newcoord,0)*min(abs(newcoord),coord[2]))
+        newcoord=abs(cmp(newcoord,0)*max(abs(newcoord),coord[1]))
         if self.Verbose:
           print "\nOld Coordinate ", coord[0],cc,curVel
           print "best global ", bcg
@@ -220,6 +223,12 @@ class Particle:
         if "UnusedVars" in line:
           self.additionalVariables.append(line.split(" ",1)[1].strip())
       resultfile.close()
+
+      #self.AllVariablesAfterIteration=self.initialVariables+self.additionalVariables
+      self.additionalVariables=[]
+      for vv in self.AllVariablesAtStart:
+        if vv not in self.initialVariables:
+          self.additionalVariables.append(vv)
       
       if ks<self.KSThreshold:
         fom=0.0
@@ -237,11 +246,14 @@ class Particle:
         print self.BestCoordinates
         print self.BestFOM
       
-      #RouteFile=open(self.Path+"ParticleRoute.txt","a")
-      #Route=str(ROC).replace("\n","")+" "+str(bufKS).replace("\n","")+" "+str(nTrees).replace("\n","")+" "+str(shrinkage).replace("\n","")+" "+str(bagging).replace("\n","")+" "+str(cuts).replace("\n","")+" "+str(depth).replace("\n","")+" "+str(self.usedVars)+"\n"
-      #RouteFile.write(Route)
-      #RouteFile.write("--Next--\n")
-      #RouteFile.close()
+      RouteFile=open(self.Path+"ParticleRoute.txt","a")
+      Route=str(fom).replace("\n","")+" "+str(ks).replace("\n","")+" "
+      for ccc in self.currentCoordinates:
+        Route+=str(ccc[1])+" "
+      Route+=str(self.additionalVariables)+"\n"
+      RouteFile.write(Route)
+      RouteFile.write("--Next--\n")
+      RouteFile.close()
       
       return fom, ks, self.MethodParams, self.currentCoordinates, self.initialVariables, self.additionalVariables
       

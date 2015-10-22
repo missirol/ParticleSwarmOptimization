@@ -32,8 +32,9 @@ void RoutePlot(){
 gStyle->SetTitleX(0.21);
 gStyle->SetTitleY(0.98);
 
-  const int Iteration=5;
-  int nParticles=15;
+  const int minIteration=0;
+  const int Iteration=10;
+  int nParticles=20;
   
   TGraph* emptygraph = new TGraph(1);
   emptygraph->SetPoint(0,1000,0.005);
@@ -53,7 +54,7 @@ gStyle->SetTitleY(0.98);
   Double_t minROC=1.0;
   Double_t bestROCGlobal=0.0;
   for(int i=0;i<nParticles;i++){
-      if(!(i==4 or i==5 or i==6 or i==13))continue;
+//      if(!(i==1 or i==13 or i==5 or i==6 or i==8 or i==4 or i==14 or i==18))continue;
 
 //     std::cout<<i<<std::endl;
     std::string buffer="";
@@ -61,12 +62,12 @@ gStyle->SetTitleY(0.98);
     buffer2<<i;
 //     std::cout<<buffer2.str()<<" "<<buffer2.str()<<std::endl;
 //     buffer2>>buffer;
-    std::string filename="PartForPlot/Particle";
+    std::string filename="../Particles_long/Particle";
     filename+=buffer2.str();
     filename+="/ParticleRoute.txt";
 //     std::cout<<filename.c_str()<<std::endl;
     std::ifstream inputfile(filename.c_str());
-//     std::ifstream inputfile("Particles/Particle1/ParticleRoute.txt");
+//     std::ifstream inputfile("Particles_long/Particle1/ParticleRoute.txt");
 
     int k=0;
     double nTrees=0.0;
@@ -97,7 +98,7 @@ gStyle->SetTitleY(0.98);
 
       }while(dump!="--Next--" and dump!="--Next--\n" and dump!="");
 //       std::cout<<"Data "<<nTrees<<" "<<shrinkage<<" "<<ROC<<std::endl;
-      if(dump!=""){
+      if(dump!="" and k>=minIteration){
         if(ROC>maxROC)maxROC=ROC;
         if(ROC<minROC and ROC!=0)minROC=ROC;
       
@@ -110,12 +111,12 @@ gStyle->SetTitleY(0.98);
     inputfile.close();
     std::cout<<"NPoints: "<<k<<std::endl;
   }
-  std::cout<<minROC<<"  "<<maxROC<<std::endl;
+  std::cout<<"ROC range "<<minROC<<"  "<<maxROC<<std::endl;
   
   //get marker scaling;
   Double_t maxSize=2.4;
   Double_t minSize=0.3;
-  minROC=0.820;
+  minROC=0.74;
   Double_t m = (maxSize-minSize)/(maxROC-minROC);
   Double_t abschnitt = maxSize-m*maxROC;
   std::cout<<m<<" "<<abschnitt<<std::endl;
@@ -124,7 +125,7 @@ gStyle->SetTitleY(0.98);
       
   //read points
   for(int i=0;i<nParticles;i++){
-    if(!(i==4 or i==5 or i==6 or i==13))continue;
+      if(!(i==1 or i==2 or i==4 or i==10 or i==13 or i==14 or i==17))continue;
 
     std::cout<<i<<std::endl;
     std::string buffer="";
@@ -132,12 +133,12 @@ gStyle->SetTitleY(0.98);
     buffer2<<i;
 //     std::cout<<buffer2.str()<<" "<<buffer2.str()<<std::endl;
 //     buffer2>>buffer;
-    std::string filename="PartForPlot/Particle";
+    std::string filename="../Particles_long/Particle";
     filename+=buffer2.str();
     filename+="/ParticleRoute.txt";
     std::cout<<filename.c_str()<<std::endl;
     std::ifstream inputfile(filename.c_str());
-//     std::ifstream inputfile("Particles/Particle1/ParticleRoute.txt");
+//     std::ifstream inputfile("Particles_long/Particle1/ParticleRoute.txt");
 
     std::vector< TGraph*> buffgraph;
     graphs.push_back( buffgraph);
@@ -149,6 +150,7 @@ gStyle->SetTitleY(0.98);
 
 
     int k=0;
+    int kk=0;
     double nTrees=0.0;
     double shrinkage=0.0;
     double bagging=0.0;
@@ -178,7 +180,8 @@ gStyle->SetTitleY(0.98);
 
       }while(dump!="--Next--" and dump!="--Next--\n" and dump!="");
 //       std::cout<<"Data "<<nTrees<<" "<<shrinkage<<" "<<ROC<<std::endl;
-      if(dump!=""){
+      if(dump!="" and k>=minIteration){
+        kk++;
         graphs.back().push_back(new TGraph);
         graphs.back().back()->SetPoint(0,nTrees,shrinkage);
         if(ROC==0)graphs.back().back()->SetMarkerStyle(3);
@@ -187,11 +190,11 @@ gStyle->SetTitleY(0.98);
 //           std::cout<<TMath::Exp(ROC)<<std::endl;
           Double_t size=m*ROC+abschnitt;
           graphs.back().back()->SetMarkerSize(size); 
-          std::cout<<ROC<<" "<<size<<std::endl;
+          std::cout<<j<<" "<<ROC<<" "<<size<<std::endl;
 
         }
-        if(k==0)graphs.back().back()->SetMarkerStyle(34);
-        lines.back()->SetPoint(k,nTrees,shrinkage);
+        if(k==minIteration)graphs.back().back()->SetMarkerStyle(34);
+        if(k>=minIteration)lines.back()->SetPoint(kk-1,nTrees,shrinkage);
         
         
            
@@ -233,8 +236,8 @@ gStyle->SetTitleY(0.98);
       Double_t velShrinkage=CurrShrinkage-PrevShrinkage;
       Double_t nvelTree=NextTrees-CurrTrees;
       Double_t nvelShrinkage=NextShrinkage-CurrShrinkage;
-      Double_t forceTrees=nvelTree-0.5*velTree;
-      Double_t forceShrinkage=nvelShrinkage-0.5*velShrinkage;
+      Double_t forceTrees=nvelTree-0.73*velTree;
+      Double_t forceShrinkage=nvelShrinkage-0.73*velShrinkage;
       arrows.back().push_back(new TArrow(CurrTrees,CurrShrinkage,CurrTrees+forceTrees,CurrShrinkage+forceShrinkage,0.02,">"));
       
     }
@@ -244,8 +247,8 @@ gStyle->SetTitleY(0.98);
     //Get velocities
     
     
-    TCanvas* c = new TCanvas("c","c",800,600);
-    TLegend* leg= new TLegend(0.5,0.65,0.7,0.85);
+    TCanvas* c = new TCanvas("c","c",1024,768);
+    TLegend* leg= new TLegend(0.5,0.75,0.7,0.95);
     leg->SetFillColor(0);
     leg->SetTextFont(42);
     std::vector<TGraph*> leggraphs;
@@ -255,14 +258,14 @@ gStyle->SetTitleY(0.98);
       leggraphs.back()->SetMarkerColor(1+i);
       leggraphs.back()->SetMarkerStyle(8);
       leggraphs.back()->SetMarkerSize(1);
-      if(i==2)leggraphs.back()->SetMarkerColor(6);
+      if(i==2)leggraphs.back()->SetMarkerColor(9);
       leg->AddEntry(leggraphs.back(), Form("particle %i",i+1),"p");
     }
-    TLegend* legMarker= new TLegend(0.7,0.55,0.9,0.85);
+    TLegend* legMarker= new TLegend(0.7,0.65,0.9,0.95);
     legMarker->SetFillColor(0);
     legMarker->SetFillStyle(0);
     legMarker->SetTextFont(42);
-    TLegend* legCMS= new TLegend(0.07,0.75,0.39,0.85);
+    TLegend* legCMS= new TLegend(0.07,0.85,0.39,0.95);
     legCMS->SetFillColor(0);
     legCMS->SetFillStyle(0);
     legCMS->SetBorderSize(0);
@@ -278,33 +281,37 @@ gStyle->SetTitleY(0.98);
     TGraph* initMarker = new TGraph();
     initMarker->SetMarkerStyle(34);
     initMarker->SetMarkerSize(1.5);
+    TGraph* zeroKSMarker = new TGraph();
+    zeroKSMarker->SetMarkerStyle(3);
+    zeroKSMarker->SetMarkerSize(1.5);
     legMarker->AddEntry(initMarker,"init. pos.","p");
     
     TArrow* legArrow = new TArrow(100,0.01,200,0.02,0.02,">");
-    TArrow* legArrow2 = new TArrow(1715,0.0334,1793,0.0334,0.02,">");
+    TArrow* legArrow2 = new TArrow(1270,0.0453,1320,0.0453,0.02,">");
     
     legArrow->SetLineColor(0);
     legArrow->SetFillColor(0);
     legArrow2->SetLineWidth(2);
     legArrow2->SetAngle(40);
-    legMarker->AddEntry(legArrow,"social pressure","");
+    legMarker->AddEntry(legArrow,"#Delta#vec{v}","");
 //         legMarker->AddEntry((TObject*)0,"","");
+    legMarker->AddEntry(zeroKSMarker,"KS < min KS","p");
 
     TGraph* sizegraph1 = new TGraph();
     sizegraph1->SetMarkerStyle(8);
-    Double_t size2=m*0.82+abschnitt;
+    Double_t size2=m*0.74+abschnitt;
     sizegraph1->SetMarkerSize(size2);
-    legMarker->AddEntry(sizegraph1, "A_{ROC} = 0.82","p");
+    legMarker->AddEntry(sizegraph1, "A_{ROC} = 0.74","p");
     TGraph* sizegraph2 = new TGraph();
     sizegraph2->SetMarkerStyle(8);
-    size2=m*0.83+abschnitt;
+    size2=m*0.76+abschnitt;
     sizegraph2->SetMarkerSize(size2);
-    legMarker->AddEntry(sizegraph2, "A_{ROC} = 0.83","p");
+    legMarker->AddEntry(sizegraph2, "A_{ROC} = 0.76","p");
     TGraph* sizegraph3 = new TGraph();
     sizegraph3->SetMarkerStyle(8);
-    size2=m*0.84+abschnitt;
+    size2=m*0.78+abschnitt;
     sizegraph3->SetMarkerSize(size2);
-    legMarker->AddEntry(sizegraph3, "A_{ROC} = 0.84","p");
+    legMarker->AddEntry(sizegraph3, "A_{ROC} = 0.78","p");
     
     
     
@@ -316,19 +323,20 @@ gStyle->SetTitleY(0.98);
         
         emptygraph->Draw("AP");
         c->Update();
-        emptygraph->GetXaxis()->SetLimits(100,2200);
-        emptygraph->GetXaxis()->SetRangeUser(100,2200);
+        emptygraph->GetXaxis()->SetLimits(200,1600);
+        emptygraph->GetXaxis()->SetRangeUser(200,1600);
 
-        emptygraph->GetYaxis()->SetLimits(0.0,0.038);
-        emptygraph->GetYaxis()->SetRangeUser(0.0,0.038);
-        emptygraph->SetTitle("particle paths in the n_{Trees} - shrinkage plane");
+        emptygraph->GetYaxis()->SetLimits(0.0,0.05);
+        emptygraph->GetYaxis()->SetRangeUser(0.0,0.05);
+        //emptygraph->SetTitle("particle paths in the n_{Trees} - shrinkage plane");
+        emptygraph->SetTitle("");
         emptygraph->GetXaxis()->SetTitle("n_{Trees}");
         emptygraph->GetYaxis()->SetTitle("shrinkage");
         emptygraph->GetYaxis()->SetTitleOffset(1.5);
         emptygraph->GetXaxis()->SetTitleOffset(1.2);
        std::cout<<emptygraph->GetXaxis()->GetTitleFont()<<std::endl;
 
-	c->SetTopMargin(0.15);
+	c->SetTopMargin(0.05);
         c->Update();
         for(size_t j=0;j<graphs.at(i).size();j++){
 //           graphs.at(i).at(j)->SetMarkerStyle(3);
@@ -385,8 +393,8 @@ gStyle->SetTitleY(0.98);
           graphs.at(i).at(j)->SetMarkerColor(1+i);
           graphs.at(i).at(j)->SetLineColor(1+i);
           if(i==2){
-          graphs.at(i).at(j)->SetMarkerColor(6);
-          graphs.at(i).at(j)->SetLineColor(6);
+          graphs.at(i).at(j)->SetMarkerColor(9);
+          graphs.at(i).at(j)->SetLineColor(9);
           }
 //         graphs.at(i)->GetXaxis()->SetRangeUser(200.0,2500.0);
 //         graphs.at(i)->GetYaxis()->SetRangeUser(0.0001,0.05);
@@ -398,8 +406,8 @@ gStyle->SetTitleY(0.98);
         arrows.at(i).at(j)->SetLineColor(1+i);
         arrows.at(i).at(j)->SetFillColor(1+i);
         if(i==2){
-        arrows.at(i).at(j)->SetLineColor(6);
-        arrows.at(i).at(j)->SetFillColor(6);
+        arrows.at(i).at(j)->SetLineColor(9);
+        arrows.at(i).at(j)->SetFillColor(9);
         }
         arrows.at(i).at(j)->SetAngle(40);
         arrows.at(i).at(j)->SetLineWidth(1.9);
@@ -410,7 +418,7 @@ gStyle->SetTitleY(0.98);
         }
         lines.at(i)->SetLineColor(1+i);
         lines.at(i)->SetLineStyle(7);
-        if(i==2)lines.at(i)->SetLineColor(6);
+        if(i==2)lines.at(i)->SetLineColor(9);
 
         lines.at(i)->Draw();
         c->Update();
@@ -429,7 +437,7 @@ gStyle->SetTitleY(0.98);
     leg->Draw();
     legMarker->Draw();
     legCMS->Draw();
-    legExplain->Draw();
+    //legExplain->Draw();
     c->Update();
     TString outfile="ParticleRoute_";
     outfile+=Iteration;
