@@ -475,7 +475,7 @@ void Particle()
   std::ifstream config("ParticleConfig.txt");
   TString dump="";
   
-  int repeatNtimes=1;
+
 
   int count=0;
   bool readline=true;
@@ -575,7 +575,7 @@ void Particle()
   //do initial training
   KS=1.0;
   FOM=999.9;
-  for(int nn=0;nn<;nn++){ 
+  for(int nn=0;nn<repeatNtimes;nn++){ 
   DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
   if(bufferKS<KS)KS=bufferKS;
   if(bufferFOM<FOM)FOM=bufferFOM;
