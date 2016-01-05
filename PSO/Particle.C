@@ -33,6 +33,8 @@ Double_t TimeTotal=0.0;
 Double_t TimeTreePreparation=0.0;
 Double_t TimeTraining=0.0;
 Double_t TimeTesting=0.0;
+int NTrainings=3;
+
 
 
 
@@ -459,9 +461,8 @@ void Particle()
  TString BackgroundTreeName="MVATree";
  Int_t MaxVariablesInCombination=10;
  Int_t MinVariablesInCombination=8;
- int repeatNtimes=1;
  Double_t ImprovementThreshold=1.0;
- Int_t RepeatTrainingNTimes=0;
+ int RepeatTrainingNTimes=0;
  TString MethodType="";
  TString MethodString="";
  std::vector<TString> coordNames;
@@ -475,8 +476,6 @@ void Particle()
   std::ifstream config("ParticleConfig.txt");
   TString dump="";
   
-
-
   int count=0;
   bool readline=true;
   std::cout<<"reading Config"<<std::endl;
@@ -575,12 +574,12 @@ void Particle()
   //do initial training
   KS=1.0;
   FOM=999.9;
-  for(int nn=0;nn<repeatNtimes;nn++){ 
-  DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &FOM, &KS,UseEvenOddSplitting);
+  for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){ 
+  DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
   if(bufferKS<KS)KS=bufferKS;
   if(bufferFOM<FOM)FOM=bufferFOM;
   }
-  std::cout<<"Inital "<<repeatNtimes<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+  std::cout<<"Inital "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
  
   //check different Variable Combinations
   int nUsedVars=InitialVars.size();
@@ -619,13 +618,13 @@ void Particle()
       
       KS=1.0;
       FOM=999.9;
-      for(int nn=0;nn<repeatNtimes;nn++){
+      for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl;  
       DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
-      std::cout<<"after "<<repeatNtimes<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+      std::cout<<"after "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
       
       if(KS>KSThreshold and FOM>=BestFOM){
         BestFOM=FOM;
@@ -706,13 +705,13 @@ void Particle()
        
       KS=1.0;
       FOM=999.9;
-      for(int nn=0;nn<repeatNtimes;nn++){
+      for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl; 
       DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
-      std::cout<<"after "<<repeatNtimes<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+      std::cout<<"after "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
 
       
       if(KS>KSThreshold and FOM>=ImprovementThreshold*BestFOM){
@@ -794,13 +793,13 @@ void Particle()
          
       KS=1.0;
       FOM=999.9;
-      for(int nn=0;nn<repeatNtimes;nn++){
+      for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl;  
       DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
-      std::cout<<"after "<<repeatNtimes<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+      std::cout<<"after "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
 
       
       if((KS>KSThreshold and FOM>=ImprovementThreshold*BestFOM) or (FOM>BestFOM and BestVars.size()<MinVariablesInCombination)){
@@ -864,12 +863,12 @@ ROCFileName+=Iteration;
 
       KS=1.0;
       FOM=999.9;
-      for(int nn=0;nn<repeatNtimes;nn++){ 
+      for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){ 
       DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
-  std::cout<<"Final "<<repeatNtimes<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+  std::cout<<"Final "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
 
   BestFOM=FOM;
   BestKS=KS;
