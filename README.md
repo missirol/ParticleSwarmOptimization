@@ -9,12 +9,12 @@ Utilizes batch system to parallelize classifier training.
 
 1) clone the repository  
 
-2) The python interface manages the communication between the particles and is run on a portal (use screen because of long    runtimes).
+2) The python interface manages the communication between the particles and is run on a portal (use screen because of long    runtimes).  
 The Training of the BDTs is done on the batch system and is implemented in Particle.C. This file is also recompiled when you start the PSO now.
 
 3) change Example_PSOConfig to suit your needs  
      should work on ekp and NAF batch system, for other batch system change PSO/QueHelper.py  
-     play around with the swarm parameters (15 to 25 particles recommended)
+     play around with the swarm parameters (15 to 25 particles recommended)  
      choose the Figure of Merit to optimize (at the moment ROC or experimentally the chi of a b-only fit)  
      specify TMVA factory and method options  
      declare coordinate space you want to search  
