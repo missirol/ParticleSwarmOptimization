@@ -9,14 +9,10 @@ Utilizes batch system to parallelize classifier training.
 
 1) clone the repository  
 
-2) you might want to rebuild the executable which is run on the batch system  
-   cd PSO  
-   g++ -o ../InitData/Particle Particle.C `root-config --cflags --glibs` -lTMVA  
-   also do this if you change it
-   -> this is done automatically now
+2) The python interface manages the communication between the particles and is run on a portal (use screen because of long    runtimes).
+The Training of the BDTs is done on the batch system and is implemented in Particle.C. This file is also recompiled when you start the PSO now.
 
-
-2) change Example_PSOConfig to suit your needs  
+3) change Example_PSOConfig to suit your needs  
      should work on ekp and NAF batch system, for other batch system change PSO/QueHelper.py  
      play around with the swarm parameters  
      choose the Figure of Merit to optimize  
@@ -26,10 +22,10 @@ Utilizes batch system to parallelize classifier training.
      Variables the swarm starts with   
      pool of additional Variables the swarm will try  
     
-3) Start the Optimization with  
+4) Start the Optimization with  
     python RunPSO.py Example_PSOConfig.txt  
     
-4) The ten best classifiers are writen to PSOResult.txt  
+5) The ten best classifiers are writen to PSOResult.txt  
    The best classifier and all necessary information is written to a file starting with "FinalMVAConfig_"  
    
    
