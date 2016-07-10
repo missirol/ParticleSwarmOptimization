@@ -1,6 +1,6 @@
 # ParticleSwarmOptimization
 
-Implementation of the particle swarm algorithm to optimize the paramters and Input Variables of TMVA Classificators.  
+implementation of the particle swarm algorithm to optimize the paramters and Input Variables of TMVA Classificators.  
 The program will create a swarm of Classifiers in the paramter space.  
 Each classifier will try to improve its input variable combination.  
 Classifiers move in the paramter space using the information of the whole swarm.  
