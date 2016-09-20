@@ -107,7 +107,7 @@ while(readline){
       id1=linebuffer.find("\"",id2+1);
       id2=linebuffer.find("\"",id1+1);
       expression=linebuffer.substr(id1+1,id2-id1-1);
-//       std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
+      std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
 //       if(size=="")std::cout<<"zero"<<std::endl;
       AddVar(name,type,size,expression );
     }
@@ -138,7 +138,7 @@ while(readline){
       id1=linebuffer.find("\"",id2+1);
       id2=linebuffer.find("\"",id1+1);
       expression=linebuffer.substr(id1+1,id2-id1-1);
-//       std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
+      std::cout<<"Did Variable "<<name<<" "<<type<<" "<<size<<" "<<expression<<std::endl;
 //       if(size=="")std::cout<<"zero"<<std::endl;
       AddVar(name,type,size,expression );
     }
@@ -159,7 +159,7 @@ else{
 AddSample("Signal",SignalFile,SignalTree,Selection);
 AddSample("Background",BackgroundFile,BackgroundTree,Selection);
 }
-
+std::cout<<"added samples"<<std::endl;
 AddBin("all","all","");
 bool flatTrees = false;
 bool appendVariables = false;

@@ -184,8 +184,8 @@ void InitAllBranches(TTree* outTree){
 }
 
 
-void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = false){
-  
+void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = false){
+  std::cout<<"filling vars"<<std::endl;
   //string outFileName = outFileDir+samples[sampleIndex]+"_"+bins[binIndex]+"_tree.root";
   string outFileName = outFileDir+samples[sampleIndex]+".root";
 
@@ -209,11 +209,13 @@ void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = fa
     }
     else
       outTree = inTree->CloneTree();
-    
-    inTree = outTree;
+    //DANGERZONE
+//     inTree = outTree;
   }
   else
     outTree = new TTree("MVATree","MVATree");
+  
+  std::cout<<inTree->GetEntries()<<std::endl;
   
   TTreeFormula* sampleSelFormula = new TTreeFormula("noSampleSelection","1",inTree);
   TTreeFormula* binSelFormula = new TTreeFormula("noBinSelection","1",inTree);
@@ -221,19 +223,21 @@ void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = fa
   if(!appendVars){
     if(sampleSelections[sampleIndex]!=""){
       string sampleSelName = samples[sampleIndex]+"Selection";
-      sampleSelFormula = new TTreeFormula(sampleSelName.c_str(),sampleSelections[sampleIndex].c_str(),inTree->GetTree());
+      sampleSelFormula = new TTreeFormula(sampleSelName.c_str(),sampleSelections[sampleIndex].c_str(),inTree);
     }
     if(binSelections[binIndex]!=""){
       string binSelName = bins[binIndex]+"Selection";
-      binSelFormula = new TTreeFormula(binSelName.c_str(),binSelections[binIndex].c_str(),inTree->GetTree());
+      binSelFormula = new TTreeFormula(binSelName.c_str(),binSelections[binIndex].c_str(),inTree);
     }
   }  
   
   InitAllBranches(outTree);
   
   vector<TTreeFormula*> variableFormula;
-  for(size_t iVar=0;iVar<variables.size();iVar++)
-    variableFormula.push_back(new TTreeFormula(variableNames[iVar].c_str(),variables[iVar].c_str(),inTree->GetTree()));
+  for(size_t iVar=0;iVar<variables.size();iVar++){
+    variableFormula.push_back(new TTreeFormula(variableNames[iVar].c_str(),variables[iVar].c_str(),inTree));
+    cout<<"created formula"<<variableNames[iVar].c_str()<<" "<<variables[iVar].c_str()<<" "<<inTree<<endl;
+  }
   
   vector<TTreeFormula*> BDTvariableSizesFormula;
   for(size_t iVar=0;iVar<bdtvariables.size();iVar++)
@@ -251,9 +255,12 @@ void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = fa
   }
   
   int nEntries = inTree->GetEntries();
+//   inTree->LoadTree(0);
     
   for(int iEntry=0;iEntry<nEntries;iEntry++){
+    Int_t previous = inTree->GetTreeNumber();
     inTree->GetEntry(iEntry);
+    Int_t current = inTree->GetTreeNumber();
     
     if(iEntry%10000 == 0){
       float rt = timer.RealTime();
@@ -269,12 +276,14 @@ void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = fa
         continue;
     }
     
+    
     for(size_t iVar=0;iVar<variables.size();iVar++){
       int nInstances = variableFormula[iVar]->GetNdata();
-      
+      if (previous!=current)variableFormula[iVar]->UpdateFormulaLeaves();
       if(nInstances == 1){
-        if(variableTypes[iVar]=="F")
+        if(variableTypes[iVar]=="F"){
           *floatMap[variableNames[iVar]] = variableFormula[iVar]->EvalInstance(0);
+	}
         else if(variableTypes[iVar]=="I")
           *intMap[variableNames[iVar]] = variableFormula[iVar]->EvalInstance(0);
         else
@@ -291,7 +300,6 @@ void FillVars(TTree* inTree, int sampleIndex, int binIndex, bool appendVars = fa
         }
       }      
     }
-    
     for(size_t iBDTVar=0;iBDTVar<bdtvariables.size();iBDTVar++){
       
       BDTvariableSizesFormula[iBDTVar]->GetNdata();
@@ -436,11 +444,11 @@ void FillAllTrees(bool flatTrees = false, bool appendVars = false){
   
   for(size_t iSample=0;iSample<samples.size();iSample++){
     
-    TFile* inFile = new TFile(sampleFiles[iSample].c_str());
-    TTree* inTree = (TTree*) inFile->Get(sampleTrees[iSample].c_str());
-    
-    //TTree* inTree = new TChain(sampleTrees[iSample].c_str());
-    //inTree->AddFile(sampleFiles[iSample].c_str());
+//     TFile* inFile = new TFile(sampleFiles[iSample].c_str());
+//     TTree* inTree = (TTree*) inFile->Get(sampleTrees[iSample].c_str());
+    std::cout<<"adding Trees to chain"<<std::endl;
+    TChain* inTree = new TChain(sampleTrees[iSample].c_str());
+    inTree->Add(sampleFiles[iSample].c_str());
     
     for( size_t iBin=0; iBin<bins.size();iBin++){
       cout << "FillAllTrees Start Sample " << samples[iSample] << " and Bin " << bins[iBin] << endl;
@@ -452,7 +460,7 @@ void FillAllTrees(bool flatTrees = false, bool appendVars = false){
       }
     }
 
-    inFile->Close();
+//     inFile->Close();
   }
   
   timer.Stop();
