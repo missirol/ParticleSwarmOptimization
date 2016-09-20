@@ -1,0 +1,121 @@
+##Parameters for the Particle Swarm Optimization
+
+##RunOn = EKPSL5 | EKPSL5 | NAFSL5 | NAFSL6
+RunOn=NAFSL6
+
+## Swarm Parameters
+NParticles=20
+NIterations=100
+wIneratia=0.729
+wMemory=1.49445
+wSwarm=1.49445
+
+##FOM = ROCIntegral | Separation | rejB_vs_effS_0.1 | rejB_vs_effS_0.3 |rejB_vs_effS_0.5 | Chi2_B_muSB
+FOM=ROCIntegral
+KSThreshold=0.1
+MaxVariablesInCombination=12
+##only add variable if new FOM > ImprovementThreshold*FOM
+ImprovementThreshold=1.0005
+
+##Following not implemented Yet->experimentally
+##repeat each training n times with different random seeds, Resulting
+##NOTYET FOM=HarmonicMean(FOM)????
+RepeatTrainingNTimes=2
+DrawNRandomAsStartingVars=9
+##NOTYET SaveTrainingsToTrees=False
+
+##TMVA Options
+FactoryString=!V:Silent:Color:!DrawProgressBar:Transformations=I:AnalysisType=Classification
+PreparationString=SplitMode=Random:SplitSeed=0:NormMode=EqualNumEvents:!V
+##if you want to limit the number of events do it eiter PreparationString or here
+nTrain_Signal=
+nTrain_Background=
+nTest_Signal=
+nTest_Background=
+##Weight expression, might need to be declared in WeightVariables furhter down
+## probably same syntax as in TTree::Draw 
+SignalWeightExpression=Weight_CSV*Weight_XS*Weight_ElectronSFID*Weight_MuonSFID*Weight_MuonSFIso*Weight_ElectronSFGFS*Weight_MuonSFHIP*Weight_pu69p2
+BackgroundWeightExpression=Weight_CSV*Weight_XS*Weight_ElectronSFID*Weight_MuonSFID*Weight_MuonSFIso*Weight_ElectronSFGFS*Weight_MuonSFHIP*Weight_pu69p2
+
+
+##Method to train and test
+##only tested with BDT so far
+## you might want to think abount you handle NEGATIVE WEIGHTS
+##Parameters in MethodParams will be overwritten if they span the search space
+MethodType=TMVA::Types::kBDT
+MethodParams=!H:!V:NTrees=100:BoostType=Grad:Shrinkage=0.01:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=10:MaxDepth=2:NegWeightTreatment=IgnoreNegWeightsInTraining
+
+
+## search space
+##coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
+##if min and max value are the same the value is not varied
+coord=["NTrees",300,1500,50,"int"]
+coord=["Shrinkage",0.001,0.05,0.002,"float"]
+coord=["GradBaggingFraction",0.1,0.9,0.05,"float"]
+coord=["nCuts",10,80,4,"int"]
+##coord=["MaxDepth",2,3,1,"int"]
+
+
+##--------------------------------------------------
+##Source Trees:
+## if UseEvenOddSplitting=1, the input trees will be split in training/testsample with Variable "Evt_Odd" 
+## maybe change the variable in PSO/PrepareTrees.C
+## else TMVA will use built in splitting
+UseEvenOddSplitting=0
+SelectionString=
+
+SourceSignalFile=/nfs/dust/cms/user/kelmorab/SplitTrees80X/Category_43/Odd/ttHbb_*_nominal.root
+SourceSignalTree=MVATree
+
+SourceBackgroundFile=/nfs/dust/cms/user/kelmorab/SplitTrees80X/Category_43/Odd/ttbar_*_nominal.root
+SourceBackgroundTree=MVATree
+
+
+##------------------------------------------------
+##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]
+##IMPORTANT dont leave a blank line between the last variable and the end variables line
+##variables the optimization starts with
+InitialVariables:
+["BDT_common5_input_avg_btag_disc_btags","F","","BDT_common5_input_avg_btag_disc_btags"]
+["BDT_common5_input_HT","F","","BDT_common5_input_HT"]
+["BDT_common5_input_sphericity","F","","BDT_common5_input_sphericity"]
+["BDT_common5_input_third_highest_btag","F","","BDT_common5_input_third_highest_btag"]
+["Evt_CSV_Average","F","","Evt_CSV_Average"]
+["BDT_common5_input_M3","F","","BDT_common5_input_M3"]
+["BDT_common5_input_all_sum_pt_with_met","F","","BDT_common5_input_all_sum_pt_with_met"]
+["BDT_common5_input_h1","F","","BDT_common5_input_h1"]
+["BDT_common5_input_pt_all_jets_over_E_all_jets","F","","BDT_common5_input_pt_all_jets_over_E_all_jets"]
+EndVariables
+
+##---------------------------------------------------
+## variables the swarm can try
+AdditionalVariables:
+["BDT_common5_input_dr_between_lep_and_closest_jet","F","","BDT_common5_input_dr_between_lep_and_closest_jet"]
+["BDT_common5_input_closest_tagged_dijet_mass","F","","BDT_common5_input_closest_tagged_dijet_mass"]
+["Evt_blr_ETH_transformed","F","","Evt_blr_ETH_transformed"]
+["BDT_common5_input_dev_from_avg_disc_btags","F","","BDT_common5_input_dev_from_avg_disc_btags"]
+["BDT_common5_input_min_dr_tagged_jets","F","","BDT_common5_input_min_dr_tagged_jets"]
+["BDT_common5_input_h3","F","","BDT_common5_input_h3"]
+["BDT_common5_input_second_jet_pt","F","","BDT_common5_input_second_jet_pt"]
+["BDT_common5_input_fourth_jet_pt","F","","BDT_common5_input_fourth_jet_pt"]
+["BDT_common5_input_maxeta_tag_tag","F","","BDT_common5_input_maxeta_tag_tag"]
+["BDT_common5_input_maxeta_jet_tag","F","","BDT_common5_input_maxeta_jet_tag"]
+["Evt_Deta_JetsAverage","F","","Evt_Deta_JetsAverage"]
+["BDT_common5_input_third_jet_pt","F","","BDT_common5_input_third_jet_pt"]
+EndVariables
+
+##---------------------------------------------------
+## variables used for reweighting and stuff
+WeightVariables:
+["Weight_XS","F","","Weight_XS"]
+["Weight_ElectronSFID","F","","Weight_ElectronSFID"]
+["Weight_MuonSFID","F","","Weight_MuonSFID"]
+["Weight_MuonSFIso","F","","Weight_MuonSFIso"]
+["Weight_ElectronSFGFS","F","","Weight_ElectronSFGFS"]
+["Weight_MuonSFHIP","F","","Weight_MuonSFHIP"]
+["Weight_pu69p2","F","","Weight_pu69p2"]
+["Weight_CSV","F","","Weight_CSV"]
+["Evt_Odd","F","","Evt_Odd"]
+EndVariables
+##---------------------------------------------------
+
