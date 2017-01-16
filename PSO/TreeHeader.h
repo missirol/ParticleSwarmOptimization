@@ -256,12 +256,12 @@ void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = f
   
   int nEntries = inTree->GetEntries();
 //   inTree->LoadTree(0);
-    
-  for(int iEntry=0;iEntry<nEntries;iEntry++){
     Int_t previous = inTree->GetTreeNumber();
+  for(int iEntry=0;iEntry<nEntries;iEntry++){
+    
     inTree->GetEntry(iEntry);
     Int_t current = inTree->GetTreeNumber();
-    
+    if (previous!=current)sampleSelFormula->UpdateFormulaLeaves();
     if(iEntry%10000 == 0){
       float rt = timer.RealTime();
       float cput = timer.CpuTime();
@@ -340,6 +340,8 @@ void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = f
     else
       for(size_t iBranch=0;iBranch<outBranches.size();iBranch++)
         outBranches[iBranch]->Fill();
+      
+    previous=current;
   }
   
   outBranches.clear();
