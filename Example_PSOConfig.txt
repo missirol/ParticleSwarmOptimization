@@ -64,6 +64,8 @@ coord=["nCuts",10,80,4,"int"]
 ## maybe change the variable in PSO/PrepareTrees.C
 ## else TMVA will use built in splitting
 UseEvenOddSplitting=0
+## use selections without quotation marks. E.g.:
+## SelectionString=(N_Jets==4)&&(N_BTagsM==3)
 SelectionString=TMath::Abs(CSV[0])<=1.0
 
 SourceSignalFile=/storage/a/karimel/Spring15_Base20thJuly/forFOMStudy/Category_64/tthbb_nominal.root
