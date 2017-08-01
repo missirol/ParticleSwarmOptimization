@@ -212,9 +212,10 @@ void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = f
     //DANGERZONE
 //     inTree = outTree;
   }
-  else
-    outTree = new TTree("MVATree","MVATree");
-  
+  else{
+    
+    outTree = new TTree(inTree->GetName(),inTree->GetName());
+  }
   std::cout<<inTree->GetEntries()<<std::endl;
   
   TTreeFormula* sampleSelFormula = new TTreeFormula("noSampleSelection","1",inTree);
@@ -355,7 +356,7 @@ void FillVarsFlat(TTree* inTree, int sampleIndex, int binIndex){
   string outFileName = outFileDir+samples[sampleIndex]+"_"+bins[binIndex]+"_tree.root";
   
   TFile* outFile = new TFile(outFileName.c_str(),"recreate");
-  TTree* outTree = new TTree("MVATree","MVATree");
+  TTree* outTree = new TTree(inTree->GetName(),inTree->GetName());
   
   InitAllBranches(outTree);
   
