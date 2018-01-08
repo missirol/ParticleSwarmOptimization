@@ -15,3 +15,6 @@ install/
 config.txt
 selectionList.txt
 output_*/
+Particles/
+InitData/Particle
+PSO/Particle
