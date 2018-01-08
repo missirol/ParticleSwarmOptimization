@@ -76,18 +76,18 @@ SourceSignalTree=event_mvaVariables_step7_cate0
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
-["avgDeltaR_jet_jet_","F","","avgDeltaR_jet_jet_"]
-["mass_jet_jet_min_deltaR_","F","","mass_jet_jet_min_deltaR_"]
-["H3_jet_","F","","H3_jet_"]
-["R1_jet_","F","","R1_jet_"]
-["HT_jets_","F","","HT_jets_"]
-["R4_tag_","F","","R4_tag_"]
-["median_mass_jet_jet_","F","","median_mass_jet_jet_"]
-["mass_higgsLikeDijet2_","F","","mass_higgsLikeDijet2_"]
-["ptSum_jets_leptons_","F","","ptSum_jets_leptons_"]
-["circularity_jet_","F","","circularity_jet_"]
-["avgDeltaR_tag_tag_","F","","avgDeltaR_tag_tag_"]
-["transSphericity_jet_","F","","transSphericity_jet_"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
+["H3_jet","F","","H3_jet"]
+["R1_jet","F","","R1_jet"]
+["HT_jets","F","","HT_jets"]
+["R4_tag","F","","R4_tag"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["circularity_jet","F","","circularity_jet"]
+["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
+["transSphericity_jet","F","","transSphericity_jet"]
 EndVariables
 
 ##---------------------------------------------------
