@@ -65,10 +65,10 @@ UseEvenOddSplitting=0
 ## SelectionString=(N_Jets==4)&&(N_BTagsM==3)
 #SelectionString=TMath::Abs(CSV[0])<=1.0
 
-SourceBackgroundFile=output_180102_jetsAK08_pt350_M50_15categs_newMVAvars/background_TrainingPlusTesting.root
+SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
 SourceBackgroundTree=event_mvaVariables_step7_cate0
 
-SourceSignalFile=output_180102_jetsAK08_pt350_M50_15categs_newMVAvars/signal_TrainingPlusTesting.root
+SourceSignalFile=PSO_input/signal_TrainingPlusTesting.root
 SourceSignalTree=event_mvaVariables_step7_cate0
 
 ##------------------------------------------------
@@ -76,41 +76,33 @@ SourceSignalTree=event_mvaVariables_step7_cate0
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
-["BDTOhio_v2_input_h2","F","","BDTOhio_v2_input_h2"]
-["BDTOhio_v2_input_avg_dr_tagged_jets","F","","BDTOhio_v2_input_avg_dr_tagged_jets"]
-["BDTOhio_v2_input_sphericity","F","","BDTOhio_v2_input_sphericity"]
-["BDTOhio_v2_input_third_highest_btag","F","","BDTOhio_v2_input_third_highest_btag"]
-["BDTOhio_v2_input_h3","F","","BDTOhio_v2_input_h3"]
-["BDTOhio_v2_input_HT","F","","BDTOhio_v2_input_HT"]
-["BDTOhio_v2_input_M3","F","","BDTOhio_v2_input_M3"]
-["BDTOhio_v2_input_fifth_highest_CSV","F","","BDTOhio_v2_input_fifth_highest_CSV"]
-["BDTOhio_v2_input_fourth_highest_btag","F","","BDTOhio_v2_input_fourth_highest_btag"]
+["avgDeltaR_jet_jet_","F","","avgDeltaR_jet_jet_"]
+["mass_jet_jet_min_deltaR_","F","","mass_jet_jet_min_deltaR_"]
+["H3_jet_","F","","H3_jet_"]
+["R1_jet_","F","","R1_jet_"]
+["HT_jets_","F","","HT_jets_"]
+["R4_tag_","F","","R4_tag_"]
+["median_mass_jet_jet_","F","","median_mass_jet_jet_"]
+["mass_higgsLikeDijet2_","F","","mass_higgsLikeDijet2_"]
+["ptSum_jets_leptons_","F","","ptSum_jets_leptons_"]
+["circularity_jet_","F","","circularity_jet_"]
+["avgDeltaR_tag_tag_","F","","avgDeltaR_tag_tag_"]
+["transSphericity_jet_","F","","transSphericity_jet_"]
 EndVariables
 
 ##---------------------------------------------------
 ## variables the swarm can try
 AdditionalVariables:
-["BDTOhio_v2_input_avg_btag_disc_btags","F","","BDTOhio_v2_input_avg_btag_disc_btags"]
-["BDTOhio_v2_input_maxeta_jet_jet","F","","BDTOhio_v2_input_maxeta_jet_jet"]
-["BDTOhio_v2_input_pt_all_jets_over_E_all_jets","F","","BDTOhio_v2_input_pt_all_jets_over_E_all_jets"]
-["BDTOhio_v2_input_all_sum_pt_with_met","F","","BDTOhio_v2_input_all_sum_pt_with_met"]
-["BDTOhio_v2_input_aplanarity","F","","BDTOhio_v2_input_aplanarity"]
-["BDTOhio_v2_input_dr_between_lep_and_closest_jet","F","","BDTOhio_v2_input_dr_between_lep_and_closest_jet"]
-["BDTOhio_v2_input_best_higgs_mass","F","","BDTOhio_v2_input_best_higgs_mass"]
-["BDTOhio_v2_input_fourth_jet_pt","F","","BDTOhio_v2_input_fourth_jet_pt"]
-["BDTOhio_v2_input_invariant_mass_of_everything","F","","BDTOhio_v2_input_invariant_mass_of_everything"]
-["BDTOhio_v2_input_min_dr_tagged_jets","F","","BDTOhio_v2_input_min_dr_tagged_jets"]
-["BDTOhio_v2_input_second_highest_btag","F","","BDTOhio_v2_input_second_highest_btag"]
-["BDTOhio_v2_input_h0","F","","BDTOhio_v2_input_h0"]
-["BDTOhio_v2_input_maxeta_jet_tag","F","","BDTOhio_v2_input_maxeta_jet_tag"]
-["BDTOhio_v2_input_maxeta_tag_tag","F","","BDTOhio_v2_input_maxeta_tag_tag"]
-["Evt_Deta_JetsAverage","F","","Evt_Deta_JetsAverage"]
-["BDTOhio_v2_input_third_jet_pt","F","","BDTOhio_v2_input_third_jet_pt"]
-["Evt_CSV_Average","F","","Evt_CSV_Average"]
-["BDTOhio_v2_input_b","F","","BDTOhio_v2_input_h1"]
-["BDTOhio_v2_input_closest_tagged_dijet_mass","F","","BDTOhio_v2_input_closest_tagged_dijet_mass"]
-["BDTOhio_v2_input_tagged_dijet_mass_closest_to_125","F","","BDTOhio_v2_input_tagged_dijet_mass_closest_to_125"]
-["BDTOhio_v2_input_dEta_fn","F","","BDTOhio_v2_input_dEta_fn"]
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+["HT_jets","F","","HT_jets"]
+["R1_jet","F","","R1_jet"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 EndVariables
 
 ##---------------------------------------------------
