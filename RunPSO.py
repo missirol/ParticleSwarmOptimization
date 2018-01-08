@@ -1,16 +1,25 @@
 #!/usr/bin/env python
-from PSO.PSOManager import PSOManager
-import sys
+import os, sys
+
 from subprocess import call
+
+from PSO.PSOManager import PSOManager
 
 if len(sys.argv)<2:
   print "usage:"
-  print "python PSO.py [OPTION] FILE_WITH_PSO_CONFIG"
+  print "python RunPSO.py [OPTION] FILE_WITH_PSO_CONFIG"
   print "[-t] skip tree creating step, for example if you already did it for a previous run" 
   print "[-v] print additional debug information" 
-  exit(0)
-  
+
+  raise SystemExit
+
 currentPath = sys.path[0]+"/"
+
+if os.path.isdir(currentPath+'/Particles'):
+   raise RuntimeError('"Particles" directory already exists')
+else:
+   print('Created dir '+currentPath+'/Particles')
+   call(['mkdir', '-p', currentPath+'/Particles'])
 
 MakeNewTrees=True
 Verbose=False

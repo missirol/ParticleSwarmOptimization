@@ -94,13 +94,9 @@ EndVariables
 ## variables the swarm can try
 AdditionalVariables:
 ["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
-["HT_jets","F","","HT_jets"]
-["R1_jet","F","","R1_jet"]
-["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
 ["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
 ["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
 ["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
-["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
 ["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
 ["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 EndVariables

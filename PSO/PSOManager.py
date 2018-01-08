@@ -382,14 +382,3 @@ class PSOManager:
       print "Copying the freshly compiled Particle exec to InitialData"
       call(["cp","PSO/Particle","InitData/Particle"])
       print "done"
-
-
-
-
-
-
-
-
-
-
-

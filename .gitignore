@@ -18,3 +18,7 @@ output_*/
 Particles/
 InitData/Particle
 PSO/Particle
+*_C.d
+*_C.so
+*_C_ACLiC_dict_rdict.pcm
+tmp.txt
