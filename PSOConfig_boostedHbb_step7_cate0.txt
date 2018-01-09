@@ -39,37 +39,45 @@ PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
 SignalWeightExpression=globalTimesEventWeight
 BackgroundWeightExpression=globalTimesEventWeight
 
-##Method to train and test
-##only tested with BDT so far
-## you might want to think abount you handle NEGATIVE WEIGHTS
-##Parameters in MethodParams will be overwritten if they span the search space
+##--------------------------------------------------
+## Method to train and test:
+##  - Only tested with BDT so far
+##  - You might want to think about how to handle NEGATIVE WEIGHTS
+##  - Parameters in MethodParams will be overwritten if they span the search space
 MethodType=TMVA::Types::kBDT
 MethodParams=!H:!V:NTrees=100:BoostType=Grad:Shrinkage=0.01:UseBaggedBoost:GradBaggingFraction=0.5:nCuts=10:MaxDepth=2:NegWeightTreatment=IgnoreNegWeightsInTraining
+##--------------------------------------------------
 
-## search space
-##coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
-##if min and max value are the same the value is not varied
+##--------------------------------------------------
+## Search Space:
+##  - coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
+##  - If min and max value are the same the value is not varied
 coord=["NTrees",100,1500,50,"int"]
 coord=["Shrinkage",0.001,0.05,0.002,"float"]
 coord=["GradBaggingFraction",0.1,0.9,0.05,"float"]
 coord=["nCuts",10,80,4,"int"]
 ##coord=["MaxDepth",2,3,1,"int"]
+##--------------------------------------------------
 
 ##--------------------------------------------------
-##Source Trees:
-## if UseEvenOddSplitting=1, the input trees will be split in training/testsample with Variable "Evt_Odd" 
-## maybe change the variable in PSO/PrepareTrees.C
-## else TMVA will use built in splitting
+## Source Trees:
+##  - if UseEvenOddSplitting=1, the input trees will be split in training/testsample with Variable "Evt_Odd"
+##  - maybe change the variable in PSO/PrepareTrees.C
+##    else TMVA will use built-in splitting
 UseEvenOddSplitting=0
-## use selections without quotation marks. E.g.:
-## SelectionString=(N_Jets==4)&&(N_BTagsM==3)
-#SelectionString=TMath::Abs(CSV[0])<=1.0
 
 SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
 SourceBackgroundTree=event_mvaVariables_step7_cate0
 
 SourceSignalFile=PSO_input/signal_TrainingPlusTesting.root
 SourceSignalTree=event_mvaVariables_step7_cate0
+##--------------------------------------------------
+
+##--------------------------------------------------
+## use selections without quotation marks:
+##  - example: SelectionString=(N_Jets==4)&&(N_BTagsM==3)
+#SelectionString=TMath::Abs(CSV[0])<=1.0
+##--------------------------------------------------
 
 ##------------------------------------------------
 ##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]

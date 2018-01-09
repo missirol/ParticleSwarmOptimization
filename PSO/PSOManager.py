@@ -27,6 +27,11 @@ class PSOManager:
       call(['mkdir', '-p', self.DataSubdir+'/logs'])
       call(['mkdir', '-p', self.DataSubdir+'/weights'])
 
+      call(['touch', self.DataSubdir+'/ParticleConfig.txt'])
+      call(['touch', self.DataSubdir+'/ParticleResult.txt'])
+      call(['touch', self.DataSubdir+'/autoLog.txt'])
+      call(['touch', self.DataSubdir+'/dump.txt'])
+
       self.nParticles=10
       self.TenBestMVAs=[[0.0,0.0,"",[],[],[]] for i in range(10)]
       #print self.TenBestMVAs
