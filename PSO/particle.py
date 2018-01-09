@@ -1,8 +1,7 @@
-import ROOT
-import math
+#!/usr/bin/env python
+import subprocess, math, ROOT
+
 from array import array
-from subprocess import call
-import sys
 
 class Particle:
     def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseEvenOddSplitting):
@@ -73,27 +72,28 @@ class Particle:
       self.BestKSGlobal=0.0
 
       #write the job and run files
-      jobfile=open(self.Path+"PSO"+str(self.particleNumber)+".sh" ,"w")
-      execlines=self.QueHelper.GetExecLines()
-      for line in execlines:
-        jobfile.write(line)
-      jobfile.write("cd "+self.Path+"\n")
-      jobfile.write("./Particle")
+      jobfile = open(self.Path+"/PSO"+str(self.particleNumber)+".sh" ,"w")
+      execlines = self.QueHelper.GetExecLines()
+      for line in execlines: jobfile.write(line)
+      jobfile.write('cd '+self.Path+'\n')
+      jobfile.write('./Particle'   +'\n')
       jobfile.close()
-      
-      runfile=open(self.Path+"run.sh","w")
-      runlines=self.QueHelper.GetRunLines()
+
+      runfile = open(self.Path+'/run.sh', 'w')
+      runlines = self.QueHelper.GetRunLines()
       for line in runlines:
-        line=line.replace("INSERTPATHHERE",self.Path)
-        line=line.replace("INSERTEXECSCRIPTHERE","./Particles/Particle"+str(self.particleNumber)+"/PSO"+str(self.particleNumber)+".sh")
+        line = line.replace("INSERTPATHHERE"      , self.Path)
+        line = line.replace("INSERTEXECSCRIPTHERE", self.Path+"/PSO"+str(self.particleNumber)+".sh")
         runfile.write(line)
       runfile.close()
-      
+
+      subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
+
       self.WriteConfig()
-      
+
     def WriteConfig(self):
       #write ConfigFile
-      configfile=open(self.Path+"ParticleConfig.txt","w")
+      configfile=open(self.Path+"/ParticleConfig.txt","w")
       configfile.write("particleNumber "+str(self.particleNumber)+"\n")
       configfile.write("Iteration "+str(self.Iteration)+"\n")
       configfile.write("FOM "+str(self.FOM)+"\n")
@@ -135,15 +135,15 @@ class Particle:
         configfile.write(var+"\n")
       configfile.write("--EndAddVars--\n")
       configfile.close()
-    
+
     def StartEvaluation(self):
-      self.JobID=self.QueHelper.StartJob("./Particles/Particle"+str(self.particleNumber)+"/run.sh")
-      #print self.JobID
-    
+        self.JobID=self.QueHelper.StartJob(self.Path+"/run.sh")
+#        print self.JobID
+
     def CheckJobStatus(self):
-      self.isrunning=self.QueHelper.GetIsJobRunning(self.JobID)
-      return self.isrunning
-            
+        self.isrunning = self.QueHelper.GetIsJobRunning(self.JobID, self.Path+'/CheckJobStatus.txt')
+        return self.isrunning
+
     def UpdateParticle(self, BestCoordsGlobal,Iteration,bestFOMGlobal, bestKSGlobal):
       self.Iteration=Iteration
       self.BestCoordinatesGlobal=BestCoordsGlobal
@@ -200,7 +200,7 @@ class Particle:
       self.WriteConfig()
 
     def GetResult(self):
-      resultfile=open(self.Path+"ParticleResult.txt","r")
+      resultfile=open(self.Path+"/ParticleResult.txt","r")
       lines=list(resultfile)
       #print lines
       fom=0.0
@@ -246,7 +246,7 @@ class Particle:
         print self.BestCoordinates
         print self.BestFOM
       
-      RouteFile=open(self.Path+"ParticleRoute.txt","a")
+      RouteFile=open(self.Path+"/ParticleRoute.txt","a")
       Route=str(fom).replace("\n","")+" "+str(ks).replace("\n","")+" "
       for ccc in self.currentCoordinates:
         Route+=str(ccc[1])+" "
@@ -258,7 +258,7 @@ class Particle:
       return fom, ks, self.MethodParams, self.currentCoordinates, self.initialVariables, self.additionalVariables
       
     #def SaveParticleStatus(self):
-      #PartSavefile=open(self.Path+"ParticleStatus.txt","w")
+      #PartSavefile=open(self.Path+"/ParticleStatus.txt","w")
       ##PartSavefile.write(str(self.Path)+"\n")
       #PartSavefile.write(str(self.KSThreshold)+"\n")
       #PartSavefile.write(str(self.usedVariables)+"\n")

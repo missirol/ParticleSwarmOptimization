@@ -1,1 +1,0 @@
-qsub -cwd -S /bin/bash -o /portal/ekpcms5/home/karimel/TMVA/TMVA/TMVASubBDT/scripts/PSO/Particle1/logs/\$JOB_NAME.o\$JOB_ID -e /portal/ekpcms5/home/karimel/TMVA/TMVA/TMVASubBDT/scripts/PSO/Particle1/logs/\$JOB_NAME.e\$JOB_ID -q 'short' ./Particle1/PSO1.sh

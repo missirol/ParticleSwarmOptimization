@@ -1,14 +1,14 @@
-import ROOT
-from array import array
-from subprocess import call
-from particle import Particle
-from QueHelper import QueHelper
+#!/us/bin/env python
+import os, sys, json, math, ROOT
 import time as timer
-import sys
-import json
+
+from subprocess import call
+
+from particle  import Particle
+from QueHelper import QueHelper
 
 class PSOManager:
-    def __init__(self,Path="",Verbose=True,PSOConfig=""):
+    def __init__(self, OutputDir='', DataSubdir='InitData', Verbose=True, PSOConfig=''):
       self.Verbose=Verbose
       self.vw=1.0
       self.vp=1.0
@@ -20,7 +20,13 @@ class PSOManager:
       self.Coordinates=[]
 
       self.rand=ROOT.TRandom3(0) ## change to !=0 if you want repeatable random seeds
-      self.Path=Path
+
+      self.OutputDir  = os.path.abspath('.' if OutputDir  == '' else OutputDir)
+      self.DataSubdir = self.OutputDir+'/'+('InitData' if DataSubdir == '' else DataSubdir)
+
+      call(['mkdir', '-p', self.DataSubdir+'/logs'])
+      call(['mkdir', '-p', self.DataSubdir+'/weights'])
+
       self.nParticles=10
       self.TenBestMVAs=[[0.0,0.0,"",[],[],[]] for i in range(10)]
       #print self.TenBestMVAs
@@ -169,16 +175,17 @@ class PSOManager:
       #set up the que system
       self.QueHelper=QueHelper(RunSystem)
 
-
-    def SetupParticles(self):
-      for i in range(self.nParticles):
-        call(["rm","-r","-f","Particles/Particle"+str(i)])
-        call(['cp','-r','InitData',"Particles/Particle"+str(i)])
-        call(['mv',"Particles/Particle"+str(i)+"/PSO.sh","Particles/Particle"+str(i)+"/PSO"+str(i)+".sh" ])
-      #print str(self.nParticles)+" Particles set up"
-        
     def InitParticles(self):
+
+      subdir_idx_format = '0'+str(1+int(math.log10(self.nParticles)))+'d'
+
       for part in range(self.nParticles):
+
+        part_dir = self.OutputDir+'/Particle'+format(part, subdir_idx_format)+'/'
+
+        call(['cp', '-r', self.DataSubdir, part_dir])
+#        call(['mv', part_dir+"/PSO.sh", part_dir+"/PSO"+format(part, subdir_idx_format)+".sh" ])
+
         #get starting values for the particle
         #uniformly distributed in coord space
         initialCoords=[]
@@ -198,34 +205,37 @@ class PSOManager:
             exit(1)
           initialCoords.append([coord[0],initValue,initVelocity]) 
         print "Particle", part, " has inital coords ", initialCoords
-        particle=Particle(
-                         self.Path+"Particles/Particle"+str(part)+"/",
-                         part,
-                         self.Verbose,
-                         self.usedVariables,
-                         self.unusedVariables,
-                         self.vw, self.vp, self.vg,
-                         self.Coordinates,
-                         initialCoords,
-                         self.FOM,
-                         self.KSThreshold,
-                         self.FactoryString,
-                         self.PreparationString,
-                         self.SignalWeightExpression,
-                         self.BackgroundWeightExpression,
-                         self.SignalTreeName,
-                         self.BackgroundTreeName,
-                         self.MethodType,
-                         self.MethodParams,
-                         self.QueHelper,
-                         self.MaxVariablesInCombination,
-                         self.ImprovementThreshold,
-                         self.RepeatTrainingNTimes,
-                         self.DrawNRandomAsStartingVars,
-                         self.SaveTrainingsToTrees,
-                         self.UseEvenOddSplitting)
+        particle = Particle(
+          part_dir,
+          part,
+          self.Verbose,
+          self.usedVariables,
+          self.unusedVariables,
+          self.vw, self.vp, self.vg,
+          self.Coordinates,
+          initialCoords,
+          self.FOM,
+          self.KSThreshold,
+          self.FactoryString,
+          self.PreparationString,
+          self.SignalWeightExpression,
+          self.BackgroundWeightExpression,
+          self.SignalTreeName,
+          self.BackgroundTreeName,
+          self.MethodType,
+          self.MethodParams,
+          self.QueHelper,
+          self.MaxVariablesInCombination,
+          self.ImprovementThreshold,
+          self.RepeatTrainingNTimes,
+          self.DrawNRandomAsStartingVars,
+          self.SaveTrainingsToTrees,
+          self.UseEvenOddSplitting
+        )
         #particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)
+
+      #print str(self.nParticles)+" Particles set up"
         
     def RunPSO(self):
       print "\n-------------------------------------------------------------"
@@ -280,66 +290,59 @@ class PSOManager:
         self.BestKSGlobal=self.TenBestMVAs[0][1]
         self.BestCoordinatesGlobal=self.TenBestMVAs[0][5]
         #print self.TenBestMVAs[0]
-        
+
         for particle in self.Particles:
-          particle.UpdateParticle(self.BestCoordinatesGlobal,it,self.BestFOMGlobal,self.BestKSGlobal)
+            particle.UpdateParticle(self.BestCoordinatesGlobal,it,self.BestFOMGlobal,self.BestKSGlobal)
+
         print "\n------------------------------------------------------------------------"
+
         print "Best Result after Iteration "+str(it)
         print self.TenBestMVAs[0][:5]
-        self.SaveStatus("PSOResult.txt")
+        self.SaveStatus(self.OutputDir+"/PSOResult.txt", self.OutputDir+"/FinalMVAConfig_PSO.txt")
         finishTime=timer.time()
         totalTime+=(finishTime-startTime)
-        
-     
-     
+
     def PrintResult(self):
-      print "Ten Best MVAs"
-      for i in range(10):
-        print self.TenBestMVAs[i][:5]
+        print 'Ten Best MVAs'
+        for i in range(10):
+            print self.TenBestMVAs[i][:5]
 
-    def SaveStatus(self, SaveFile):
-      savefile=open(SaveFile,"w")
-      savefile.write("nParticles "+str(self.nParticles)+"\n")
-      savefile.write("wIneratia "+str(self.vw)+"\n")
-      savefile.write("wMemory "+str(self.vp)+"\n")
-      savefile.write("wSwarm "+str(self.vg)+"\n")
-      savefile.write("path "+str(self.Path)+"\n")
-      savefile.write("usedVariables "+str(self.usedVariables)+"\n")
-      savefile.write("unusedVariables "+str(self.unusedVariables)+"\n")
-      savefile.write("KSThreshold "+str(self.KSThreshold)+"\n")
-      savefile.write("TenBestMVAs\n")
-      for i in range(10):
-        savefile.write(str(self.TenBestMVAs[i][:5])+"\n")
-      savefile.close()
-      
-      #for part in self.Particles:
-        #part.SaveParticleStatus()
-      
-      splitPath = self.Path.split("/")
-      #print splitPath
-      last = splitPath[len(splitPath)-2]
-      CatDef = last.partition("_")[2]
-      #print CatDef
-      bestBDTFile=open("FinalMVAConfig_"+CatDef+".txt","w")
-      bestBDTFile.write("FOM "+str(self.TenBestMVAs[0][0])+"\n")
-      bestBDTFile.write("KS "+str(self.TenBestMVAs[0][1])+"\n")
-      bestBDTFile.write("Method "+str(self.TenBestMVAs[0][2])+"\n")
-      bestBDTFile.write("Variables "+str(self.TenBestMVAs[0][3])+"\n")
-      bestBDTFile.write("Factory "+str(self.FactoryString)+"\n")
-      bestBDTFile.write("Preparation "+str(self.PreparationString)+"\n")
-      bestBDTFile.write("SignalWeight "+str(self.SignalWeightExpression)+"\n")
-      bestBDTFile.write("Preparation "+str(self.BackgroundWeightExpression)+"\n")
-      bestBDTFile.write(str(self.TenBestMVAs[0][:5])+"\n")
+    def SaveStatus(self, SaveFile, BestBDTFile):
+        savefile = open(SaveFile,'w')
+        savefile.write('nParticles '     +str(self.nParticles)     +'\n')
+        savefile.write('wIneratia '      +str(self.vw)             +'\n')
+        savefile.write('wMemory '        +str(self.vp)             +'\n')
+        savefile.write('wSwarm '         +str(self.vg)             +'\n')
+        savefile.write('OutputDir '      +str(self.OutputDir)      +'\n')
+        savefile.write('usedVariables '  +str(self.usedVariables)  +'\n')
+        savefile.write('unusedVariables '+str(self.unusedVariables)+'\n')
+        savefile.write('KSThreshold '    +str(self.KSThreshold)    +'\n')
+        savefile.write('TenBestMVAs\n')
+        for i in range(10):
+            savefile.write(str(self.TenBestMVAs[i][:5])+'\n')
+        savefile.close()
 
-      bestBDTFile.close()
+        #for part in self.Particles:
+            #part.SaveParticleStatus()
 
-    
+        bestBDTFile = open(BestBDTFile, 'w')
+        bestBDTFile.write('FOM '         +str(self.TenBestMVAs[0][0])         +'\n')
+        bestBDTFile.write('KS '          +str(self.TenBestMVAs[0][1])         +'\n')
+        bestBDTFile.write('Method '      +str(self.TenBestMVAs[0][2])         +'\n')
+        bestBDTFile.write('Variables '   +str(self.TenBestMVAs[0][3])         +'\n')
+        bestBDTFile.write('Factory '     +str(self.FactoryString)             +'\n')
+        bestBDTFile.write('Preparation ' +str(self.PreparationString)         +'\n')
+        bestBDTFile.write('SignalWeight '+str(self.SignalWeightExpression)    +'\n')
+        bestBDTFile.write('Preparation ' +str(self.BackgroundWeightExpression)+'\n')
+        bestBDTFile.write(                str(self.TenBestMVAs[0][:5])        +'\n')
+        bestBDTFile.close()
+
     def GetVariableNumbers(self):
-      outfile=open(self.Path+"/VariableNumbers.txt","w")
+      outfile=open(self.OutputDir+"/VariableNumbers.txt","w")
       for var in self.usedVariables:
         VarCount=0
         for i in range(self.nParticles):
-          file=open(self.Path+"Particles/Particle"+str(i)+"/ParticleRoute.txt","r")
+          file=open(self.OutputDir+"/Particle"+str(i)+"/ParticleRoute.txt","r")
           lines=list(file)
           for line in lines:
             #print line
@@ -354,7 +357,7 @@ class PSOManager:
       for var in self.unusedVariables:
         VarCount=0
         for i in range(self.nParticles):
-          file=open(self.Path+"Particles/Particle"+str(i)+"/ParticleRoute.txt","r")
+          file=open(self.OutputDir+"/Particle"+str(i)+"/ParticleRoute.txt","r")
           lines=list(file)
           for line in lines:
             if "0.0 " not in line:
@@ -377,8 +380,14 @@ class PSOManager:
       print "did the tests"
 
     def CompileAndSetupClientExecutable(self):
-      print "Freshly Compiling PSO/Particle.C" 
-      call(["g++ -o PSO/Particle PSO/Particle.C `root-config --cflags --glibs` -lTMVA"],shell=True)
-      print "Copying the freshly compiled Particle exec to InitialData"
-      call(["cp","PSO/Particle","InitData/Particle"])
-      print "done"
+
+        if not os.path.isdir(self.DataSubdir):
+           raise RuntimeError('target directory for Particle executable not found: '+self.DataSubdir)
+
+        Particle_C = 'PSO/Particle.C'
+        if not os.path.isfile(Particle_C):
+           raise RuntimeError('source code not found: '+Particle_C)
+
+        print 'Compiling '+Particle_C
+        print('g++ -o '+self.DataSubdir+'/Particle '+Particle_C+' `root-config --cflags --glibs` -lTMVA')
+        call(['g++ -o '+self.DataSubdir+'/Particle '+Particle_C+' `root-config --cflags --glibs` -lTMVA'], shell=True)

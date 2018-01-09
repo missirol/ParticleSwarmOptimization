@@ -1,9 +1,5 @@
-import subprocess
-from subprocess import call
-from subprocess import check_output
-import os
-import sys
-
+#!/usr/bin/env python
+import os, sys, subprocess
 
 class QueHelper:
   def __init__(self,RunSystem):
@@ -12,13 +8,14 @@ class QueHelper:
     self.RunLines=[]
     
     # change if you want to use a different CMSSW Version
-    cmssw=os.environ["CMSSW_BASE"]
-    self.CMSSWBASE=cmssw
+    self.CMSSW_BASE = os.environ['CMSSW_BASE']
+    self.SCRAM_ARCH = os.environ['SCRAM_ARCH']
     print("\n----------------------------------------\n")
-    print "using $CMSSW_BASE ",self.CMSSWBASE
+    print "using CMSSW_BASE="+self.CMSSW_BASE
+    print "using SCRAM_ARCH="+self.SCRAM_ARCH
     print "might not be the right choice, depending on your linux, target linux and CMSSW Version"
     print "changeable in QueHelper.py"
-    
+
     if RunSystem=="EKPSL5":
       thisPortal=os.environ["HOSTNAME"]
       if thisPortal=="ekpcms5":
@@ -39,9 +36,9 @@ class QueHelper:
         exit(1)
       self.ExecLines=[
           "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
-          "export SCRAM_ARCH=slc5_amd64_gcc462\n",
+          "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
           "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
-          "cd "+self.CMSSWBASE+"/src\n",
+          "cd "+self.CMSSW_BASE+"/src\n",
           "eval `scram runtime -sh`\n"
           ]
       self.RunLines=[
@@ -61,9 +58,9 @@ class QueHelper:
           exit(1)
       self.ExecLines=[
           "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
-          "export SCRAM_ARCH=slc6_amd64_gcc481\n",
+          "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
           "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
-          "cd "+self.CMSSWBASE+"/src\n",
+          "cd "+self.CMSSW_BASE+"/src\n",
           "eval `scram runtime -sh`\n"
           ]
       self.RunLines=[
@@ -71,55 +68,57 @@ class QueHelper:
           ] 
     elif RunSystem=="NAFSL6":
       self.ExecLines=[
-          "#!/bin/bash\n",
-          ". /etc/profile.d/modules.sh\n",
-          "module use -a /afs/desy.de/group/cms/modulefiles/\n",
-          "module load cmssw/slc6_amd64_gcc491\n",
-          "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
-          "export SCRAM_ARCH=slc6_amd64_gcc491\n",
-          "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
-          "cd "+self.CMSSWBASE+"/src\n",
-          "eval `scram runtime -sh`\n"
-          ]
-      self.RunLines=[
-          "qsub -l h=bird* -hard -l os=sld6 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
-          ] 
+        "#!/bin/bash\n",
+        ". /etc/profile.d/modules.sh\n",
+        "module use -a /afs/desy.de/group/cms/modulefiles/\n",
+        "module load cmssw/"+self.SCRAM_ARCH+"\n",
+        "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
+        "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
+        "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
+        "cd "+self.CMSSW_BASE+"/src\n",
+        "eval `scram runtime -sh`\n"
+      ]
+      self.RunLines = [
+        "qsub -l os=sld6 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
+      ] 
+
     elif RunSystem=="NAFSL5":
       self.ExecLines=[
-          "#!/bin/bash",
-          ". /etc/profile.d/modules.sh\n",
-          "module use -a /afs/desy.de/group/cms/modulefiles/\n",
-          "module load cmssw/slc5_amd64_gcc462\n",
-          "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
-          "export SCRAM_ARCH=slc5_amd64_gcc462\n",
-          "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
-          "cd "+self.CMSSWBASE+"/src\n",
-          "eval `scram runtime -sh`\n"
-          ]
+        "#!/bin/bash",
+        ". /etc/profile.d/modules.sh\n",
+        "module use -a /afs/desy.de/group/cms/modulefiles/\n",
+        "module load cmssw/"+self.SCRAM_ARCH+"\n",
+        "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
+        "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
+        "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
+        "cd "+self.CMSSW_BASE+"/src\n",
+        "eval `scram runtime -sh`\n"
+      ]
       self.RunLines=[
-          "qsub -l h=bird* -hard -l os=sld5 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
-          ] 
-    
+        "qsub -l os=sld5 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
+      ] 
+
     else:
       print "could not set up the batch system ", self.RunSystem
       print "check QueHelper.py"
       exit(1)
+
     print "set up QueHelper\n"
-    
+
   def GetExecLines(self):
     return self.ExecLines
   
   def GetRunLines(self):
     return self.RunLines
-  
-  def StartJob(self,runScript):
+
+  def StartJob(self, runScript):
     res=""
     try:
-      res=check_output([runScript],shell=True)
+      res=subprocess.check_output([runScript],shell=True)
     except (subprocess.CalledProcessError, OSError) :
       print "could not submit the job"
       exit(1)
-      
+
     res=res.split()
     jid=0
     for r in res:
@@ -127,12 +126,12 @@ class QueHelper:
         jid=int(r)
         break
     return jid
-    
-  def GetIsJobRunning(self, jobID):
-    bufferfile=open("tmp.txt","w")
-    res=""
+
+  def GetIsJobRunning(self, jobID, fpath):
+    bufferfile = open(fpath, 'w')
+    res = ''
     try:
-      res=check_output(["qstat","-j",str(jobID)],stderr=bufferfile)
+      res=subprocess.check_output(["qstat","-j",str(jobID)],stderr=bufferfile)
     except (subprocess.CalledProcessError):
      res=""
     except:

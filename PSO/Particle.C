@@ -228,23 +228,26 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    wSfChi2=signalTest->GetMinimum(SigWeight)*signalTest->GetEntries();
    wBfChi2=backgroundTest->GetMinimum(BkgWeight)*backgroundTest->GetEntries();
    }
-   else{
-   inputS = TFile::Open( "Signal.root" );
-   inputB = TFile::Open( "Background.root" );
- 
-   signal     = (TTree*)inputS->Get(SignalTreeName);
-   background = (TTree*)inputB->Get(BackgroundTreeName);
-   wSfChi2=signal->GetMinimum(SigWeight)*signal->GetEntries();
-   wBfChi2=background->GetMinimum(BkgWeight)*background->GetEntries();
-   
-   factory->AddSignalTree    ( signal,     1.0 );
-   factory->AddBackgroundTree( background, 1.0 );
+   else
+   {
+     inputS = TFile::Open( "Signal.root" );
+     inputB = TFile::Open( "Background.root" );
+
+     signal     = (TTree*) inputS->Get(SignalTreeName);
+     background = (TTree*) inputB->Get(BackgroundTreeName);
+
+     wSfChi2 = (signal    ->GetMinimum(SigWeight) * signal    ->GetEntries());
+     wBfChi2 = (background->GetMinimum(BkgWeight) * background->GetEntries());
+
+     factory->AddSignalTree    (signal,     1.0);
+     factory->AddBackgroundTree(background, 1.0);
    }
    factory->SetBackgroundWeightExpression( SigWeight );
    factory->SetSignalWeightExpression( BkgWeight );
 
-   factory->PrepareTrainingAndTestTree( "", "", PrepString);
-   
+   std::cout << "Running TMVA::Factory::PrepareTrainingAndTestTree(\"\", \"\", \""+PrepString+"\")" << std::endl;
+   factory->PrepareTrainingAndTestTree("", "", PrepString);
+
    //check method and book it
    if(MethodType=="TMVA::Types::kBDT"){
      factory->BookMethod( TMVA::Types::kBDT,"myMVA", MethodString );
@@ -263,15 +266,16 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    //timing studies
    thisTreeTime=thisTimer->RealTime();
    thisTimer->Start();
-      
+
+   std::cout << "Running TMVA::Factory::TrainAllMethods()" << std::endl;
    factory->TrainAllMethods();
+
    std::cout<<"--------Training Done------"<<std::endl;
-   
+
    //timing studies
    thisTrainingTime=thisTimer->RealTime();
    thisTimer->Start();
-   
-   
+
    // ---- Evaluate all MVAs using the set of test events
    factory->TestAllMethods();
    im = factory -> GetMethod("myMVA");

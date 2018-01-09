@@ -187,7 +187,7 @@ void InitAllBranches(TTree* outTree){
 void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = false){
   std::cout<<"filling vars"<<std::endl;
   //string outFileName = outFileDir+samples[sampleIndex]+"_"+bins[binIndex]+"_tree.root";
-  string outFileName = outFileDir+samples[sampleIndex]+".root";
+  string outFileName = outFileDir+"/"+samples[sampleIndex]+".root";
 
   TFile* outFile = new TFile(outFileName.c_str(),"recreate");
   TTree* outTree;
@@ -353,7 +353,7 @@ void FillVars(TChain* inTree, int sampleIndex, int binIndex, bool appendVars = f
 
 
 void FillVarsFlat(TTree* inTree, int sampleIndex, int binIndex){
-  string outFileName = outFileDir+samples[sampleIndex]+"_"+bins[binIndex]+"_tree.root";
+  string outFileName = outFileDir+"/"+samples[sampleIndex]+"_"+bins[binIndex]+"_tree.root";
   
   TFile* outFile = new TFile(outFileName.c_str(),"recreate");
   TTree* outTree = new TTree(inTree->GetName(),inTree->GetName());
