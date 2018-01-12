@@ -4,9 +4,8 @@ ODIR="$1"
 
 mkdir -p "${ODIR}"
 
-for i_categ in `seq 0 0`; do
+for i_categ in `seq 7 7`; do
 
-#  nohup ./runPSO.py --dryrun \
   nohup ./runPSO.py \
     -c     PSOConfig_boostedHbb_step7_cate"${i_categ}".txt \
     -o "${ODIR}"/PSO_boostedHbb_step7_cate"${i_categ}" \
