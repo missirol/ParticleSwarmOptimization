@@ -4,6 +4,7 @@ import subprocess, math, ROOT
 from array import array
 
 class Particle:
+
     def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseEvenOddSplitting):
 
       self.particleNumber=particleNumber
@@ -13,7 +14,7 @@ class Particle:
       self.JobID=0
       self.isrunning=False
       self.rand=ROOT.TRandom3(int(self.particleNumber)) ## Use seed=0 to get non reproduceability
-      
+
       self.initialVariables=usedVariables
       self.additionalVariables=unusedVariables
       self.LastUsedVariables=[]
@@ -24,9 +25,11 @@ class Particle:
       self.Coordinates=coordinates
       self.BestCoordinates=[]
       self.BestCoordinatesGlobal=[]
+
       for coord in self.Coordinates:
-        self.BestCoordinates.append([coord[0],0.0])
-        self.BestCoordinatesGlobal.append([coord[0],0.0])
+          self.BestCoordinates.append([coord[0],0.0])
+          self.BestCoordinatesGlobal.append([coord[0],0.0])
+
       self.currentCoordinates=initialcoordinates
       self.FOM=FOM
       self.KSThreshold=KSThreshold
@@ -43,26 +46,35 @@ class Particle:
       self.ImprovementThreshold=ImprovementThreshold
       self.RepeatTrainingNTimes=RepeatTrainingNTimes
       self.DrawNRandomAsStartingVars=DrawNRandomAsStartingVars
+
       if self.Verbose:
-          print "-------------------------------------------"
-          print "setting up particle ",self.particleNumber
+         print "-------------------------------------------"
+         print "setting up particle", self.particleNumber
+
       if self.DrawNRandomAsStartingVars>0:
-        allVars=self.initialVariables+self.additionalVariables
-        il=len(allVars)
-        self.initialVariables=[]
-        for i in range(self.DrawNRandomAsStartingVars):
-          idx=int(self.rand.Uniform(0,len(allVars)))
-          var=allVars.pop(idx)
-          self.initialVariables.append(var)
-        self.additionalVariables=allVars
-        if self.Verbose:
-          print "Drawing ", self.DrawNRandomAsStartingVars, " starting Variables"
-          print "usedVars\n", self.initialVariables
-          print "unusedVariables\n", self.additionalVariables
-          print il, len(self.initialVariables), len(self.additionalVariables)
+
+         allVars=self.initialVariables+self.additionalVariables
+
+         il=len(allVars)
+
+         self.initialVariables=[]
+
+         for i in range(self.DrawNRandomAsStartingVars):
+             idx=int(self.rand.Uniform(0,len(allVars)))
+             var=allVars.pop(idx)
+             self.initialVariables.append(var)
+
+         self.additionalVariables=allVars
+
+         if self.Verbose:
+            print "Drawing ", self.DrawNRandomAsStartingVars, " starting Variables"
+            print "usedVars\n", self.initialVariables
+            print "unusedVariables\n", self.additionalVariables
+            print il, len(self.initialVariables), len(self.additionalVariables)
+
       self.SaveTrainingsToTrees=SaveTrainingsToTrees
       self.UseEvenOddSplitting=UseEvenOddSplitting
-     
+
       self.AllVariablesAtStart=self.additionalVariables+self.initialVariables
       self.AllVariablesAfterIteration=self.AllVariablesAtStart
 
@@ -71,7 +83,7 @@ class Particle:
       self.BestFOMGlobal=0.0
       self.BestKSGlobal=0.0
 
-      #write the job and run files
+      # write the job and run files
       jobfile = open(self.Path+"/PSO"+str(self.particleNumber)+".sh" ,"w")
       execlines = self.QueHelper.GetExecLines()
       for line in execlines: jobfile.write(line)
@@ -92,7 +104,7 @@ class Particle:
       self.WriteConfig()
 
     def WriteConfig(self):
-      #write ConfigFile
+      # write ConfigFile
       configfile=open(self.Path+"/ParticleConfig.txt","w")
       configfile.write("particleNumber "+str(self.particleNumber)+"\n")
       configfile.write("Iteration "+str(self.Iteration)+"\n")
@@ -111,7 +123,7 @@ class Particle:
       configfile.write("RepeatTrainingNTimes "+str(self.RepeatTrainingNTimes)+"\n")
       configfile.write("MethodType "+str(self.MethodType)+"\n")
       methodString=self.MethodParams
-      #print methodString
+      # print methodString
       for coord in self.currentCoordinates:
         configfile.write("coord "+coord[0]+" "+str(coord[1])+"\n")
         if coord[0] in methodString:
@@ -149,12 +161,13 @@ class Particle:
       self.BestCoordinatesGlobal=BestCoordsGlobal
       self.BestFOMGlobal=bestFOMGlobal
       self.BestKSGlobal=bestKSGlobal
-      
+
       if self.Verbose:
-        print "\nUpdating particle ",self.particleNumber
-        print "current ", self.currentCoordinates
-        print "best global ", self.BestCoordinatesGlobal
-        print "best particle ", self.BestCoordinates
+         print "\nUpdating particle ",self.particleNumber
+         print "current ", self.currentCoordinates
+         print "best global ", self.BestCoordinatesGlobal
+         print "best particle ", self.BestCoordinates
+
       newCoords=[]
       for coord in self.Coordinates:
         curVel=0
@@ -194,22 +207,22 @@ class Particle:
         if self.Verbose:
           print "New Coordinate ", newcoord, newVel
         newCoords.append([coord[0],newcoord,newVel])
-       
+
       self.currentCoordinates=newCoords
-      #print self.currentCoordinates
+#      print self.currentCoordinates
       self.WriteConfig()
 
     def GetResult(self):
       resultfile=open(self.Path+"/ParticleResult.txt","r")
       lines=list(resultfile)
-      #print lines
+
       fom=0.0
       ks=0.0
       self.LastUsedVariables=self.initialVariables
       self.LastUnusedVariables=self.additionalVariables
       self.initialVariables=[]
       self.additionalVariables=[]
-      #print lines
+
       for line in lines:
         if "BestFOM" in line:
           fom=float(line.split(" ",1)[1])
@@ -217,7 +230,6 @@ class Particle:
           ks=float(line.split(" ",1)[1])
         if "MethodString" in line:
           self.MethodParams=line.split(" ",1)[1].strip()
-          #print self.MethodParams
         if "UsedVar" in line:
           self.initialVariables.append(line.split(" ",1)[1].strip())
         if "UnusedVars" in line:
@@ -229,11 +241,11 @@ class Particle:
       for vv in self.AllVariablesAtStart:
         if vv not in self.initialVariables:
           self.additionalVariables.append(vv)
-      
+
       if ks<self.KSThreshold:
         fom=0.0
         ks=0.0
-        #print ROC
+
       else:
         if fom>=self.BestFOM:
           self.BestFOM=fom
@@ -245,7 +257,7 @@ class Particle:
         print "particle ", self.particleNumber
         print self.BestCoordinates
         print self.BestFOM
-      
+
       RouteFile=open(self.Path+"/ParticleRoute.txt","a")
       Route=str(fom).replace("\n","")+" "+str(ks).replace("\n","")+" "
       for ccc in self.currentCoordinates:
@@ -254,47 +266,31 @@ class Particle:
       RouteFile.write(Route)
       RouteFile.write("--Next--\n")
       RouteFile.close()
-      
+
       return fom, ks, self.MethodParams, self.currentCoordinates, self.initialVariables, self.additionalVariables
-      
-    #def SaveParticleStatus(self):
-      #PartSavefile=open(self.Path+"/ParticleStatus.txt","w")
-      ##PartSavefile.write(str(self.Path)+"\n")
-      #PartSavefile.write(str(self.KSThreshold)+"\n")
-      #PartSavefile.write(str(self.usedVariables)+"\n")
-      #PartSavefile.write(str(self.unusedVariables)+"\n")
-      #PartSavefile.write(str(self.particleNumber)+"\n")
-      #PartSavefile.write(str(self.BestROC)+"\n")
-      #PartSavefile.write(str(self.BestKS)+"\n")
-      #PartSavefile.write(str(self.BestNTrees)+"\n")
-      #PartSavefile.write(str(self.BestShrinkage)+"\n")
-      #PartSavefile.write(str(self.BestBagging)+"\n")
-      #PartSavefile.write(str(self.BestCuts)+"\n")
-      #PartSavefile.write(str(self.BestDepth)+"\n")
-      #PartSavefile.write(str(self.VelTree)+"\n")
-      #PartSavefile.write(str(self.VelShrinkage)+"\n")
-      #PartSavefile.write(str(self.VelBagging)+"\n")
-      #PartSavefile.write(str(self.VelCuts)+"\n")
-      #PartSavefile.write(str(self.VelDepth)+"\n")
-      #PartSavefile.write(str(self.NTrees)+"\n")
-      #PartSavefile.write(str(self.Shrinkage)+"\n")
-      #PartSavefile.write(str(self.Bagging)+"\n")
-      #PartSavefile.write(str(self.Cuts)+"\n")
-      #PartSavefile.write(str(self.Depth)+"\n")
-      #PartSavefile.close()
-      
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#    def SaveParticleStatus(self):
+#        PartSavefile=open(self.Path+"/ParticleStatus.txt","w")
+##        PartSavefile.write(str(self.Path)+"\n")
+#        PartSavefile.write(str(self.KSThreshold)+"\n")
+#        PartSavefile.write(str(self.usedVariables)+"\n")
+#        PartSavefile.write(str(self.unusedVariables)+"\n")
+#        PartSavefile.write(str(self.particleNumber)+"\n")
+#        PartSavefile.write(str(self.BestROC)+"\n")
+#        PartSavefile.write(str(self.BestKS)+"\n")
+#        PartSavefile.write(str(self.BestNTrees)+"\n")
+#        PartSavefile.write(str(self.BestShrinkage)+"\n")
+#        PartSavefile.write(str(self.BestBagging)+"\n")
+#        PartSavefile.write(str(self.BestCuts)+"\n")
+#        PartSavefile.write(str(self.BestDepth)+"\n")
+#        PartSavefile.write(str(self.VelTree)+"\n")
+#        PartSavefile.write(str(self.VelShrinkage)+"\n")
+#        PartSavefile.write(str(self.VelBagging)+"\n")
+#        PartSavefile.write(str(self.VelCuts)+"\n")
+#        PartSavefile.write(str(self.VelDepth)+"\n")
+#        PartSavefile.write(str(self.NTrees)+"\n")
+#        PartSavefile.write(str(self.Shrinkage)+"\n")
+#        PartSavefile.write(str(self.Bagging)+"\n")
+#        PartSavefile.write(str(self.Cuts)+"\n")
+#        PartSavefile.write(str(self.Depth)+"\n")
+#        PartSavefile.close()

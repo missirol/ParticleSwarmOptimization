@@ -78,8 +78,17 @@ class QueHelper:
         "cd "+self.CMSSW_BASE+"/src\n",
         "eval `scram runtime -sh`\n"
       ]
+
+      qsub_opts = [
+        '-V',
+        '-pe smp 4',
+        '-l h_vmem=8000M',
+        '-l h_rt=96:00:00',
+        '-S /bin/bash',
+      ]
+
       self.RunLines = [
-        "qsub -l os=sld6 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
+        'qsub -l os=sld6 '+' '.join(qsub_opts)+'-o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
       ] 
 
     elif RunSystem=="NAFSL5":
@@ -94,8 +103,17 @@ class QueHelper:
         "cd "+self.CMSSW_BASE+"/src\n",
         "eval `scram runtime -sh`\n"
       ]
-      self.RunLines=[
-        "qsub -l os=sld5 -l h_vmem=2000M -l s_vmem=2000M -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'default.q' INSERTEXECSCRIPTHERE\n"
+
+      qsub_opts = [
+        '-V',
+        '-pe smp 4',
+        '-l h_vmem=8000M',
+        '-l h_rt=96:00:00',
+        '-S /bin/bash',
+      ]
+
+      self.RunLines = [
+        'qsub -l os=sld5 '+' '.join(qsub_opts)+'-o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
       ] 
 
     else:
