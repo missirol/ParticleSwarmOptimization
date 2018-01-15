@@ -352,9 +352,12 @@ std::cout<<"doing sep"<<std::endl;
    ksS=mva_s->KolmogorovTest(mva_s_tr);
    ksB=mva_b->KolmogorovTest(mva_b_tr);
    KS=TMath::Min(ksS, ksB);
-   std::cout<<"KS: "<<KS<<std::endl;
-   std::cout<<"ROC: "<<ROC<<std::endl;
-   std::cout<<"Sep: "<<sep<<std::endl;
+
+   std::cout<<"KS Sig: " << ksS << std::endl;
+   std::cout<<"KS Bkg: " << ksB << std::endl;
+   std::cout<<"KS: "     << KS  << std::endl;
+   std::cout<<"ROC: "    << ROC << std::endl;
+   std::cout<<"Sep: "    << sep << std::endl;
 
     *testKS=KS;
    //choose wanted FOM
