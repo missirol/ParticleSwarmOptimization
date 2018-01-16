@@ -4,8 +4,8 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=15
-NIterations=1
+NParticles=25
+NIterations=2
 wIneratia=0.729
 wMemory=1.49445
 wSwarm=1.49445
@@ -35,7 +35,7 @@ PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
 #nTest_Signal=
 #nTest_Background=
 ##Weight expression, might need to be declared in WeightVariables furhter down
-## probably same syntax as in TTree::Draw
+## probably same syntax as in TTree::Draw 
 SignalWeightExpression=globalTimesEventWeight
 BackgroundWeightExpression=globalTimesEventWeight
 

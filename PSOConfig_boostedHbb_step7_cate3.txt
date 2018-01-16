@@ -67,10 +67,10 @@ coord=["nCuts",10,80,4,"int"]
 UseEvenOddSplitting=0
 
 SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
-SourceBackgroundTree=event_mvaVariables_step7_cate0
+SourceBackgroundTree=event_mvaVariables_step7_cate3
 
 SourceSignalFile=PSO_input/signal_TrainingPlusTesting.root
-SourceSignalTree=event_mvaVariables_step7_cate0
+SourceSignalTree=event_mvaVariables_step7_cate3
 ##--------------------------------------------------
 
 ##--------------------------------------------------
@@ -84,29 +84,22 @@ SourceSignalTree=event_mvaVariables_step7_cate0
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
-["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
-["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
-["H3_jet","F","","H3_jet"]
-["R1_jet","F","","R1_jet"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
+["R3_jet","F","","R3_jet"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
 ["HT_jets","F","","HT_jets"]
-["R4_tag","F","","R4_tag"]
-["median_mass_jet_jet","F","","median_mass_jet_jet"]
-["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
-["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
-["circularity_jet","F","","circularity_jet"]
-["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
-["transSphericity_jet","F","","transSphericity_jet"]
+["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+["isotropy_tag","F","","isotropy_tag"]
 EndVariables
 
 ##---------------------------------------------------
 ## variables the swarm can try
 AdditionalVariables:
-#["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
-#["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
-#["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
-#["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
-#["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
-#["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 EndVariables
 
 ##---------------------------------------------------
