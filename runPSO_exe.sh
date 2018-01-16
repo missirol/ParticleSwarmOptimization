@@ -25,7 +25,7 @@ fi
 
 mkdir -p "${ODIR}"
 
-for i_categ in `seq 5 7`; do
+for i_categ in `seq 0 7`; do
 
   nohup ./runPSO.py \
     -c     PSOConfig_boostedHbb_step7_cate"${i_categ}".txt \
