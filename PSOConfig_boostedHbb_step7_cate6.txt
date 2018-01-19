@@ -4,8 +4,8 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=25
-NIterations=2
+NParticles=60
+NIterations=3
 wIneratia=0.729
 wMemory=1.49445
 wSwarm=1.49445
@@ -88,11 +88,14 @@ InitialVariables:
 ["fatjet_btagHBB","F","","fatjet_btagHBB"]
 ["fatjet_btagCSVv2","F","","fatjet_btagCSVv2"]
 ["fatjet_ECFbeta1N2_SD","F","","fatjet_ECFbeta1N2_SD"]
+["fatjet_ECFbeta2N2_SD","F","","fatjet_ECFbeta2N2_SD"]
 ["fatjet_eta","F","","fatjet_eta"]
 ["fatjet_subjet_pt_1","F","","fatjet_subjet_pt_1"]
 ["fatjet_subjet_pt_2","F","","fatjet_subjet_pt_2"]
 ["fatjet_subjet_btagCSVv2_1","F","","fatjet_subjet_btagCSVv2_1"]
 ["fatjet_subjet_btagCSVv2_2","F","","fatjet_subjet_btagCSVv2_2"]
+["N_jets","I","","N_jets"]
+["N_btags","I","","N_btags"]
 ["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
 ["HT_jets","F","","HT_jets"]
 EndVariables
