@@ -47,7 +47,7 @@ for i_sample in signal background; do
 
   hadd "${ODIR}"/"${i_sample}"_TrainingPlusTesting.root "${i_trai}" "${i_test}"
 
-  printf ">>> created PSO input file: ${ODIR}/${i_sample}_TrainingPlusTesting.root\n"
+  printf "\n>>> created PSO input file: ${ODIR}/${i_sample}_TrainingPlusTesting.root\n\n"
 
   unset -v i_trai i_test
 
