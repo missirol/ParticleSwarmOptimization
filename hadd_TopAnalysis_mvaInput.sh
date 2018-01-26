@@ -14,9 +14,9 @@ elif [ "$#" -eq 2 ]; then
 
 else
 
-  printf "\n>>> ERROR -- invalid list of command-line argument(s):\n"
-  printf   "             [1] path to output directory\n"
-  printf   "             [2] path to input directory (optional)\n\n"
+  printf "\n%s\n" ">>> ERROR -- invalid list of command-line argument(s):"
+  printf "%s\n"   "             [1] path to output directory"
+  printf "%s\n\n" "             [2] path to input directory (optional)"
   exit
 
 fi
@@ -47,7 +47,7 @@ for i_sample in signal background; do
 
   hadd "${ODIR}"/"${i_sample}"_TrainingPlusTesting.root "${i_trai}" "${i_test}"
 
-  printf "\n>>> created PSO input file: ${ODIR}/${i_sample}_TrainingPlusTesting.root\n\n"
+  printf "\n%s\n\n" ">>> created PSO input file: ${ODIR}/${i_sample}_TrainingPlusTesting.root"
 
   unset -v i_trai i_test
 
