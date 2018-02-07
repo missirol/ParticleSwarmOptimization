@@ -4,8 +4,8 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=25
-NIterations=2
+NParticles=60
+NIterations=3
 wIneratia=0.729
 wMemory=1.49445
 wSwarm=1.49445

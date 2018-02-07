@@ -4,8 +4,8 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=25
-NIterations=2
+NParticles=60
+NIterations=3
 wIneratia=0.729
 wMemory=1.49445
 wSwarm=1.49445
@@ -101,12 +101,6 @@ EndVariables
 ##---------------------------------------------------
 ## variables the swarm can try
 AdditionalVariables:
-#["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
-#["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
-#["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
-#["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
-#["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
-#["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 EndVariables
 
 ##---------------------------------------------------
