@@ -18,21 +18,18 @@ else
   printf "%s\n"   "             [1] path to output directory"
   printf "%s\n\n" "             [2] path to input directory (optional)"
   exit
-
 fi
 
 if [ -d "${ODIR}" ]; then
 
-  printf "\n>>> ERROR -- target output directory already exists: ${ODIR}\n\n"
+  printf "\n%s\n\n" ">>> ERROR -- target output directory already exists: ${ODIR}"
   exit
-
 fi
 
 if [ ! -d "${IDIR}" ]; then
 
-  printf "\n>>> ERROR -- target input directory not found: ${IDIR}\n\n"
+  printf "\n%s\n\n" ">>> ERROR -- target input directory not found: ${IDIR}"
   exit
-
 fi
 
 mkdir -p "${ODIR}"
@@ -42,8 +39,8 @@ for i_sample in signal background; do
   i_trai="${IDIR}"/"${i_sample}"Training.root
   i_test="${IDIR}"/"${i_sample}"Testing.root
 
-  if [ ! -f "${i_trai}" ]; then printf "\n>>> ERROR -- target input file not found: ${i_trai}\n\n"; break; fi;
-  if [ ! -f "${i_test}" ]; then printf "\n>>> ERROR -- target input file not found: ${i_test}\n\n"; break; fi;
+  if [ ! -f "${i_trai}" ]; then printf "\n%s\n\n" ">>> ERROR -- target input file not found: ${i_trai}"; break; fi;
+  if [ ! -f "${i_test}" ]; then printf "\n%s\n\n" ">>> ERROR -- target input file not found: ${i_test}"; break; fi;
 
   hadd "${ODIR}"/"${i_sample}"_TrainingPlusTesting.root "${i_trai}" "${i_test}"
 
