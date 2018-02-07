@@ -9,11 +9,6 @@
 *.tar.gz
 *.zip
 #*#
-build_ntupleCommon/
-build_ttH/
-install/
-config.txt
-selectionList.txt
 output_*/
 Particles/
 InitData/Particle

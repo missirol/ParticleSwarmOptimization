@@ -2,38 +2,50 @@
 
 set -e
 
-if [ "$#" -eq 1 ]; then
+if [ "$#" -gt 1 ]; then
 
   ODIR="$1"
 
 else
 
-  printf "\n>>> ERROR -- invalid list of command-line argument(s):\n"
-  printf   "             [1] path to output directory\n\n"
+  printf "\n%s\n" ">>> ERROR -- invalid list of command-line argument(s):"
+  printf "%s\n"   "          [1]  path to output directory"
+  printf "%s\n\n" "          [2+] PSO configuration file(s)"
   exit
-
 fi
 
 if [ -d "${ODIR}" ]; then
 
-  printf "\n>>> ERROR -- target output directory already exists: ${ODIR}\n\n"
+  printf "\n%s\n\n" ">>> ERROR -- target output directory already exists: ${ODIR}"
   exit
-
 fi
 
 ###
 
-mkdir -p "${ODIR}"
+for cfgfile in "${@:2}"; do
 
-for i_categ in `seq 0 7`; do
+  if [ ! -f "${cfgfile}" ]; then
 
-  nohup ./runPSO.py \
-    -c     PSOConfig_boostedHbb_step7_cate"${i_categ}".txt \
-    -o "${ODIR}"/PSO_boostedHbb_step7_cate"${i_categ}" \
-    >& "${ODIR}"/PSO_boostedHbb_step7_cate"${i_categ}".log &
+    printf "\n%s\n\n" ">>> WARNING -- target configuration file not found: ${cfgfile}"
+    continue
+  fi
+
+  if [ ! -d "${ODIR}" ]; then mkdir -p "${ODIR}"; fi;
+
+  cfgname=$(basename "${cfgfile}")
+  cfgname="${cfgname%_config.txt}"
+
+  printf "%s\n" "> ${ODIR}/${cfgname}"
+
+#  nohup ./runPSO.py \
+#    -c           "${cfgfile}" \
+#    -o "${ODIR}"/"${cfgname}" \
+#    >& "${ODIR}"/"${cfgname}".log &
+
+  unset -v cfgname
 
 done
-unset -v i_categ
+unset -v cfgfile
 
 ###
 
