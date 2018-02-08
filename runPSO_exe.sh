@@ -37,10 +37,10 @@ for cfgfile in "${@:2}"; do
 
   printf "%s\n" "> ${ODIR}/${cfgname}"
 
-#  nohup ./runPSO.py \
-#    -c           "${cfgfile}" \
-#    -o "${ODIR}"/"${cfgname}" \
-#    >& "${ODIR}"/"${cfgname}".log &
+  nohup ./runPSO.py \
+    -c           "${cfgfile}" \
+    -o "${ODIR}"/"${cfgname}" \
+    >& "${ODIR}"/"${cfgname}".log &
 
   unset -v cfgname
 

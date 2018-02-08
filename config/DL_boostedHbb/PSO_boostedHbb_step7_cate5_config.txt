@@ -84,6 +84,8 @@ SourceSignalTree=event_mvaVariables_step7_cate5
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
+["N_btags","I","","N_btags"]
+["N_jets","I","","N_jets"]
 ["fatjet_Msubjets_cor","F","","fatjet_Msubjets_cor"]
 ["fatjet_btagHBB","F","","fatjet_btagHBB"]
 ["fatjet_btagCSVv2","F","","fatjet_btagCSVv2"]
@@ -94,8 +96,6 @@ InitialVariables:
 ["fatjet_subjet_pt_2","F","","fatjet_subjet_pt_2"]
 ["fatjet_subjet_btagCSVv2_1","F","","fatjet_subjet_btagCSVv2_1"]
 ["fatjet_subjet_btagCSVv2_2","F","","fatjet_subjet_btagCSVv2_2"]
-["N_jets","I","","N_jets"]
-["N_btags","I","","N_btags"]
 ["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
 ["HT_jets","F","","HT_jets"]
 EndVariables

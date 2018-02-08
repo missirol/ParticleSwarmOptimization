@@ -5,7 +5,7 @@ set -e
 if   [ "$#" -eq 1 ]; then
 
   ODIR="$1"
-  IDIR="${TTHBB_ANALYSIS}"/"${ODIR}"/mvaInput_mvaEvent_mvaEventP_boostedHbb_cp/Nominal/combined
+  IDIR="${TTHBB_ANALYSIS}"/"${ODIR}"/mvaInput_mvaEvent_mvaEventP_boostedHbb_cp_reco/Nominal/combined
 
 elif [ "$#" -eq 2 ]; then
 
