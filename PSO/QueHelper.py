@@ -82,14 +82,14 @@ class QueHelper:
       qsub_opts = [
         '-S /bin/bash',
         '-V',
-        '-pe local 4-8',
+#        '-pe local 4-8',
         '-l h_vmem=4G',
         '-l h_fsize=1G',
         '-l h_rt=96:00:00',
       ]
 
       self.RunLines = [
-        'qsub -l os=sld6 '+' '.join(qsub_opts)+' -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
+        'qsub '+' '.join(qsub_opts)+' -l os=sld6 -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
       ] 
 
     elif RunSystem=="NAFSL5":
@@ -108,14 +108,14 @@ class QueHelper:
       qsub_opts = [
         '-S /bin/bash',
         '-V',
-        '-pe local 4-8',
+#        '-pe local 4-8',
         '-l h_vmem=4G',
         '-l h_fsize=1G',
         '-l h_rt=96:00:00',
       ]
 
       self.RunLines = [
-        'qsub -l os=sld5 '+' '.join(qsub_opts)+' -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
+        'qsub '+' '.join(qsub_opts)+' -l os=sld5 -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
       ] 
 
     else:
