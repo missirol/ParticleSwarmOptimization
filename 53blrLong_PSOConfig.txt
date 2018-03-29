@@ -13,7 +13,7 @@ wSwarm=1.49445
 ##FOM = ROCIntegral | Separation | rejB_vs_effS_0.1 | rejB_vs_effS_0.3 |rejB_vs_effS_0.5 | Chi2_B_muSB
 FOM=ROCIntegral
 KSThreshold=0.1
-MaxVariablesInCombination=8
+MaxVariablesInCombination=10
 ##only add variable if new FOM > ImprovementThreshold*FOM
 ImprovementThreshold=1.0002
 
@@ -21,7 +21,7 @@ ImprovementThreshold=1.0002
 ##repeat each training n times with different random seeds, Resulting
 ##NOTYET FOM=HarmonicMean(FOM)????
 RepeatTrainingNTimes=1
-DrawNRandomAsStartingVars=6
+DrawNRandomAsStartingVars=8
 ##NOTYET SaveTrainingsToTrees=False
 
 ##TMVA Options
@@ -64,10 +64,10 @@ coord=["nCuts",10,80,4,"int"]
 UseEvenOddSplitting=0
 SelectionString=
 
-SourceSignalFile=/nfs/dust/cms/user/kelmorab/SplitTrees04102017/Category_43/Odd/ttHbb_*_nominal.root
+SourceSignalFile=/nfs/dust/cms/user/kelmorab/SplitTrees04102017/Category_53/Odd/ttHbb_*_nominal.root
 SourceSignalTree=MVATree
 
-SourceBackgroundFile=/nfs/dust/cms/user/kelmorab/SplitTrees04102017/Category_43/Odd/ttbar_*_nominal.root
+SourceBackgroundFile=/nfs/dust/cms/user/kelmorab/SplitTrees04102017/Category_53/Odd/ttbar_*_nominal.root
 SourceBackgroundTree=MVATree
 
 ##------------------------------------------------
@@ -75,27 +75,28 @@ SourceBackgroundTree=MVATree
 ##IMPORTANT dont leave a blank line between the last variable and the end variables line
 ##variables the optimization starts with
 InitialVariables:
-["BDT_common5_input_HT","F","","BDT_common5_input_HT"]
 ["BDT_common5_input_MHT","F","","BDT_common5_input_MHT"]
-["BDT_common5_input_aplanarity","F","","BDT_common5_input_aplanarity"]
+["BDT_common5_input_Mlb","F","","BDT_common5_input_Mlb"]
 ["BDT_common5_input_all_sum_pt_with_met","F","","BDT_common5_input_all_sum_pt_with_met"]
-["BDT_common5_input_closest_tagged_dijet_mass","F","","BDT_common5_input_closest_tagged_dijet_mass"]
-["BDT_common5_input_avg_dr_tagged_jets","F","","BDT_common5_input_avg_dr_tagged_jets"]
-["BDT_common5_input_first_jet_pt","F","","BDT_common5_input_first_jet_pt"]
-["BDT_common5_input_dr_between_lep_and_closest_jet","F","","BDT_common5_input_dr_between_lep_and_closest_jet"]
-["BDT_common5_input_fourth_highest_btag","F","","BDT_common5_input_fourth_highest_btag"]
+["BDT_common5_input_aplanarity","F","","BDT_common5_input_aplanarity"]
 ["BDT_common5_input_avg_btag_disc_btags","F","","BDT_common5_input_avg_btag_disc_btags"]
+["BDT_common5_input_closest_tagged_dijet_mass","F","","BDT_common5_input_closest_tagged_dijet_mass"]
+["BDT_common5_input_dr_between_lep_and_closest_jet","F","","BDT_common5_input_dr_between_lep_and_closest_jet"]
+["BDT_common5_input_first_jet_pt","F","","BDT_common5_input_first_jet_pt"]
+["BDT_common5_input_fourth_highest_btag","F","","BDT_common5_input_fourth_highest_btag"]
 ["BDT_common5_input_h1","F","","BDT_common5_input_h1"]
+["BDT_common5_input_h3","F","","BDT_common5_input_h3"]
 EndVariables
 
 ##---------------------------------------------------
 ## variables the swarm can try
 AdditionalVariables:
-["BDT_common5_input_h2","F","","BDT_common5_input_h2"]
 ["BDT_common5_input_maxeta_tag_tag","F","","BDT_common5_input_maxeta_tag_tag"]
-["BDT_common5_input_min_dr_tagged_jets","F","","BDT_common5_input_min_dr_tagged_jets"]
+["BDT_common5_input_maxeta_jet_jet","F","","BDT_common5_input_maxeta_jet_jet"]
+["BDT_common5_input_sphericity","F","","BDT_common5_input_sphericity"]
+["BDT_common5_input_pt_all_jets_over_E_all_jets","F","","BDT_common5_input_pt_all_jets_over_E_all_jets"]
 ["Evt_blr_ETH_transformed","F","","Evt_blr_ETH_transformed"]
-["Evt_M2_TaggedJetsAverage","F","","Evt_M2_TaggedJetsAverage"]
+["BDT_common5_input_tagged_dijet_mass_closest_to_125","F","","BDT_common5_input_tagged_dijet_mass_closest_to_125"]
 EndVariables
 
 ##---------------------------------------------------
