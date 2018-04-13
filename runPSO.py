@@ -1,12 +1,8 @@
 #!/usr/bin/env python
-import argparse, os
-
-from subprocess import call
+import argparse, os, subprocess
 
 from PSO.PSOManager import PSOManager
-
-def KILL(log):
-    raise SystemExit('\n '+'\033[1m'+'@@@ '+'\033[91m'+'FATAL'  +'\033[0m'+' -- '+log+'\n')
+from PSO.utils      import *
 
 if __name__ == '__main__':
     ### args
@@ -42,13 +38,13 @@ if __name__ == '__main__':
     DATA_SUBDIR = 'InitData'
 
     print('Created dir '+opts.output_dir)
-    call(['mkdir', '-p', opts.output_dir])
-    call(['mkdir', '-p', opts.output_dir+'/'+DATA_SUBDIR])
+    subprocess.call(['mkdir', '-p', opts.output_dir])
+    subprocess.call(['mkdir', '-p', opts.output_dir+'/'+DATA_SUBDIR])
 
-    call(['cp', opts.config, opts.output_dir+'/'+DATA_SUBDIR+'/config.txt'])
+    subprocess.call(['cp', opts.config, opts.output_dir+'/'+DATA_SUBDIR+'/config.txt'])
 
     if not opts.skip_trees:
-       call(['root', '-b', '-q', 'PSO/PrepareTrees.C+(\"'+opts.config+'\", \"'+opts.output_dir+'/'+DATA_SUBDIR+'\")'])
+       subprocess.call(['root', '-b', '-q', 'PSO/PrepareTrees.C+(\"'+opts.config+'\", \"'+opts.output_dir+'/'+DATA_SUBDIR+'\")'])
 
     PSO = PSOManager(opts.output_dir, DATA_SUBDIR, opts.verbose, opts.config)
     PSO.CompileAndSetupClientExecutable()

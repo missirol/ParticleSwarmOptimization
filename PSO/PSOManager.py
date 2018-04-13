@@ -1,11 +1,10 @@
 #!/us/bin/env python
-import os, sys, json, math, ROOT
-import time as timer
-
-from subprocess import call
+import os, sys, json, math, ROOT, time, subprocess
 
 from particle  import Particle
 from QueHelper import QueHelper
+
+from utils import *
 
 class PSOManager:
     def __init__(self, OutputDir='', DataSubdir='InitData', Verbose=True, PSOConfig=''):
@@ -24,13 +23,13 @@ class PSOManager:
       self.OutputDir  = os.path.abspath('.' if OutputDir  == '' else OutputDir)
       self.DataSubdir = self.OutputDir+'/'+('InitData' if DataSubdir == '' else DataSubdir)
 
-      call(['mkdir', '-p', self.DataSubdir+'/logs'])
-      call(['mkdir', '-p', self.DataSubdir+'/weights'])
+      subprocess.call(['mkdir', '-p', self.DataSubdir+'/logs'])
+      subprocess.call(['mkdir', '-p', self.DataSubdir+'/weights'])
 
-      call(['touch', self.DataSubdir+'/ParticleConfig.txt'])
-      call(['touch', self.DataSubdir+'/ParticleResult.txt'])
-      call(['touch', self.DataSubdir+'/autoLog.txt'])
-      call(['touch', self.DataSubdir+'/dump.txt'])
+      subprocess.call(['touch', self.DataSubdir+'/ParticleConfig.txt'])
+      subprocess.call(['touch', self.DataSubdir+'/ParticleResult.txt'])
+      subprocess.call(['touch', self.DataSubdir+'/autoLog.txt'])
+      subprocess.call(['touch', self.DataSubdir+'/dump.txt'])
 
       self.nParticles=10
       self.TenBestMVAs=[[0.0,0.0,"",[],[],[]] for i in range(10)]
@@ -188,8 +187,8 @@ class PSOManager:
 
         part_dir = self.OutputDir+'/Particle'+format(part, subdir_idx_format)+'/'
 
-        call(['cp', '-r', self.DataSubdir, part_dir])
-#        call(['mv', part_dir+"/PSO.sh", part_dir+"/PSO"+format(part, subdir_idx_format)+".sh" ])
+        subprocess.call(['cp', '-r', self.DataSubdir, part_dir])
+#        subprocess.call(['mv', part_dir+"/PSO.sh", part_dir+"/PSO"+format(part, subdir_idx_format)+".sh" ])
 
         #get starting values for the particle
         #uniformly distributed in coord space
@@ -237,11 +236,11 @@ class PSOManager:
           self.SaveTrainingsToTrees,
           self.UseEvenOddSplitting
         )
-        #particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
+#        particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)
 
-      #print str(self.nParticles)+" Particles set up"
-        
+#      print str(self.nParticles)+" Particles set up"
+
     def RunPSO(self):
       print "\n-------------------------------------------------------------"
       print "Starting Optimization"
@@ -251,7 +250,7 @@ class PSOManager:
       totalTime=0.0
       nIterations=self.NIterations
       for it in range(nIterations):
-        startTime=timer.time()
+        startTime=time.time()
         for particle in self.Particles:
           particle.StartEvaluation()
         running=True
@@ -262,7 +261,7 @@ class PSOManager:
         print "Number of particles finished :"
         while running:
           nFinished=0
-          timer.sleep(30)
+          time.sleep(30)
           for particle in self.Particles:
             partRun = particle.CheckJobStatus()
             if partRun==False:
@@ -303,8 +302,8 @@ class PSOManager:
 
         print "Best Result after Iteration "+str(it)
         print self.TenBestMVAs[0][:5]
-        self.SaveStatus(self.OutputDir+"/PSOResult.txt", self.OutputDir+"/FinalMVAConfig_PSO.txt")
-        finishTime=timer.time()
+        self.SaveStatus(self.OutputDir+"/PSOResult.txt", self.OutputDir+"/FinalMVAConfig_PSO.txt", self.OutputDir+'.conf')
+        finishTime=time.time()
         totalTime+=(finishTime-startTime)
 
     def PrintResult(self):
@@ -312,8 +311,8 @@ class PSOManager:
         for i in range(10):
             print self.TenBestMVAs[i][:5]
 
-    def SaveStatus(self, SaveFile, BestBDTFile):
-        savefile = open(SaveFile, 'a')
+    def SaveStatus(self, SaveFile, BestBDTFile, FinalMVAConfFile=None):
+        savefile = open(SaveFile, 'w')
         savefile.write('nParticles '     +str(self.nParticles)     +'\n')
         savefile.write('wIneratia '      +str(self.vw)             +'\n')
         savefile.write('wMemory '        +str(self.vp)             +'\n')
@@ -329,7 +328,7 @@ class PSOManager:
 
 #        for part in self.Particles: part.SaveParticleStatus()
 
-        bestBDTFile = open(BestBDTFile, 'a')
+        bestBDTFile = open(BestBDTFile, 'w')
         bestBDTFile.write('FOM '         +str(self.TenBestMVAs[0][0])         +'\n')
         bestBDTFile.write('KS '          +str(self.TenBestMVAs[0][1])         +'\n')
         bestBDTFile.write('Method '      +str(self.TenBestMVAs[0][2])         +'\n')
@@ -341,6 +340,26 @@ class PSOManager:
         bestBDTFile.write(                str(self.TenBestMVAs[0][:5])        +'\n')
         bestBDTFile.write('\n')
         bestBDTFile.close()
+
+        if FinalMVAConfFile != None:
+
+           if os.path.exists(FinalMVAConfFile):
+              KILL('PSOManager.py -- path to target output file for final MVA configuration already exists: '+FinalMVAConfFile)
+
+           finalMVAConfFile = open(FinalMVAConfFile, 'w')
+           finalMVAConfFile.write('[configuration]'+'\n')
+           finalMVAConfFile.write('\n')
+           finalMVAConfFile.write('factory    = '+str(self.FactoryString)             +'\n')
+           finalMVAConfFile.write('dataloader = '+str(self.PreparationString)         +'\n')
+           finalMVAConfFile.write('\n')
+           finalMVAConfFile.write('method = kBDT, BDTG, '+str(self.TenBestMVAs[0][2]) +'\n')
+           finalMVAConfFile.write('\n')
+           finalMVAConfFile.write('[variables]'+'\n')
+           for i_var in self.TenBestMVAs[0][3]: finalMVAConfFile.write(str(i_var)+'\n')
+           finalMVAConfFile.write('\n')
+           finalMVAConfFile.write('[spectators]'+'\n')
+           for i_spc in self.TenBestMVAs[0][4]: finalMVAConfFile.write(str(i_spc)+'\n')
+           finalMVAConfFile.close()
 
     def GetVariableNumbers(self):
       outfile=open(self.OutputDir+"/VariableNumbers.txt","w")
@@ -395,4 +414,4 @@ class PSOManager:
 
         print 'Compiling '+Particle_C
         print('g++ -o '+self.DataSubdir+'/Particle '+Particle_C+' `root-config --cflags --glibs` -lTMVA')
-        call(['g++ -o '+self.DataSubdir+'/Particle '+Particle_C+' `root-config --cflags --glibs` -lTMVA'], shell=True)
+        subprocess.call(['g++ -o '+self.DataSubdir+'/Particle '+Particle_C+' `root-config --cflags --glibs` -lTMVA'], shell=True)
