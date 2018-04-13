@@ -313,7 +313,7 @@ class PSOManager:
             print self.TenBestMVAs[i][:5]
 
     def SaveStatus(self, SaveFile, BestBDTFile):
-        savefile = open(SaveFile,'w')
+        savefile = open(SaveFile, 'a')
         savefile.write('nParticles '     +str(self.nParticles)     +'\n')
         savefile.write('wIneratia '      +str(self.vw)             +'\n')
         savefile.write('wMemory '        +str(self.vp)             +'\n')
@@ -323,14 +323,13 @@ class PSOManager:
         savefile.write('unusedVariables '+str(self.unusedVariables)+'\n')
         savefile.write('KSThreshold '    +str(self.KSThreshold)    +'\n')
         savefile.write('TenBestMVAs\n')
-        for i in range(10):
-            savefile.write(str(self.TenBestMVAs[i][:5])+'\n')
+        for i in range(10): savefile.write(str(self.TenBestMVAs[i][:5])+'\n')
+        savefile.write('\n')
         savefile.close()
 
-        #for part in self.Particles:
-            #part.SaveParticleStatus()
+#        for part in self.Particles: part.SaveParticleStatus()
 
-        bestBDTFile = open(BestBDTFile, 'w')
+        bestBDTFile = open(BestBDTFile, 'a')
         bestBDTFile.write('FOM '         +str(self.TenBestMVAs[0][0])         +'\n')
         bestBDTFile.write('KS '          +str(self.TenBestMVAs[0][1])         +'\n')
         bestBDTFile.write('Method '      +str(self.TenBestMVAs[0][2])         +'\n')
@@ -340,6 +339,7 @@ class PSOManager:
         bestBDTFile.write('SignalWeight '+str(self.SignalWeightExpression)    +'\n')
         bestBDTFile.write('Preparation ' +str(self.BackgroundWeightExpression)+'\n')
         bestBDTFile.write(                str(self.TenBestMVAs[0][:5])        +'\n')
+        bestBDTFile.write('\n')
         bestBDTFile.close()
 
     def GetVariableNumbers(self):
