@@ -6,7 +6,7 @@ from subprocess import call
 from PSO.PSOManager import PSOManager
 
 def KILL(log):
-    raise RuntimeError('@@@ FATAL -- '+log)
+    raise SystemExit('\n '+'\033[1m'+'@@@ '+'\033[91m'+'FATAL'  +'\033[0m'+' -- '+log+'\n')
 
 if __name__ == '__main__':
     ### args
@@ -23,13 +23,13 @@ if __name__ == '__main__':
     parser.add_argument('-v', '--verbose', dest='verbose',
                         action='store_true', default=False,
                         help='print additional debug information')
-    parser.add_argument('--dryrun', dest='dryrun',
+    parser.add_argument('--dry-run', dest='dry_run',
                         action='store_true', default=False,
                         help='enable dry-run mode (PSO set up but not executed)')
     opts, opts_unknown = parser.parse_known_args()
     ###
 
-    log_prx = 'runPSO.py -- '
+    log_prx = os.path.basename(__file__)+' -- '
 
     if not opts.config    : KILL(log_prx+'unspecified path to PSO configuration file [-c]')
     if not opts.output_dir: KILL(log_prx+'unspecified path to output directory [-o]')
@@ -54,6 +54,6 @@ if __name__ == '__main__':
     PSO.CompileAndSetupClientExecutable()
     PSO.InitParticles()
 
-    if not opts.dryrun:
+    if not opts.dry_run:
        PSO.RunPSO()
        PSO.PrintResult()
