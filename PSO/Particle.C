@@ -467,7 +467,7 @@ void Particle()
  TString SignalTreeName="MVATree";
  TString BackgroundTreeName="MVATree";
  Int_t MaxVariablesInCombination=10;
- Int_t MinVariablesInCombination=7;
+ Int_t MinVariablesInCombination=6;
  Double_t ImprovementThreshold=1.0;
  int RepeatTrainingNTimes=0;
  TString MethodType="";

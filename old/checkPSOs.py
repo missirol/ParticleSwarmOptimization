@@ -4,10 +4,9 @@ from glob import glob
 import os
 
 PSOdirs=[
-	"/nfs/dust/cms/user/kelmorab/PSOs80x",
-	#"/nfs/dust/cms/user/kelmorab/dilep16082016/PSOs",
-	#"/nfs/dust/cms/user/kelmorab/dilep/PSOs"
 	]
+
+PSOdirs=sys.argv[1:]
 
 listOfPSOs=[]
 listOfPrelPSOs=[]
