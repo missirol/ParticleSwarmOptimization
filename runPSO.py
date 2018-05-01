@@ -38,15 +38,23 @@ if __name__ == '__main__':
     DATA_SUBDIR = 'InitData'
 
     print('Created dir '+opts.output_dir)
-    subprocess.call(['mkdir', '-p', opts.output_dir])
-    subprocess.call(['mkdir', '-p', opts.output_dir+'/'+DATA_SUBDIR])
 
-    subprocess.call(['cp', opts.config, opts.output_dir+'/'+DATA_SUBDIR+'/config.txt'])
+    OUTPUT_DIR = os.path.abspath(os.path.realpath(opts.output_dir))
+    OUTPUT_SUBDIR = OUTPUT_DIR+'/'+DATA_SUBDIR
+
+    subprocess.call(['mkdir', '-p', OUTPUT_DIR])
+    subprocess.call(['mkdir', '-p', OUTPUT_SUBDIR])
+
+    subprocess.call(['cp', opts.config, OUTPUT_SUBDIR+'/config.txt'])
+
+    CONFIG_FPATH = OUTPUT_SUBDIR+'/config.txt'
+
+    subprocess.call(['cp', '-r', 'PSO', OUTPUT_DIR])
 
     if not opts.skip_trees:
-       subprocess.call(['root', '-b', '-q', 'PSO/PrepareTrees.C+(\"'+opts.config+'\", \"'+opts.output_dir+'/'+DATA_SUBDIR+'\")'])
+       subprocess.call(['root', '-b', '-q', OUTPUT_DIR+'/PSO/PrepareTrees.C+("'+CONFIG_FPATH+'", "'+OUTPUT_SUBDIR+'")'])
 
-    PSO = PSOManager(opts.output_dir, DATA_SUBDIR, opts.verbose, opts.config)
+    PSO = PSOManager(opts.output_dir, DATA_SUBDIR, opts.verbose, CONFIG_FPATH)
     PSO.CompileAndSetupClientExecutable()
     PSO.InitParticles()
 

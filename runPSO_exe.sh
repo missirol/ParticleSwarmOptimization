@@ -8,15 +8,15 @@ if [ "$#" -gt 1 ]; then
 
 else
 
-  printf "\n%s\n" ">>> ERROR -- invalid list of command-line argument(s):"
-  printf "%s\n"   "          [1]  path to output directory"
-  printf "%s\n\n" "          [2+] PSO configuration file(s)"
+  printf "\n%s\n" " >>> ERROR -- invalid list of command-line argument(s):"
+  printf "%s\n"   "           [1]  path to output directory"
+  printf "%s\n\n" "           [2+] PSO configuration file(s)"
   exit
 fi
 
 if [ -d "${ODIR}" ]; then
 
-  printf "\n%s\n\n" ">>> ERROR -- target output directory already exists: ${ODIR}"
+  printf "\n%s\n\n" " >>> ERROR -- target output directory already exists: ${ODIR}"
   exit
 fi
 
@@ -26,7 +26,7 @@ for cfgfile in "${@:2}"; do
 
   if [ ! -f "${cfgfile}" ]; then
 
-    printf "\n%s\n\n" ">>> WARNING -- target configuration file not found: ${cfgfile}"
+    printf "\n%s\n\n" " >>> WARNING -- target configuration file not found: ${cfgfile}"
     continue
   fi
 

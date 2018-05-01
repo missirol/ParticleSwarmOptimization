@@ -395,11 +395,11 @@ class PSOManager:
     def testFunction(self):
       for part in self.Particles:
         part.WriteConfig()
-        part.UpdateParticle([[u'NTrees', 1000], [u'Shrinkage', 0.02], [u'GradBaggingFraction', 0.2], [u'nCuts', 50]])
+        part.UpdateParticle([[u'NTrees', 1000], [u'Shrinkage', 0.02], [u'BaggedSampleFraction', 0.2], [u'nCuts', 50]])
         part.StartEvaluation()
         part.CheckJobStatus()
         print self.BestCoordinatesGlobal
-        bg=[[u'NTrees', 0.0], [u'Shrinkage', 0.0], [u'GradBaggingFraction', 0.0], [u'nCuts', 0.0]]
+        bg=[[u'NTrees', 0.0], [u'Shrinkage', 0.0], [u'BaggedSampleFraction', 0.0], [u'nCuts', 0.0]]
 
       print "did the tests"
 
