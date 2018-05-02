@@ -83,14 +83,14 @@ class QueHelper:
         '-S /bin/bash',
         '-V',
 #        '-pe local 4-8',
-        '-l h_vmem=4G',
+        '-l h_vmem=8G',
         '-l h_fsize=1G',
         '-l h_rt=96:00:00',
       ]
 
       self.RunLines = [
         'qsub '+' '.join(qsub_opts)+' -l os=sld6 -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
-      ] 
+      ]
 
     elif RunSystem=="NAFSL5":
       self.ExecLines=[
