@@ -342,10 +342,6 @@ class PSOManager:
         bestBDTFile.close()
 
         if FinalMVAConfFile != None:
-
-           if os.path.exists(FinalMVAConfFile):
-              KILL('PSOManager.py -- path to target output file for final MVA configuration already exists: '+FinalMVAConfFile)
-
            finalMVAConfFile = open(FinalMVAConfFile, 'w')
            finalMVAConfFile.write('[configuration]'+'\n')
            finalMVAConfFile.write('\n')
