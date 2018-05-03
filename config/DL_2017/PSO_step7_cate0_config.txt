@@ -4,8 +4,8 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=40
-NIterations=100
+NParticles=10
+NIterations=50
 wIneratia=0.729
 wMemory=1.49445
 wSwarm=1.49445
@@ -57,7 +57,7 @@ coord=["Shrinkage",0.001,0.05,0.002,"float"]
 coord=["BaggedSampleFraction",0.1,0.9,0.05,"float"]
 coord=["nCuts",10,80,4,"int"]
 coord=["UseNVars",8,14,2,"int"]
-coord=["MaxDepth",2,3,1,"int"]
+coord=["MaxDepth",2,2,2,"int"]
 ##--------------------------------------------------
 
 ##--------------------------------------------------
