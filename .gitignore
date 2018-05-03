@@ -9,6 +9,7 @@
 *.tar.gz
 *.zip
 #*#
+PSO_output_*/
 output_*/
 Particles/
 InitData/Particle
