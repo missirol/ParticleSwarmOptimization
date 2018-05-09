@@ -12,7 +12,7 @@ wSwarm=1.49445
 
 ##FOM = ROCIntegral | Separation | rejB_vs_effS_0.1 | rejB_vs_effS_0.3 |rejB_vs_effS_0.5 | Chi2_B_muSB
 FOM=ROCIntegral
-KSThreshold=0.1
+KSThreshold=0.2
 MaxVariablesInCombination=14
 ##only add variable if new FOM > ImprovementThreshold*FOM
 ImprovementThreshold=1.005
