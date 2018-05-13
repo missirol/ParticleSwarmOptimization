@@ -32,6 +32,8 @@ for cfgfile in "${@:2}"; do
 
   if [ ! -d "${ODIR}" ]; then mkdir -p "${ODIR}"; fi;
 
+  if [[ ${cfgfile} != *_config.txt ]]; then continue; fi;
+
   cfgname=$(basename "${cfgfile}")
   cfgname="${cfgname%_config.txt}"
 
