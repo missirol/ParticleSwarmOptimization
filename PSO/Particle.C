@@ -584,11 +584,13 @@ void Particle()
   //do initial training
   KS=1.0;
   FOM=999.9;
-  for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){ 
-  DoTraining(InitialVars, OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
-  if(bufferKS<KS)KS=bufferKS;
-  if(bufferFOM<FOM)FOM=bufferFOM;
+  for(int nn=0;nn<RepeatTrainingNTimes+1;nn++)
+  {
+    DoTraining(InitialVars,OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+    if(bufferKS  < KS ){ KS  = bufferKS;  }
+    if(bufferFOM < FOM){ FOM = bufferFOM; }
   }
+
   std::cout<<"Inital "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
 
   //check different Variable Combinations
@@ -607,7 +609,8 @@ void Particle()
     BestUnusedVars.push_back(iVar);
   }
 
-  if(KS>KSThreshold and FOM>=BestFOM){
+  if((KS < 1.0) and (KS > KSThreshold) and (FOM >= BestFOM))
+  {
     BestFOM=FOM;
     BestKS=KS;
     BestVars.clear();
