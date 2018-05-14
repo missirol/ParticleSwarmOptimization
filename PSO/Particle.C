@@ -466,6 +466,7 @@ void Particle()
  TString BkgWeight="";
  TString SignalTreeName="MVATree";
  TString BackgroundTreeName="MVATree";
+ Int_t FindBestVariables=1;
  Int_t MaxVariablesInCombination=10;
  Int_t MinVariablesInCombination=6;
  Double_t ImprovementThreshold=1.0;
@@ -514,6 +515,8 @@ void Particle()
       config>>BackgroundTreeName;}
     if(dump=="UseEvenOddSplitting"){
       config>>UseEvenOddSplitting;}
+    if(dump=="FindBestVariables"){
+      config>>FindBestVariables;}
     if(dump=="MaxVariablesInCombination"){
       config>>MaxVariablesInCombination;}
     if(dump=="ImprovementThreshold"){
@@ -587,33 +590,37 @@ void Particle()
   if(bufferFOM<FOM)FOM=bufferFOM;
   }
   std::cout<<"Inital "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
- 
+
   //check different Variable Combinations
   int nUsedVars=InitialVars.size();
-    
+
   for(std::vector<BDTVar*>::iterator itVar=InitialVars.begin(); itVar!=InitialVars.end();++itVar){
     BDTVar* iVar=*itVar;
     BestVars.push_back(iVar);
     UsedVars.push_back(iVar);
   }
+
   for(std::vector<BDTVar*>::iterator itVar=OtherVars.begin(); itVar!=OtherVars.end();++itVar){
     BDTVar* iVar=*itVar;
     UnusedVars.push_back(iVar);
     WorstVars.push_back(iVar);
     BestUnusedVars.push_back(iVar);
   }
-    
-    if(KS>KSThreshold and FOM>=BestFOM){
-      BestFOM=FOM;
-      BestKS=KS;
-      BestVars.clear();
-      for(std::vector<BDTVar*>::iterator itVar=InitialVars.begin(); itVar!=InitialVars.end();++itVar){
-        BDTVar* iVar=*itVar;
-        BestVars.push_back(iVar);
-      }
+
+  if(KS>KSThreshold and FOM>=BestFOM){
+    BestFOM=FOM;
+    BestKS=KS;
+    BestVars.clear();
+    for(std::vector<BDTVar*>::iterator itVar=InitialVars.begin(); itVar!=InitialVars.end();++itVar){
+      BDTVar* iVar=*itVar;
+      BestVars.push_back(iVar);
     }
+  }
+
   std::cout<<"Initial KS , FOM "<<BestKS<<", "<<BestFOM<<std::endl<<std::endl;
 
+  if(bool(FindBestVariables))
+  {
     std::cout<<"Removing each Variable"<<std::endl;
     // remove worst Variable
     BDTVar* worstVar = new BDTVar;
@@ -681,11 +688,8 @@ void Particle()
       }
       BestUnusedVars.push_back(new BDTVar);
       BestUnusedVars.back()->name=worstVar->name;
-      
     }
 
-    
-    
     //add one more Variable to improve result
     BDTVar* addedVar=new BDTVar;
     BDTVar* testVar=new BDTVar;
@@ -854,32 +858,32 @@ void Particle()
       }  
     }
 
-  
-  
-  
-  std::cout<<"Best FOM "<<BestFOM<<" "<<BestKS<<std::endl;
-  
-  for(int k=0;k<BestVars.size();k++){
-    std::cout<<BestVars.at(k)->name<<std::endl; 
-  }
+    std::cout<<"Best FOM "<<BestFOM<<" "<<BestKS<<std::endl;
 
-TString ROCFileName="ROC_Particle";
-ROCFileName+=particleNumber;
-ROCFileName+="_Iteration";
-ROCFileName+=Iteration;
+    for(int k=0;k<BestVars.size();k++){
+      std::cout<<BestVars.at(k)->name<<std::endl; 
+    }
 
-      KS=1.0;
-      FOM=999.9;
-      for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){ 
+//    TString ROCFileName="ROC_Particle";
+//    ROCFileName+=particleNumber;
+//    ROCFileName+="_Iteration";
+//    ROCFileName+=Iteration;
+
+    KS=1.0;
+    FOM=999.9;
+    for(int nn=0;nn<RepeatTrainingNTimes+1;nn++)
+    {
       DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
-      }
-  std::cout<<"Final "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+    }
 
-  BestFOM=FOM;
-  BestKS=KS;
-  
+    std::cout<<"Final "<<RepeatTrainingNTimes+1<<" trainigns KS, FOM "<<KS<<" "<<FOM<<std::endl;
+
+    BestFOM = FOM;
+    BestKS = KS;
+  }
+
   std::ofstream result("ParticleResult.txt", std::ofstream::trunc);
   result<<"BestFOM "<<BestFOM<<std::endl;
   result<<"KSScore "<<BestKS<<std::endl;
@@ -896,10 +900,9 @@ ROCFileName+=Iteration;
     result<<"UnusedVars "<<BestUnusedVars.at(k)->name<<std::endl; 
   }
   result.close();
-  
-  
-  TimeTotal=timerTotal->RealTime();
-    
+
+  TimeTotal = timerTotal->RealTime();
+
   std::cout<<"*******************************************************"<<std::endl;
   std::cout<<"* Total Time: "<<TimeTotal<<std::endl;
   std::cout<<"* Tree processing time : "<<TimeTreePreparation<< " "<<TimeTreePreparation/TimeTotal*100.0<<"%"<<std::endl;

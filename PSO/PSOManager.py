@@ -38,6 +38,7 @@ class PSOManager:
       RunSystem="EKPSL5"
       self.NIterations=1
       self.FOM="ROCIntegral"
+      self.FindBestVariables = 1
       self.MaxVariablesInCombination=10
       self.ImprovementThreshold=1.00
       self.FactoryString=""
@@ -125,6 +126,8 @@ class PSOManager:
           self.FOM=line.split("=",1)[1]
         if "KSThreshold" in line:
           self.KSThreshold=float(line.split("=",1)[1])
+        if "FindBestVariables" in line:
+          self.FindBestVariables=int(line.split("=",1)[1])
         if "MaxVariablesInCombination" in line:
           self.MaxVariablesInCombination=int(line.split("=",1)[1])
         if "ImprovementThreshold" in line:
@@ -229,6 +232,7 @@ class PSOManager:
           self.MethodType,
           self.MethodParams,
           self.QueHelper,
+          self.FindBestVariables,
           self.MaxVariablesInCombination,
           self.ImprovementThreshold,
           self.RepeatTrainingNTimes,

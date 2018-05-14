@@ -14,6 +14,7 @@ wSwarm=1.49445
 FOM=ROCIntegral
 KSThreshold=0.2
 MaxVariablesInCombination=20
+FindBestVariables=0
 ##only add variable if new FOM > ImprovementThreshold*FOM
 ImprovementThreshold=1.005
 
@@ -23,7 +24,7 @@ ImprovementThreshold=1.005
 ## FOM and KS will be taken as the worst of all trainings
 RepeatTrainingNTimes=0
 ## draw random starting variables, 0== use predermined starting variables
-DrawNRandomAsStartingVars=8
+DrawNRandomAsStartingVars=0
 ##NOTYET SaveTrainingsToTrees=False
 
 ##TMVA Options
