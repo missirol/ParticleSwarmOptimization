@@ -86,21 +86,59 @@ class Particle:
 
       # write the job and run files
       jobfile = open(self.Path+"/PSO"+str(self.particleNumber)+".sh" ,"w")
+
       execlines = self.QueHelper.GetExecLines()
       for line in execlines: jobfile.write(line)
+
       jobfile.write('cd '+self.Path+'\n')
       jobfile.write('./Particle'   +'\n')
       jobfile.close()
 
-      runfile = open(self.Path+'/run.sh', 'w')
-      runlines = self.QueHelper.GetRunLines()
-      for line in runlines:
-        line = line.replace("INSERTPATHHERE"      , self.Path)
-        line = line.replace("INSERTEXECSCRIPTHERE", self.Path+"/PSO"+str(self.particleNumber)+".sh")
-        runfile.write(line)
-      runfile.close()
+      if self.QueHelper.GetConfigLines() == []:
 
-      subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
+         runfile = open(self.Path+'/run.sh', 'w')
+         runlines = self.QueHelper.GetRunLines()
+         for line in runlines:
+           line = line.replace("INSERTPATHHERE"      , self.Path)
+           line = line.replace("INSERTEXECSCRIPTHERE", self.Path+"/PSO"+str(self.particleNumber)+".sh")
+           runfile.write(line)
+
+         runfile.close()
+
+         subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
+
+      else:
+
+         # HTCondor configuration script
+         config_fpath = self.Path+'/conf.htc'
+
+         config_file = open(config_fpath, 'w')
+         config_lines = self.QueHelper.GetConfigLines()
+
+         for line in config_lines:
+             line = line.replace('INSERTPATHHERE'      , self.Path)
+             line = line.replace('INSERTEXECSCRIPTHERE', self.Path+'/PSO'+str(self.particleNumber)+'.sh')
+             line = line.replace('INSERTNAMEHERE'      ,            'PSO'+str(self.particleNumber))
+
+             config_file.write('\n'+line+'\n')
+
+         config_file.close()
+
+         # execution script
+         run_file = open(self.Path+'/run.sh', 'w')
+         run_lines = self.QueHelper.GetRunLines()
+
+         for line in runlines:
+             run_file.write('#!/bin/sh')
+             run_file.write('\n\n')
+             run_file.write('cd '+self.Path)
+             run_file.write('\n')
+             run_file.write('condor_submit conf.htc')
+             run_file.write('\n')
+
+         run_file.close()
+
+         subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
 
       self.WriteConfig()
 
@@ -151,7 +189,7 @@ class Particle:
       configfile.close()
 
     def StartEvaluation(self):
-        self.JobID=self.QueHelper.StartJob(self.Path+"/run.sh")
+        self.JobID = self.QueHelper.StartJob(self.Path+"/run.sh")
 #        print self.JobID
 
     def CheckJobStatus(self):

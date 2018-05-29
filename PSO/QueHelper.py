@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 import os, sys, subprocess
 
+from common import *
+
 class QueHelper:
   def __init__(self,RunSystem):
     self.RunSystem=RunSystem
-    self.ExecLines=[]
-    self.RunLines=[]
-    
+
+    self.ExecLines = []
+
+    self.ConfigLines = []
+
+    self.RunLines = []
+
     # change if you want to use a different CMSSW Version
     self.CMSSW_BASE = os.environ['CMSSW_BASE']
     self.SCRAM_ARCH = os.environ['SCRAM_ARCH']
@@ -65,31 +71,56 @@ class QueHelper:
           ]
       self.RunLines=[
           "qsub -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'medium' INSERTEXECSCRIPTHERE\n"
-          ] 
-    elif RunSystem=="NAFSL6":
-      self.ExecLines=[
+          ]
+
+    elif RunSystem == "NAFSL6":
+
+      self.ExecLines = [
+
         "#!/bin/bash\n",
-        ". /etc/profile.d/modules.sh\n",
+        "source /etc/profile.d/modules.sh\n",
         "module use -a /afs/desy.de/group/cms/modulefiles/\n",
         "module load cmssw/"+self.SCRAM_ARCH+"\n",
         "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
         "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
         "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
         "cd "+self.CMSSW_BASE+"/src\n",
-        "eval `scram runtime -sh`\n"
+        "eval `scram runtime -sh`\n",
       ]
 
-      qsub_opts = [
-        '-S /bin/bash',
-        '-V',
-#        '-pe local 4-8',
-        '-l h_vmem=8G',
-        '-l h_fsize=1G',
-        '-l h_rt=96:00:00',
-      ]
+      # HTCondor getenv=True does not export LD_LIBRARY_PATH
+      # --> added by hand in the script itself
+      if 'LD_LIBRARY_PATH' in os.environ:
+         self.ExecLines += ['export LD_LIBRARY_PATH='+os.environ['LD_LIBRARY_PATH']]
 
-      self.RunLines = [
-        'qsub '+' '.join(qsub_opts)+' -l os=sld6 -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID INSERTEXECSCRIPTHERE\n'
+      self.ConfigLines = [
+
+        'batch_name = INSERTNAMEHERE',
+
+        'executable = INSERTEXECSCRIPTHERE',
+
+        'output = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.out.'+'$(Cluster).$(Process)',
+        'error  = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.err.'+'$(Cluster).$(Process)',
+        'log    = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.log.'+'$(Cluster).$(Process)',
+
+        '#arguments = ',
+
+        'transfer_executable = True',
+
+        'universe = vanilla',
+
+        'getenv = True',
+
+        'should_transfer_files   = IF_NEEDED',
+        'when_to_transfer_output = ON_EXIT',
+
+        'requirements = (OpSysAndVer == "SL6")',
+        '#requirements = (OpSysAndVer == "SL6" || OpSysAndVer == "CentOS7")',
+
+        ' RequestMemory  = 2G',
+        '+RequestRuntime = 10800',
+
+        'queue',
       ]
 
     elif RunSystem=="NAFSL5":
@@ -127,40 +158,56 @@ class QueHelper:
 
   def GetExecLines(self):
     return self.ExecLines
-  
+
   def GetRunLines(self):
     return self.RunLines
 
   def StartJob(self, runScript):
-    res=""
+
+    res = ''
+
     try:
-      res=subprocess.check_output([runScript],shell=True)
-    except (subprocess.CalledProcessError, OSError) :
+      res=subprocess.check_output([runScript], shell=True)
+
+    except (subprocess.CalledProcessError, OSError):
       print "could not submit the job"
       exit(1)
 
     res=res.split()
+
     jid=0
+
     for r in res:
       if r.isdigit():
         jid=int(r)
         break
+
     return jid
 
   def GetIsJobRunning(self, jobID, fpath):
-    bufferfile = open(fpath, 'w')
-    res = ''
-    try:
-      res=subprocess.check_output(["qstat","-j",str(jobID)],stderr=bufferfile)
-    except (subprocess.CalledProcessError):
-     res=""
-    except:
-      print "ERROR during qstat"
-      print sys.exc_info()[0]
-      exit(1)
-    bufferfile.close()
-    #print res
-    if res!="":
-      return True
+
+    if which('qstat', permissive=True) != None:
+
+       try:
+         bufferfile = open(fpath, 'w')
+
+         res = subprocess.check_output(["qstat", "-j", str(jobID)], stderr=bufferfile)
+
+         bufferfile.close()
+
+         return bool(res != '')
+
+       except (subprocess.CalledProcessError):
+         return False
+
+       except:
+         print "ERROR during qstat"
+         print sys.exc_info()[0]
+         exit(1)
+
     else:
-      return False
+       htc_jobIDs = HTCondor_jobIDs(os.environ['USER'])
+
+       if str(jobID) in htc_jobIDs): return True
+
+    return False
