@@ -52,8 +52,9 @@ class PSOManager:
       self.RepeatTrainingNTimes=0
       self.DrawNRandomAsStartingVars=0
       self.SaveTrainingsToTrees="False"
-      self.UseEvenOddSplitting=0
-      
+      self.UseFixedTrainTestSplitting = 0
+      self.UseFixedTrainTestSplitting_Train = '(eventNumber%2)==0'
+
       initialVariables=[]
       additionalVariables=[]
       ivars=[]
@@ -160,8 +161,13 @@ class PSOManager:
           self.MethodType=line.split("=",1)[1]
         if "MethodParams" in line:
           self.MethodParams=line.split("=",1)[1]
-        if "UseEvenOddSplitting" in line:
-          self.UseEvenOddSplitting=line.split("=",1)[1]
+
+        if    "UseFixedTrainTestSplitting" in line:
+          self.UseFixedTrainTestSplitting = line.split("=", 1)[1]
+
+        if    "UseFixedTrainTestSplitting_Train" in line:
+          self.UseFixedTrainTestSplitting_Train = line.split("=", 1)[1]
+
         if "SourceBackgroundTree" in line:
           self.BackgroundTreeName=line.split("=",1)[1]
         if "SourceSignalTree" in line:
@@ -238,7 +244,8 @@ class PSOManager:
           self.RepeatTrainingNTimes,
           self.DrawNRandomAsStartingVars,
           self.SaveTrainingsToTrees,
-          self.UseEvenOddSplitting
+          self.UseFixedTrainTestSplitting,
+          self.UseFixedTrainTestSplitting_Train
         )
 #        particle.SetTestPoint(initTree,initShrinkage,initBagging,initCuts,2,1,0)
         self.Particles.append(particle)

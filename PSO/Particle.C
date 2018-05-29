@@ -169,7 +169,7 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
   return fom;
 }
 
- void DoTraining(std::vector<BDTVar*> UsedVars,std::vector<BDTVar*> UnUsedVars,TString FOMType, TString FactoryString, TString PrepString, TString SigWeight, TString BkgWeight, TString SignalTreeName, TString BackgroundTreeName, TString MethodType, TString MethodString, int particleNumber, Double_t* testFOM, Double_t* testKS,Int_t UseEvenOddSplitting, TString PlotName="NONE" ){
+ void DoTraining(std::vector<BDTVar*> UsedVars,std::vector<BDTVar*> UnUsedVars,TString FOMType, TString FactoryString, TString PrepString, TString SigWeight, TString BkgWeight, TString SignalTreeName, TString BackgroundTreeName, TString MethodType, TString MethodString, int particleNumber, Double_t* testFOM, Double_t* testKS,Int_t UseFixedTrainTestSplitting, TString PlotName="NONE" ){
    std::cout<<"----------------------------------------------------------------"<<std::endl;
    
    //prepare TMVA
@@ -212,7 +212,7 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    Double_t wSfChi2=0.0;
    Double_t wBfChi2=0.0;
 
-   if(UseEvenOddSplitting==1){
+   if(UseFixedTrainTestSplitting==1){
    inputSTrain = TFile::Open( "Signal_Train.root" );
    inputBTrain = TFile::Open( "Background_Train.root" );
    signalTrain     = (TTree*)inputSTrain->Get(SignalTreeName);
@@ -416,7 +416,7 @@ std::cout<<"doing sep"<<std::endl;
 //    std::cout<<"here2"<<std::endl;
    delete factory;
 //    std::cout<<"here3"<<std::endl;
-   if(UseEvenOddSplitting==0){
+   if(UseFixedTrainTestSplitting==0){
    delete signal;
    delete background;
    inputS->Close();
@@ -477,7 +477,7 @@ void Particle()
  std::vector<Double_t> coordValues;
  Double_t dumpVal;
  TString dumpName;
- Int_t UseEvenOddSplitting=0;
+ Int_t UseFixedTrainTestSplitting = 0;
  
    
   //read Config File
@@ -513,8 +513,8 @@ void Particle()
       config>>SignalTreeName;}
     if(dump=="BackgroundTreeName"){
       config>>BackgroundTreeName;}
-    if(dump=="UseEvenOddSplitting"){
-      config>>UseEvenOddSplitting;}
+    if(dump=="UseFixedTrainTestSplitting"){
+      config>>UseFixedTrainTestSplitting;}
     if(dump=="FindBestVariables"){
       config>>FindBestVariables;}
     if(dump=="MaxVariablesInCombination"){
@@ -586,7 +586,7 @@ void Particle()
   FOM=999.9;
   for(int nn=0;nn<RepeatTrainingNTimes+1;nn++)
   {
-    DoTraining(InitialVars,OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+    DoTraining(InitialVars,OtherVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseFixedTrainTestSplitting);
     if(bufferKS  < KS ){ KS  = bufferKS;  }
     if(bufferFOM < FOM){ FOM = bufferFOM; }
   }
@@ -637,7 +637,7 @@ void Particle()
       FOM=999.9;
       for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl;  
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseFixedTrainTestSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
@@ -721,7 +721,7 @@ void Particle()
       FOM=999.9;
       for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl; 
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseFixedTrainTestSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
@@ -809,7 +809,7 @@ void Particle()
       FOM=999.9;
       for(int nn=0;nn<RepeatTrainingNTimes+1;nn++){
       std::cout<<"Training Nr. "<<nn<<std::endl;  
-      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+      DoTraining(UsedVars, UnusedVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseFixedTrainTestSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
       }
@@ -876,7 +876,7 @@ void Particle()
     FOM=999.9;
     for(int nn=0;nn<RepeatTrainingNTimes+1;nn++)
     {
-      DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseEvenOddSplitting);
+      DoTraining(BestVars, WorstVars,FOMType,FactoryString,PrepString,SigWeight,BkgWeight,SignalTreeName,BackgroundTreeName,MethodType,MethodString, particleNumber, &bufferFOM, &bufferKS,UseFixedTrainTestSplitting);
       if(bufferKS<KS)KS=bufferKS;
       if(bufferFOM<FOM)FOM=bufferFOM;
     }

@@ -5,7 +5,7 @@ from array import array
 
 class Particle:
 
-    def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, FindBestVariables, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseEvenOddSplitting):
+    def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, FindBestVariables, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseFixedTrainTestSplitting,UseFixedTrainTestSplitting_Train):
 
       self.particleNumber=particleNumber
       self.Iteration=0
@@ -74,7 +74,9 @@ class Particle:
             print il, len(self.initialVariables), len(self.additionalVariables)
 
       self.SaveTrainingsToTrees=SaveTrainingsToTrees
-      self.UseEvenOddSplitting=UseEvenOddSplitting
+
+      self.UseFixedTrainTestSplitting       = UseFixedTrainTestSplitting
+      self.UseFixedTrainTestSplitting_Train = UseFixedTrainTestSplitting_Train
 
       self.AllVariablesAtStart=self.additionalVariables+self.initialVariables
       self.AllVariablesAfterIteration=self.AllVariablesAtStart
@@ -156,7 +158,10 @@ class Particle:
       configfile.write("BackgroundWeightExpression "+str(self.BackgroundWeightExpression)+"\n")
       configfile.write("SignalTreeName "+str(self.SignalTreeName)+"\n")
       configfile.write("BackgroundTreeName "+str(self.BackgroundTreeName)+"\n")
-      configfile.write("UseEvenOddSplitting "+str(self.UseEvenOddSplitting)+"\n")
+
+      configfile.write("UseFixedTrainTestSplitting "      +str(self.UseFixedTrainTestSplitting)      +"\n")
+      configfile.write("UseFixedTrainTestSplitting_Train "+str(self.UseFixedTrainTestSplitting_Train)+"\n")
+
       configfile.write("FindBestVariables "+str(self.FindBestVariables)+"\n")
       configfile.write("MaxVariablesInCombination "+str(self.MaxVariablesInCombination)+"\n")
       configfile.write("ImprovementThreshold "+str(self.ImprovementThreshold)+"\n")
