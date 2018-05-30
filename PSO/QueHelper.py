@@ -162,6 +162,9 @@ class QueHelper:
   def GetRunLines(self):
     return self.RunLines
 
+  def GetConfigLines(self):
+    return self.ConfigLines
+
   def StartJob(self, runScript):
 
     res = ''
