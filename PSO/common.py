@@ -18,13 +18,23 @@ def EXE(cmd, suspend=True, verbose=False, dry_run=False):
     if _exitcode and suspend: raise SystemExit(_exitcode)
 # --
 
-def get_output(cmd, permissive=False):
+def get_output(cmd, permissive=False, warn=False):
+
     prc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    out, err = prc.communicate()
+    if prc.returncode:
 
-    if (not permissive) and prc.returncode:
-       KILL('get_output -- shell command failed (execute command to reproduce the error):\n'+' '*14+'> '+cmd)
+       log_msg = 'get_output -- shell command failed (execute command to reproduce the error):\n'+' '*14+'> '+cmd
+
+       if not permissive:
+          KILL(log_msg)
+
+       elif warn:
+          WARNING(log_msg)
+
+       return None
+
+    out, err = prc.communicate()
 
     return (out, err)
 # --
@@ -34,7 +44,7 @@ def rreplace(str__, old__, new__, occurrence__):
     return new__.join(li_)
 # --
 
-def which(program, permissive=False):
+def which(program, permissive=False, warn=False):
 
     def is_exe(fpath):
         return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
@@ -56,14 +66,22 @@ def which(program, permissive=False):
     if len(exe_ls) == 0:
         log_msg = 'which -- executable not found: '+program
 
-        if permissive: WARNING(log_msg); return None;
-        else:          KILL   (log_msg)
+        if permissive:
+           if warn: WARNING(log_msg)
+           return None
+
+        else:
+           KILL(log_msg)
 
     if len(exe_ls) >  1:
         log_msg = 'which -- executable "'+program+'" has multiple matches: \n'+str(exe_ls)
 
-        if permissive: WARNING(log_msg); return None;
-        else:          KILL   (log_msg)
+        if permissive:
+           if warn: WARNING(log_msg)
+           return None
+
+        else:
+           KILL(log_msg)
 
     return exe_ls[0]
 # --
@@ -84,7 +102,7 @@ def is_float(value):
     return True
 # --
 
-def HTCondor_jobIDs(username=None):
+def HTCondor_jobIDs(username=None, permissive=False, warn=False):
 
     if not username:
        if 'USER' in os.environ: username = os.environ['USER']
@@ -94,7 +112,9 @@ def HTCondor_jobIDs(username=None):
 
     _condorq_jobIDs = []
 
-    _condorq_lines = get_output('condor_q')[0].split('\n')
+    _condorq_lines = get_output('condor_q', permissive, warn)[0].split('\n')
+
+    if _condorq_lines == None: return None
 
     for _i_condorq in _condorq_lines:
         _i_condorq_pieces = _i_condorq.split()

@@ -189,7 +189,7 @@ class QueHelper:
 
   def GetIsJobRunning(self, jobID, fpath):
 
-    if which('qstat', permissive=True) != None:
+    if which('qstat', permissive=True, warn=False) != None:
 
        try:
          bufferfile = open(fpath, 'w')
@@ -209,8 +209,17 @@ class QueHelper:
          exit(1)
 
     else:
-       htc_jobIDs = HTCondor_jobIDs(os.environ['USER'])
 
-       if str(jobID) in htc_jobIDs): return True
+       htc_jobIDs = HTCondor_jobIDs(os.environ['USER'], permissive=True)
+
+       while htc_jobIDs == None:
+
+          WARNING('QueHelper.py -- call to "condor_q" failed, will wait 60sec and try again')
+
+          time.sleep(60)
+
+          htc_jobIDs = HTCondor_jobIDs(os.environ['USER'], permissive=True)
+
+       if str(jobID) in htc_jobIDs: return True
 
     return False

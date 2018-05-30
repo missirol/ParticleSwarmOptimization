@@ -272,7 +272,9 @@ class PSOManager:
         print "Number of particles finished :"
         while running:
           nFinished=0
-          time.sleep(30)
+
+          time.sleep(300)
+
           for particle in self.Particles:
             partRun = particle.CheckJobStatus()
             if partRun==False:
