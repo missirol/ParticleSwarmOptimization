@@ -275,13 +275,15 @@ class PSOManager:
            estTime=totalTime/it * (nIterations-it)/60.0/60.0
            print "optimization finished in ca ", estTime, " hours"
 
-        print "Number of particles finished: [checked every 180sec]"
+        check_dt_sec = int(60)
+
+        print 'Number of particles finished: [checked every '+str(check_dt_sec)+'sec]'
 
         while running:
 
-          nFinished=0
+          nFinished = 0
 
-          time.sleep(180)
+          time.sleep(check_dt_sec)
 
           htc_jobIDs = None
 

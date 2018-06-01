@@ -112,9 +112,11 @@ def HTCondor_jobIDs(username=None, permissive=False, warn=False):
 
     _condorq_jobIDs = {}
 
-    _condorq_lines = get_output('condor_q '+str(username)+' -nobatch', permissive, warn)[0].split('\n')
+    _condorq_ret = get_output('condor_q '+str(username)+' -nobatch', permissive, warn)
 
-    if _condorq_lines == None: return None
+    if _condorq_ret == None: return None
+
+    _condorq_lines = _condorq_ret[0].split('\n')
 
     for _i_condorq in _condorq_lines:
 
@@ -145,9 +147,11 @@ def HTCondor_job_executables(username=None, permissive=False, warn=False):
     if not username:
        KILL('HTCondor_jobIDs -- undefined argument "username"')
 
-    _condorq_cmds = get_output('condor_q '+str(username)+' -nobatch -long | grep "Cmd = "', permissive, warn)[0].split('\n')
+    _condorq_ret = get_output('condor_q '+str(username)+' -nobatch -long | grep "Cmd = "', permissive, warn)
 
-    if _condorq_cmds == None: return None
+    if _condorq_ret == None: return None
+
+    _condorq_cmds = _condorq_ret[0].split('\n')
 
     _ret_paths = []
 
@@ -170,8 +174,14 @@ def HTCondor_job_executables(username=None, permissive=False, warn=False):
 
 def HTCondor_executable_from_jobID(jobID):
 
-    _condorq_cmd = get_output('condor_q '+str(jobID)+' -long | grep "Cmd = "', permissive=True)[0].split('\n')
+    _condorq_ret = get_output('condor_q '+str(jobID)+' -long | grep "Cmd = "', permissive=True)
+
+    if _condorq_ret == None: return None
+
+    _condorq_cmd = _condorq_ret[0].split('\n')
+
     _condorq_cmd = [_tmp for _tmp in _condorq_cmd if _tmp != '']
+
     if len(_condorq_cmd) != 1: return None
 
     _condorq_cmd_pieces = _condorq_cmd[0].split(' = ')

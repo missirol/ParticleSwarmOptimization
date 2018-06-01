@@ -282,14 +282,17 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    TMVA::MethodBase* myMethod = dynamic_cast<TMVA::MethodBase*>(im);
    Double_t err;
    myMethod->TestClassification();
-   
-  Double_t ROCC1 = myMethod->GetROCIntegral();
+
+   Double_t ROCC1 = myMethod->GetROCIntegral();
    Double_t ROC = myMethod->GetEfficiency("",TMVA::Types::kTesting, err);
+
    //buff is needed for KS test
    Double_t buff = myMethod->GetTrainingEfficiency("Efficiency:0.5");
-std::cout<<"doing sep"<<std::endl;
+
+   std::cout << "doing sep" << std::endl;
+
    Double_t sep = myMethod->GetSeparation();
-//    Double_t sep=0.0;
+//   Double_t sep=0.0;
 
    TMVA::DataSet* myData = myMethod->Data();
    myData->SetCurrentType(TMVA::Types::kTesting);
