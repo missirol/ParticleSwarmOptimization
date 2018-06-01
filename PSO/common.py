@@ -110,23 +110,67 @@ def HTCondor_jobIDs(username=None, permissive=False, warn=False):
     if not username:
        KILL('HTCondor_jobIDs -- undefined argument "username"')
 
-    _condorq_jobIDs = []
+    _condorq_jobIDs = {}
 
-    _condorq_lines = get_output('condor_q', permissive, warn)[0].split('\n')
+    _condorq_lines = get_output('condor_q '+str(username)+' -nobatch', permissive, warn)[0].split('\n')
 
     if _condorq_lines == None: return None
 
     for _i_condorq in _condorq_lines:
+
         _i_condorq_pieces = _i_condorq.split()
 
-        if (len(_i_condorq_pieces) > 0) and (_i_condorq_pieces[0] == str(username)):
-           _condorq_jobIDs += [_i_condorq_pieces[-1]]
+        if len(_i_condorq_pieces) == 9:
+
+           if is_float(_i_condorq_pieces[0]) and str(_i_condorq_pieces[1]) == username:
+
+              _condorq_jobIDs[_i_condorq_pieces[0]] = {
+                'ID'        : _i_condorq_pieces[0],
+                'OWNER'     : _i_condorq_pieces[1],
+                'SUBMITTED' : _i_condorq_pieces[2]+' '+_i_condorq_pieces[3],
+                'RUN_TIME'  : _i_condorq_pieces[4],
+                'STATUS'    : _i_condorq_pieces[5],
+                'PRIORITY'  : _i_condorq_pieces[6],
+                'SIZE'      : _i_condorq_pieces[7],
+                'CMD'       : _i_condorq_pieces[8],
+              }
 
     return _condorq_jobIDs
 
+def HTCondor_job_executables(username=None, permissive=False, warn=False):
+
+    if not username:
+       if 'USER' in os.environ: username = os.environ['USER']
+
+    if not username:
+       KILL('HTCondor_jobIDs -- undefined argument "username"')
+
+    _condorq_cmds = get_output('condor_q '+str(username)+' -nobatch -long | grep "Cmd = "', permissive, warn)[0].split('\n')
+
+    if _condorq_cmds == None: return None
+
+    _ret_paths = []
+
+    for _i_cmd in _condorq_cmds:
+
+        if _i_cmd == '': continue
+
+        _i_cmd_pieces = _i_cmd.split(' = ')
+        if len(_i_cmd_pieces) != 2: return None
+
+        _exe_path = _i_cmd_pieces[1]
+        _exe_path = _exe_path.replace(' ', '')
+
+        if _exe_path.startswith('"'): _exe_path = _exe_path[+1:]
+        if _exe_path.endswith  ('"'): _exe_path = _exe_path[:-1]
+
+        _ret_paths += [os.path.abspath(os.path.realpath(_exe_path))]
+
+    return _ret_paths
+
 def HTCondor_executable_from_jobID(jobID):
 
-    _condorq_cmd = get_output('condor_q '+jobID+' -long | grep "Cmd = "', permissive=True)[0].split('\n')
+    _condorq_cmd = get_output('condor_q '+str(jobID)+' -long | grep "Cmd = "', permissive=True)[0].split('\n')
     _condorq_cmd = [_tmp for _tmp in _condorq_cmd if _tmp != '']
     if len(_condorq_cmd) != 1: return None
 
@@ -142,4 +186,3 @@ def HTCondor_executable_from_jobID(jobID):
     _exe_path = os.path.abspath(os.path.realpath(_exe_path))
 
     return _exe_path
-# --

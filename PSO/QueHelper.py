@@ -91,17 +91,19 @@ class QueHelper:
       # HTCondor getenv=True does not export LD_LIBRARY_PATH
       # --> added by hand in the script itself
       if 'LD_LIBRARY_PATH' in os.environ:
+         self.ExecLines += ['\n']
          self.ExecLines += ['export LD_LIBRARY_PATH='+os.environ['LD_LIBRARY_PATH']]
+         self.ExecLines += ['\n\n']
 
       self.ConfigLines = [
 
-        'batch_name = INSERTNAMEHERE',
+        'batch_name = __BATCH_NAME__',
 
-        'executable = INSERTEXECSCRIPTHERE',
+        'executable = __EXEC_FILE__',
 
-        'output = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.out.'+'$(Cluster).$(Process)',
-        'error  = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.err.'+'$(Cluster).$(Process)',
-        'log    = INSERTPATHHERE/logs/INSERTNAMEHERE'+'.log.'+'$(Cluster).$(Process)',
+        'output = __PATH__/logs/__NAME__'+'.out.'+'$(Cluster).$(Process)',
+        'error  = __PATH__/logs/__NAME__'+'.err.'+'$(Cluster).$(Process)',
+        'log    = __PATH__/logs/__NAME__'+'.log.'+'$(Cluster).$(Process)',
 
         '#arguments = ',
 
@@ -167,59 +169,28 @@ class QueHelper:
 
   def StartJob(self, runScript):
 
-    res = ''
+      jobID = None
 
-    try:
-      res=subprocess.check_output([runScript], shell=True)
+      while jobID == None:
 
-    except (subprocess.CalledProcessError, OSError):
-      print "could not submit the job"
-      exit(1)
+         ret = get_output(runScript, permissive=True)
 
-    res=res.split()
+         if ret != None:
 
-    jid=0
+            ret_lines = ret[0].split('\n')
 
-    for r in res:
-      if r.isdigit():
-        jid=int(r)
-        break
+            ret_lines = [_tmp for _tmp in ret_lines if _tmp != '']
 
-    return jid
+            if len(ret_lines) == 2:
 
-  def GetIsJobRunning(self, jobID, fpath):
+               jobID = ret_lines[1].split()[-1]+'0'
 
-    if which('qstat', permissive=True, warn=False) != None:
+               if not is_float(jobID): jobID = None
 
-       try:
-         bufferfile = open(fpath, 'w')
+         if jobID == None:
 
-         res = subprocess.check_output(["qstat", "-j", str(jobID)], stderr=bufferfile)
+            WARNING('QueHelper.py -- job submission failed, will wait 60sec and try again')
 
-         bufferfile.close()
+            time.sleep(60)
 
-         return bool(res != '')
-
-       except (subprocess.CalledProcessError):
-         return False
-
-       except:
-         print "ERROR during qstat"
-         print sys.exc_info()[0]
-         exit(1)
-
-    else:
-
-       htc_jobIDs = HTCondor_jobIDs(os.environ['USER'], permissive=True)
-
-       while htc_jobIDs == None:
-
-          WARNING('QueHelper.py -- call to "condor_q" failed, will wait 60sec and try again')
-
-          time.sleep(60)
-
-          htc_jobIDs = HTCondor_jobIDs(os.environ['USER'], permissive=True)
-
-       if str(jobID) in htc_jobIDs: return True
-
-    return False
+      return jobID

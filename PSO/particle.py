@@ -9,10 +9,15 @@ class Particle:
 
       self.particleNumber=particleNumber
       self.Iteration=0
+
       self.Path=Path
-      self.Verbose=Verbose
-      self.JobID=0
-      self.isrunning=False
+
+      self.ExeFile = None
+      self.RunFile = self.Path+'/run.sh'
+
+      self.Verbose = Verbose
+      self.JobID = None
+      self.isRunning = False
       self.rand=ROOT.TRandom3(int(self.particleNumber)) ## Use seed=0 to get non reproduceability
 
       self.initialVariables=usedVariables
@@ -86,28 +91,33 @@ class Particle:
       self.BestFOMGlobal=0.0
       self.BestKSGlobal=0.0
 
-      # write the job and run files
-      jobfile = open(self.Path+"/PSO"+str(self.particleNumber)+".sh" ,"w")
+      # write execution script and run script for job submission
+      self.ExeFile = self.Path+'/PSO'+str(self.particleNumber)+'.sh'
 
-      execlines = self.QueHelper.GetExecLines()
-      for line in execlines: jobfile.write(line)
+      exe_file = open(self.ExeFile, 'w')
 
-      jobfile.write('cd '+self.Path+'\n')
-      jobfile.write('./Particle'   +'\n')
-      jobfile.close()
+      for line in self.QueHelper.GetExecLines():
+          exe_file.write(line)
+
+      exe_file.write('cd '+self.Path+'\n')
+      exe_file.write('./Particle'   +'\n')
+
+      exe_file.close()
+
+      subprocess.call(['chmod', 'u+x', self.ExeFile])
 
       if self.QueHelper.GetConfigLines() == []:
 
-         runfile = open(self.Path+'/run.sh', 'w')
-         runlines = self.QueHelper.GetRunLines()
-         for line in runlines:
-           line = line.replace("INSERTPATHHERE"      , self.Path)
-           line = line.replace("INSERTEXECSCRIPTHERE", self.Path+"/PSO"+str(self.particleNumber)+".sh")
-           runfile.write(line)
+         run_file = open(self.RunFile, 'w')
 
-         runfile.close()
+         for line in self.QueHelper.GetRunLines():
+             line = line.replace("INSERTPATHHERE"      , self.Path)
+             line = line.replace("INSERTEXECSCRIPTHERE", self.Path+"/PSO"+str(self.particleNumber)+".sh")
+             run_file.write(line)
 
-         subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
+         run_file.close()
+
+         subprocess.call(['chmod', 'u+x', self.RunFile])
 
       else:
 
@@ -118,29 +128,30 @@ class Particle:
          config_lines = self.QueHelper.GetConfigLines()
 
          for line in config_lines:
-             line = line.replace('INSERTPATHHERE'      , self.Path)
-             line = line.replace('INSERTEXECSCRIPTHERE', self.Path+'/PSO'+str(self.particleNumber)+'.sh')
-             line = line.replace('INSERTNAMEHERE'      ,            'PSO'+str(self.particleNumber))
+
+             line = line.replace('__PATH__'      , self.Path)
+             line = line.replace('__EXEC_FILE__' , self.Path+'/PSO'+str(self.particleNumber)+'.sh')
+
+             line = line.replace('__NAME__'      , 'PSO'+str(self.particleNumber))
+             line = line.replace('__BATCH_NAME__', 'PSO'+str(self.particleNumber))
 
              config_file.write('\n'+line+'\n')
 
          config_file.close()
 
          # execution script
-         run_file = open(self.Path+'/run.sh', 'w')
-         run_lines = self.QueHelper.GetRunLines()
+         run_file = open(self.RunFile, 'w')
 
-         for line in runlines:
-             run_file.write('#!/bin/sh')
-             run_file.write('\n\n')
-             run_file.write('cd '+self.Path)
-             run_file.write('\n')
-             run_file.write('condor_submit conf.htc')
-             run_file.write('\n')
+         run_file.write('#!/bin/sh')
+         run_file.write('\n\n')
+         run_file.write('cd '+self.Path)
+         run_file.write('\n')
+         run_file.write('condor_submit conf.htc')
+         run_file.write('\n')
 
          run_file.close()
 
-         subprocess.call(['chmod', 'u+x', self.Path+'/run.sh'])
+         subprocess.call(['chmod', 'u+x', self.RunFile])
 
       self.WriteConfig()
 
@@ -194,12 +205,11 @@ class Particle:
       configfile.close()
 
     def StartEvaluation(self):
-        self.JobID = self.QueHelper.StartJob(self.Path+"/run.sh")
+
+        self.JobID = self.QueHelper.StartJob(self.Path+'/run.sh')
 #        print self.JobID
 
-    def CheckJobStatus(self):
-        self.isrunning = self.QueHelper.GetIsJobRunning(self.JobID, self.Path+'/CheckJobStatus.txt')
-        return self.isrunning
+        self.isRunning = True
 
     def UpdateParticle(self, BestCoordsGlobal,Iteration,bestFOMGlobal, bestKSGlobal):
       self.Iteration=Iteration
@@ -258,11 +268,12 @@ class Particle:
       self.WriteConfig()
 
     def GetResult(self):
-      resultfile=open(self.Path+"/ParticleResult.txt","r")
-      lines=list(resultfile)
+      resultfile = open(self.Path+"/ParticleResult.txt","r")
+      lines = list(resultfile)
 
-      fom=0.0
-      ks=0.0
+      fom = 0.0
+      ks  = 0.0
+
       self.LastUsedVariables=self.initialVariables
       self.LastUnusedVariables=self.additionalVariables
       self.initialVariables=[]
@@ -279,6 +290,7 @@ class Particle:
           self.initialVariables.append(line.split(" ",1)[1].strip())
         if "UnusedVars" in line:
           self.additionalVariables.append(line.split(" ",1)[1].strip())
+
       resultfile.close()
 
       #self.AllVariablesAfterIteration=self.initialVariables+self.additionalVariables

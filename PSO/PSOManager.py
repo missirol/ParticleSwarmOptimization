@@ -4,7 +4,7 @@ import os, sys, json, math, ROOT, time, subprocess
 from particle  import Particle
 from QueHelper import QueHelper
 
-from utils import *
+from common import *
 
 class PSOManager:
     def __init__(self, OutputDir='', DataSubdir='InitData', Verbose=True, PSOConfig=''):
@@ -261,63 +261,94 @@ class PSOManager:
       totalTime=0.0
       nIterations=self.NIterations
       for it in range(nIterations):
-        startTime=time.time()
+
+        startTime = time.time()
+
         for particle in self.Particles:
-          particle.StartEvaluation()
-        running=True
+            particle.StartEvaluation()
+
+        running = True
+
         print "\nIteration ", it
+
         if it!=0:
-          estTime=totalTime/it * (nIterations-it)/60.0/60.0
-          print "optimization finished in ca ", estTime, " hours"
-        print "Number of particles finished :"
+           estTime=totalTime/it * (nIterations-it)/60.0/60.0
+           print "optimization finished in ca ", estTime, " hours"
+
+        print "Number of particles finished: [checked every 180sec]"
+
         while running:
+
           nFinished=0
 
-          time.sleep(300)
+          time.sleep(180)
 
-          for particle in self.Particles:
-            partRun = particle.CheckJobStatus()
-            if partRun==False:
-              nFinished+=1
+          htc_jobIDs = None
+
+          while htc_jobIDs == None:
+
+             htc_jobIDs = HTCondor_jobIDs(os.environ['USER'], permissive=True)
+
+             if htc_jobIDs == None:
+
+                WARNING('PSOManager.py -- call to "condor_q" failed, will wait 60sec and try again')
+
+                time.sleep(60)
+
+          for i_part in self.Particles:
+
+              i_part.isRunning = bool(str(i_part.JobID) in htc_jobIDs and htc_jobIDs[str(i_part.JobID)]['STATUS'] != 'C')
+
+              if not i_part.isRunning: nFinished += 1
+
           #print nFinished
           sys.stdout.write(str(nFinished)+" ")
           sys.stdout.flush()
           #print(str(nFinished)+" "),
-          if nFinished==self.nParticles:
-            running=False
+
+          if nFinished == self.nParticles:
+             running = False
+
         print " "
         for particle in self.Particles:
+
           fom, KS, methodString, currentcoords, usedVars, unusedVars = particle.GetResult()
+
           if self.Verbose:
-            print "particle returned: "
-            print fom, KS, methodString, currentcoords, usedVars, unusedVars
-          if fom>=self.TenBestMVAs[0][0]:
-            if fom==0.0:
-              self.TenBestMVAs[0]=[fom, KS, methodString, usedVars, unusedVars,currentcoords]
-              #print "starting fix done"
-            else:
-              self.TenBestMVAs[9]=[fom, KS, methodString, usedVars, unusedVars,currentcoords]
-              self.TenBestMVAs=sorted(self.TenBestMVAs, key=lambda s:s[0], reverse=True)
-            #print "first"
-          elif fom>=self.TenBestMVAs[9][0]:
-            self.TenBestMVAs[9]=[fom, KS, methodString, usedVars, unusedVars,currentcoords]
-            self.TenBestMVAs=sorted(self.TenBestMVAs, key=lambda s:s[0], reverse=True)
-            #print "second"
-        self.BestFOMGlobal=self.TenBestMVAs[0][0]
-        self.BestKSGlobal=self.TenBestMVAs[0][1]
-        self.BestCoordinatesGlobal=self.TenBestMVAs[0][5]
-        #print self.TenBestMVAs[0]
+             print "particle returned: "
+             print fom, KS, methodString, currentcoords, usedVars, unusedVars
+
+          if fom >= self.TenBestMVAs[0][0]:
+
+             if fom==0.0:
+                self.TenBestMVAs[0] = [fom, KS, methodString, usedVars, unusedVars,currentcoords]
+
+             else:
+                self.TenBestMVAs[9] = [fom, KS, methodString, usedVars, unusedVars,currentcoords]
+                self.TenBestMVAs = sorted(self.TenBestMVAs, key=lambda s:s[0], reverse=True)
+
+          elif fom >= self.TenBestMVAs[9][0]:
+             self.TenBestMVAs[9] = [fom, KS, methodString, usedVars, unusedVars,currentcoords]
+             self.TenBestMVAs = sorted(self.TenBestMVAs, key=lambda s:s[0], reverse=True)
+
+        self.BestFOMGlobal         = self.TenBestMVAs[0][0]
+        self.BestKSGlobal          = self.TenBestMVAs[0][1]
+        self.BestCoordinatesGlobal = self.TenBestMVAs[0][5]
 
         for particle in self.Particles:
-            particle.UpdateParticle(self.BestCoordinatesGlobal,it,self.BestFOMGlobal,self.BestKSGlobal)
+            particle.UpdateParticle(self.BestCoordinatesGlobal, it, self.BestFOMGlobal, self.BestKSGlobal)
 
         print "\n------------------------------------------------------------------------"
 
         print "Best Result after Iteration "+str(it)
+
         print self.TenBestMVAs[0][:5]
+
         self.SaveStatus(self.OutputDir+"/PSOResult.txt", self.OutputDir+"/FinalMVAConfig_PSO.txt", self.OutputDir+'.conf')
-        finishTime=time.time()
-        totalTime+=(finishTime-startTime)
+
+        finishTime = time.time()
+
+        totalTime += (finishTime-startTime)
 
     def PrintResult(self):
         print 'Ten Best MVAs'
@@ -401,16 +432,16 @@ class PSOManager:
         outfile.write(var+" "+str(VarCount)+"\n")
       outfile.close()
 
-    def testFunction(self):
-      for part in self.Particles:
-        part.WriteConfig()
-        part.UpdateParticle([[u'NTrees', 1000], [u'Shrinkage', 0.02], [u'BaggedSampleFraction', 0.2], [u'nCuts', 50]])
-        part.StartEvaluation()
-        part.CheckJobStatus()
-        print self.BestCoordinatesGlobal
-        bg=[[u'NTrees', 0.0], [u'Shrinkage', 0.0], [u'BaggedSampleFraction', 0.0], [u'nCuts', 0.0]]
-
-      print "did the tests"
+#    def testFunction(self):
+#      for part in self.Particles:
+#        part.WriteConfig()
+#        part.UpdateParticle([[u'NTrees', 1000], [u'Shrinkage', 0.02], [u'BaggedSampleFraction', 0.2], [u'nCuts', 50]])
+#        part.StartEvaluation()
+#        part.CheckJobStatus()
+#        print self.BestCoordinatesGlobal
+#        bg=[[u'NTrees', 0.0], [u'Shrinkage', 0.0], [u'BaggedSampleFraction', 0.0], [u'nCuts', 0.0]]
+#
+#      print "did the tests"
 
     def CompileAndSetupClientExecutable(self):
 
