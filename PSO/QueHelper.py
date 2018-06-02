@@ -189,8 +189,24 @@ class QueHelper:
 
          if jobID == None:
 
-            WARNING('QueHelper.py -- job submission failed, will wait 60sec and try again')
+            WARNING('QueHelper.py -- StartJob: job submission failed, will wait 60sec and try again')
 
             time.sleep(60)
 
       return jobID
+
+  def KillJob(self, jobID_str):
+
+      ret = None
+
+      while ret == None:
+
+         ret = get_output('condor_rm '+jobID_str, permissive=True)
+
+         if ret == None:
+
+            WARNING('QueHelper.py -- KillJob: job removal failed, will wait 60sec and try again')
+
+            time.sleep(60)
+
+      return

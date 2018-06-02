@@ -211,6 +211,41 @@ class Particle:
 
         self.isRunning = True
 
+    def ManageJob(self, jobID_dict):
+
+        job_exists = bool(str(self.JobID) in jobID_dict))
+
+        if not job_exists:
+
+           self.isRunning = False
+
+        else:
+
+           job_status = jobID_dict[str(self.JobID)]['STATUS']
+
+           if bool(job_status == 'C'):
+
+              self.isRunning = False
+
+           elif bool(job_status in ['H','X']):
+
+              log_msg = 'job '+str(self.JobID)+' found in status "'+job_status+'"'
+
+              self.QueHelper.KillJob(str(self.JobID))
+
+              # resubmit
+              self.StartEvaluation()
+
+              log_msg += ' has been removed and resubmitted as job '+str(self.JobID)
+
+              WARNING('particle.py -- ManageJob: '+log_msg)
+
+           else:
+
+              self.isRunning = True
+
+        return
+
     def UpdateParticle(self, BestCoordsGlobal,Iteration,bestFOMGlobal, bestKSGlobal):
       self.Iteration=Iteration
       self.BestCoordinatesGlobal=BestCoordsGlobal

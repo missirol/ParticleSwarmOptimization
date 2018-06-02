@@ -299,7 +299,7 @@ class PSOManager:
 
           for i_part in self.Particles:
 
-              i_part.isRunning = bool(str(i_part.JobID) in htc_jobIDs and htc_jobIDs[str(i_part.JobID)]['STATUS'] != 'C')
+              i_part.ManageJob(htc_jobIDs)
 
               if not i_part.isRunning: nFinished += 1
 
