@@ -213,7 +213,7 @@ class Particle:
 
     def ManageJob(self, jobID_dict):
 
-        job_exists = bool(str(self.JobID) in jobID_dict))
+        job_exists = bool(str(self.JobID) in jobID_dict)
 
         if not job_exists:
 
