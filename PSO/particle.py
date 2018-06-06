@@ -3,6 +3,8 @@ import subprocess, math, ROOT
 
 from array import array
 
+from common import *
+
 class Particle:
 
     def __init__(self, Path,particleNumber,Verbose, usedVariables, unusedVariables, vw, vp, vg, coordinates, initialcoordinates, FOM, KSThreshold, FactoryString, PreparationString, SignalWeightExpression, BackgroundWeightExpression, SignalTreeName, BackgroundTreeName, MethodType, MethodParams, QueHelper, FindBestVariables, MaxVariablesInCombination, ImprovementThreshold, RepeatTrainingNTimes, DrawNRandomAsStartingVars,SaveTrainingsToTrees,UseFixedTrainTestSplitting,UseFixedTrainTestSplitting_Train):
