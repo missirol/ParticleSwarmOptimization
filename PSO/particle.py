@@ -172,8 +172,8 @@ class Particle:
       configfile.write("SignalTreeName "+str(self.SignalTreeName)+"\n")
       configfile.write("BackgroundTreeName "+str(self.BackgroundTreeName)+"\n")
 
-      configfile.write("UseFixedTrainTestSplitting "      +str(self.UseFixedTrainTestSplitting)      +"\n")
-      configfile.write("UseFixedTrainTestSplitting_Train "+str(self.UseFixedTrainTestSplitting_Train)+"\n")
+      configfile.write("UseFixedTrainTestSplitting "        +str(self.UseFixedTrainTestSplitting)      +  "\n")
+      configfile.write("UseFixedTrainTestSplitting_Train \""+str(self.UseFixedTrainTestSplitting_Train)+"\"\n")
 
       configfile.write("FindBestVariables "+str(self.FindBestVariables)+"\n")
       configfile.write("MaxVariablesInCombination "+str(self.MaxVariablesInCombination)+"\n")
