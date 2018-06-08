@@ -1,0 +1,909 @@
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 0sjb
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  N_btags                                  | 0.14090    | 0.06964    |
+  fatjet_btagHBB                           | 0.03465    | 0.05658    |
+  N_jets                                   | 0.08266    | 0.05495    |
+  fatjet_subjet_btagDeepCSV_1              | 0.04078    | 0.05147    |
+  fatjet_subjet_eta_1                      | 0.00400    | 0.04422    |
+  fatjet_eta                               | 0.00289    | 0.04087    |
+  fatjet_subjets_DR                        | 0.00515    | 0.03922    |
+  HT_jets                                  | 0.04745    | 0.03890    |
+  fatjet_M                                 | 0.01371    | 0.03726    |
+  ptSum_jets_leptons                       | 0.04033    | 0.03597    |
+  fatjet_subjets_Dpt_norm                  | 0.00230    | 0.03579    |
+  fatjet_subjet_M_2                        | 0.00330    | 0.03572    |
+  fatjet_subjets_Deta                      | 0.00304    | 0.03572    |
+  fatjet_subjet_eta_2                      | 0.00265    | 0.03563    |
+  fatjet_Msubjets_cor                      | 0.01130    | 0.03415    |
+  fatjet_ECFbeta2N2_SD                     | 0.00786    | 0.03353    |
+  fatjet_subjet_btagDeepCSV_2              | 0.03183    | 0.03293    |
+  fatjet_subjet_phi_2                      | 0.00185    | 0.03247    |
+  fatjet_tau21                             | 0.00718    | 0.03109    |
+  fatjet_btagDeepCSV                       | 0.03236    | 0.03096    |
+  fatjet_subjet_phi_1                      | 0.00228    | 0.03077    |
+  fatjet_ECFbeta1N2_SD                     | 0.00806    | 0.03070    |
+  fatjet_subjet_pt_1                       | 0.00416    | 0.02828    |
+  fatjet_subjet_M_1                        | 0.00360    | 0.02815    |
+  fatjet_phi                               | 0.00292    | 0.02767    |
+  fatjet_pt                                | 0.00503    | 0.02580    |
+  fatjet_subjet_pt_2                       | 0.00506    | 0.02152    |
+
+  * variables to be removed (poor data/MC agreement):
+     fatjet_eta
+     fatjet_btagHBB
+     fatjet_btagCSVv2
+     btagDiscriminatorAverage_tagged
+     fatjet_btagDeepCSV
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     fatjet_phi
+     ptSum_jets_leptons
+     fatjet_subjet_eta_2
+     fatjet_Msubjets_cor
+     fatjet_ECFbeta1N2_SD
+
+  * final list of variables (ordered by Importance):
+["N_btags","F","","N_btags"]
+["N_jets","F","","N_jets"]
+["fatjet_subjet_btagDeepCSV_1","F","","fatjet_subjet_btagDeepCSV_1"]
+["fatjet_subjet_eta_1","F","","fatjet_subjet_eta_1"]
+["fatjet_subjets_DR","F","","fatjet_subjets_DR"]
+["HT_jets","F","","HT_jets"]
+["fatjet_M","F","","fatjet_M"]
+["fatjet_subjets_Dpt_norm","F","","fatjet_subjets_Dpt_norm"]
+["fatjet_subjet_M_2","F","","fatjet_subjet_M_2"]
+["fatjet_subjets_Deta","F","","fatjet_subjets_Deta"]
+["fatjet_ECFbeta2N2_SD","F","","fatjet_ECFbeta2N2_SD"]
+["fatjet_subjet_btagDeepCSV_2","F","","fatjet_subjet_btagDeepCSV_2"]
+["fatjet_subjet_phi_2","F","","fatjet_subjet_phi_2"]
+["fatjet_tau21","F","","fatjet_tau21"]
+["fatjet_subjet_phi_1","F","","fatjet_subjet_phi_1"]
+["fatjet_subjet_pt_1","F","","fatjet_subjet_pt_1"]
+["fatjet_subjet_M_1","F","","fatjet_subjet_M_1"]
+["fatjet_pt","F","","fatjet_pt"]
+["fatjet_subjet_pt_2","F","","fatjet_subjet_pt_2"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 1sjb
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  fatjet_btagHBB                           | 0.08500    | 0.05298    |
+  fatjet_subjet_btagDeepCSV_2              | 0.10150    | 0.04913    |
+  N_btags                                  | 0.05842    | 0.04897    |
+  fatjet_subjet_btagDeepCSV_1              | 0.01798    | 0.04850    |
+  fatjet_btagDeepCSV                       | 0.03925    | 0.04346    |
+  fatjet_subjets_DR                        | 0.00816    | 0.04248    |
+  fatjet_M                                 | 0.04648    | 0.04239    |
+  fatjet_subjet_eta_1                      | 0.00920    | 0.04095    |
+  fatjet_Msubjets_cor                      | 0.04775    | 0.04031    |
+  fatjet_ECFbeta2N2_SD                     | 0.02562    | 0.03863    |
+  fatjet_subjets_Deta                      | 0.00382    | 0.03832    |
+  ptSum_jets_leptons                       | 0.02500    | 0.03714    |
+  HT_jets                                  | 0.01721    | 0.03701    |
+  N_jets                                   | 0.01813    | 0.03605    |
+  fatjet_ECFbeta1N2_SD                     | 0.02900    | 0.03555    |
+  fatjet_subjets_Dpt_norm                  | 0.01487    | 0.03524    |
+  fatjet_subjet_phi_1                      | 0.00428    | 0.03328    |
+  fatjet_subjet_eta_2                      | 0.00777    | 0.03326    |
+  fatjet_subjet_phi_2                      | 0.00352    | 0.03273    |
+  fatjet_tau21                             | 0.02755    | 0.03196    |
+  fatjet_subjet_M_1                        | 0.00570    | 0.03072    |
+  fatjet_subjet_M_2                        | 0.00852    | 0.02991    |
+  fatjet_eta                               | 0.00939    | 0.02973    |
+  fatjet_phi                               | 0.00418    | 0.02891    |
+  fatjet_subjet_pt_1                       | 0.00789    | 0.02845    |
+  fatjet_subjet_pt_2                       | 0.02711    | 0.02700    |
+  fatjet_pt                                | 0.01625    | 0.02695    |
+
+  * variables to be removed (poor data/MC agreement):
+     fatjet_btagCSVv2
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     fatjet_eta
+     fatjet_Msubjets_cor
+     HT_jets
+     fatjet_subjet_eta_2
+     fatjet_ECFbeta1N2_SD
+     fatjet_phi
+     fatjet_tau21
+
+  * final list of variables (ordered by Importance):
+["fatjet_btagHBB","F","","fatjet_btagHBB"]
+["fatjet_subjet_btagDeepCSV_2","F","","fatjet_subjet_btagDeepCSV_2"]
+["N_btags","F","","N_btags"]
+["fatjet_subjet_btagDeepCSV_1","F","","fatjet_subjet_btagDeepCSV_1"]
+["fatjet_btagDeepCSV","F","","fatjet_btagDeepCSV"]
+["fatjet_subjets_DR","F","","fatjet_subjets_DR"]
+["fatjet_M","F","","fatjet_M"]
+["fatjet_subjet_eta_1","F","","fatjet_subjet_eta_1"]
+["fatjet_ECFbeta2N2_SD","F","","fatjet_ECFbeta2N2_SD"]
+["fatjet_subjets_Deta","F","","fatjet_subjets_Deta"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["N_jets","F","","N_jets"]
+["fatjet_subjets_Dpt_norm","F","","fatjet_subjets_Dpt_norm"]
+["fatjet_subjet_phi_1","F","","fatjet_subjet_phi_1"]
+["fatjet_subjet_phi_2","F","","fatjet_subjet_phi_2"]
+["fatjet_subjet_M_1","F","","fatjet_subjet_M_1"]
+["fatjet_subjet_M_2","F","","fatjet_subjet_M_2"]
+["fatjet_subjet_pt_1","F","","fatjet_subjet_pt_1"]
+["fatjet_subjet_pt_2","F","","fatjet_subjet_pt_2"]
+["fatjet_pt","F","","fatjet_pt"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 2sjb
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  N_btags                                  | 0.11130    | 0.10020    |
+  fatjet_Msubjets_cor                      | 0.16470    | 0.09707    |
+  fatjet_M                                 | 0.16890    | 0.08514    |
+  HT_jets                                  | 0.04900    | 0.05723    |
+  fatjet_tau21                             | 0.10700    | 0.05119    |
+  fatjet_btagHBB                           | 0.05919    | 0.04803    |
+  fatjet_ECFbeta2N2_SD                     | 0.09952    | 0.04735    |
+  fatjet_ECFbeta1N2_SD                     | 0.10960    | 0.04502    |
+  fatjet_pt                                | 0.04695    | 0.03899    |
+  fatjet_subjet_btagDeepCSV_2              | 0.02850    | 0.03545    |
+  fatjet_subjets_Deta                      | 0.02811    | 0.03510    |
+  fatjet_subjet_pt_2                       | 0.06879    | 0.03313    |
+  fatjet_subjet_btagDeepCSV_1              | 0.03952    | 0.03032    |
+  fatjet_subjets_Dpt_norm                  | 0.05185    | 0.02784    |
+  fatjet_subjets_DR                        | 0.06720    | 0.02778    |
+  fatjet_subjet_M_2                        | 0.05083    | 0.02740    |
+  fatjet_subjet_phi_2                      | 0.02808    | 0.02530    |
+  fatjet_subjet_pt_1                       | 0.02839    | 0.02486    |
+  fatjet_subjet_M_1                        | 0.03179    | 0.02481    |
+  fatjet_subjet_eta_1                      | 0.04128    | 0.02255    |
+  fatjet_btagDeepCSV                       | 0.00734    | 0.01938    |
+  fatjet_subjet_phi_1                      | 0.02685    | 0.01873    |
+  fatjet_phi                               | 0.03535    | 0.01837    |
+  fatjet_eta                               | 0.03055    | 0.01822    |
+  fatjet_subjet_eta_2                      | 0.03078    | 0.01529    |
+  N_jets                                   | 0.01730    | 0.01479    |
+  ptSum_jets_leptons                       | 0.03223    | 0.01047    |
+
+  * variables to be removed (poor data/MC agreement):
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     fatjet_eta
+     fatjet_subjet_eta_2
+     fatjet_ECFbeta1N2_SD
+     fatjet_phi
+     ptSum_jets_leptons
+     fatjet_M
+
+  * final list of variables (ordered by Importance):
+["N_btags","F","","N_btags"]
+["fatjet_Msubjets_cor","F","","fatjet_Msubjets_cor"]
+["HT_jets","F","","HT_jets"]
+["fatjet_tau21","F","","fatjet_tau21"]
+["fatjet_btagHBB","F","","fatjet_btagHBB"]
+["fatjet_ECFbeta2N2_SD","F","","fatjet_ECFbeta2N2_SD"]
+["fatjet_pt","F","","fatjet_pt"]
+["fatjet_subjet_btagDeepCSV_2","F","","fatjet_subjet_btagDeepCSV_2"]
+["fatjet_subjets_Deta","F","","fatjet_subjets_Deta"]
+["fatjet_subjet_pt_2","F","","fatjet_subjet_pt_2"]
+["fatjet_subjet_btagDeepCSV_1","F","","fatjet_subjet_btagDeepCSV_1"]
+["fatjet_subjets_Dpt_norm","F","","fatjet_subjets_Dpt_norm"]
+["fatjet_subjets_DR","F","","fatjet_subjets_DR"]
+["fatjet_subjet_M_2","F","","fatjet_subjet_M_2"]
+["fatjet_subjet_phi_2","F","","fatjet_subjet_phi_2"]
+["fatjet_subjet_pt_1","F","","fatjet_subjet_pt_1"]
+["fatjet_subjet_M_1","F","","fatjet_subjet_M_1"]
+["fatjet_subjet_eta_1","F","","fatjet_subjet_eta_1"]
+["fatjet_btagDeepCSV","F","","fatjet_btagDeepCSV"]
+["fatjet_subjet_phi_1","F","","fatjet_subjet_phi_1"]
+["N_jets","F","","N_jets"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 3j2b
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  btagDiscriminatorAverage_untagged        | 0.13530    | 0.07767    |
+  ptSum_jets_leptons                       | 0.04706    | 0.05158    |
+  maxDeltaEta_jet_jet                      | 0.05422    | 0.04815    |
+  pT_tag_tag_min_deltaR                    | 0.05221    | 0.04615    |
+  mass_jet_jet_min_deltaR                  | 0.01528    | 0.04438    |
+  avgDeltaR_jet_jet                        | 0.03853    | 0.04401    |
+  centrality_tags                          | 0.00222    | 0.03823    |
+  HT_tags                                  | 0.01816    | 0.03767    |
+  centrality_jets_leps                     | 0.00767    | 0.03509    |
+  pT_jet_jet_min_deltaR                    | 0.05155    | 0.03435    |
+  mass_tag_tag_min_deltaR                  | 0.00696    | 0.03338    |
+  mass_higgsLikeDijet                      | 0.00874    | 0.03334    |
+  H0_jet                                   | 0.00052    | 0.03281    |
+  mass_jet_jet_jet_max_pT                  | 0.00455    | 0.03199    |
+  R1_tag                                   | 0.02579    | 0.02897    |
+  multiplicity_higgsLikeDijet15            | 0.00573    | 0.02682    |
+  minDeltaR_jet_jet                        | 0.01997    | 0.02597    |
+  HT_jets                                  | 0.03919    | 0.02537    |
+  minDeltaR_tag_tag                        | 0.02066    | 0.02314    |
+  H4_jet                                   | 0.00060    | 0.02220    |
+  median_mass_jet_jet                      | 0.00474    | 0.02025    |
+  circularity_jet                          | 0.00053    | 0.01933    |
+  R2_tag                                   | 0.00125    | 0.01867    |
+  R1_jet                                   | 0.02535    | 0.01794    |
+  maxDeltaEta_tag_tag                      | 0.02100    | 0.01689    |
+  isotropy_jet                             | 0.00045    | 0.01348    |
+  H1_tag                                   | 0.02039    | 0.01328    |
+  H2_jet                                   | 0.00078    | 0.01220    |
+  D_jet                                    | 0.00120    | 0.01149    |
+  R2_jet                                   | 0.00096    | 0.00992    |
+  isotropy_tag                             | 0.00024    | 0.00967    |
+  circularity_tag                          | 0.00029    | 0.00927    |
+  btagDiscriminatorAverage_tagged          | 0.00066    | 0.00894    |
+  R4_jet                                   | 0.00087    | 0.00888    |
+  C_jet                                    | 0.00091    | 0.00858    |
+  aplanarity_jet                           | 0.00119    | 0.00718    |
+  R3_tag                                   | 0.00548    | 0.00656    |
+  sphericity_jet                           | 0.00085    | 0.00655    |
+  C_tag                                    | 0.00128    | 0.00538    |
+  H3_jet                                   | 0.00077    | 0.00519    |
+  H3_tag                                   | 0.00461    | 0.00472    |
+  transSphericity_jet                      | 0.00057    | 0.00380    |
+  twist_tag_tag_max_mass                   | 0.00455    | 0.00367    |
+  H0_tag                                   | 0.00257    | 0.00318    |
+  twist_jet_jet_max_mass                   | 0.02901    | 0.00313    |
+  H1_jet                                   | 0.01668    | 0.00298    |
+  R4_tag                                   | 0.00088    | 0.00283    |
+  sphericity_tag                           | 0.00126    | 0.00249    |
+  transSphericity_tag                      | 0.00126    | 0.00227    |
+  avgDeltaR_jet_tag                        | 0.03853    | 0.00000    |
+  avgDeltaR_tag_tag                        | 0.02066    | 0.00000    |
+  mass_higgsLikeDijet2                     | 0.00874    | 0.00000    |
+  mass_jet_tag_min_deltaR                  | 0.01528    | 0.00000    |
+  mass_tag_tag_max_mass                    | 0.00696    | 0.00000    |
+  pT_jet_tag_min_deltaR                    | 0.05155    | 0.00000    |
+  mass_jet_tag_tag_max_pT                  | 0.00455    | 0.00000    |
+  twist_jet_tag_max_mass                   | 0.02901    | 0.00000    |
+  twist_tag_tag_min_deltaR                 | 0.00455    | 0.00000    |
+  aplanarity_tag                           | 0.00018    | 0.00000    |
+  D_tag                                    | 0.00049    | 0.00000    |
+  R3_jet                                   | 0.00129    | 0.00000    |
+  H2_tag                                   | 0.00277    | 0.00000    |
+  H4_tag                                   | 0.00195    | 0.00000    |
+
+  * variables to be removed (poor data/MC agreement):
+     median_mass_jet_jet
+     btagDiscriminatorAverage_untagged
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     mass_jet_tag_min_deltaR
+     mass_jet_tag_tag_max_pT
+     pT_jet_tag_min_deltaR
+     avgDeltaR_jet_tag
+     transSphericity_jet
+     mass_tag_tag_max_mass
+     isotropy_jet
+     sphericity_tag
+     H3_tag
+     R2_jet
+     C_tag
+     sphericity_jet
+     circularity_tag
+     R3_jet
+     transSphericity_tag
+     avgDeltaR_tag_tag
+     H4_tag
+     H2_tag
+     twist_tag_tag_min_deltaR
+     H1_jet
+     H1_tag
+     aplanarity_jet
+     R4_jet
+     C_jet
+     twist_jet_tag_max_mass
+     mass_higgsLikeDijet2
+
+  * final list of variables (ordered by Importance):
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["centrality_tags","F","","centrality_tags"]
+["HT_tags","F","","HT_tags"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["H0_jet","F","","H0_jet"]
+["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+["R1_tag","F","","R1_tag"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["minDeltaR_jet_jet","F","","minDeltaR_jet_jet"]
+["HT_jets","F","","HT_jets"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["H4_jet","F","","H4_jet"]
+["circularity_jet","F","","circularity_jet"]
+["R2_tag","F","","R2_tag"]
+["R1_jet","F","","R1_jet"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["H2_jet","F","","H2_jet"]
+["D_jet","F","","D_jet"]
+["isotropy_tag","F","","isotropy_tag"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["R3_tag","F","","R3_tag"]
+["H3_jet","F","","H3_jet"]
+["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["H0_tag","F","","H0_tag"]
+["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
+["R4_tag","F","","R4_tag"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 3j3b
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  maxDeltaEta_jet_jet                      | 0.11050    | 0.06529    |
+  btagDiscriminatorAverage_tagged          | 0.06135    | 0.05993    |
+  ptSum_jets_leptons                       | 0.03852    | 0.04800    |
+  mass_higgsLikeDijet                      | 0.02499    | 0.04670    |
+  mass_jet_jet_min_deltaR                  | 0.02881    | 0.04437    |
+  pT_jet_jet_min_deltaR                    | 0.05142    | 0.04197    |
+  R1_jet                                   | 0.01878    | 0.03879    |
+  avgDeltaR_jet_jet                        | 0.07625    | 0.03500    |
+  mass_tag_tag_max_mass                    | 0.01581    | 0.03383    |
+  minDeltaR_jet_jet                        | 0.04164    | 0.03330    |
+  twist_tag_tag_min_deltaR                 | 0.00485    | 0.03257    |
+  centrality_jets_leps                     | 0.02209    | 0.03209    |
+  twist_jet_jet_max_mass                   | 0.06401    | 0.03168    |
+  centrality_tags                          | 0.02884    | 0.02998    |
+  H0_jet                                   | 0.00677    | 0.02772    |
+  circularity_jet                          | 0.00539    | 0.02690    |
+  R4_jet                                   | 0.01058    | 0.02687    |
+  H4_jet                                   | 0.00961    | 0.02685    |
+  R3_jet                                   | 0.00683    | 0.02539    |
+  median_mass_jet_jet                      | 0.01483    | 0.02535    |
+  isotropy_jet                             | 0.00492    | 0.02456    |
+  transSphericity_jet                      | 0.01137    | 0.02417    |
+  multiplicity_higgsLikeDijet15            | 0.01330    | 0.02259    |
+  HT_jets                                  | 0.03753    | 0.02183    |
+  H2_jet                                   | 0.01341    | 0.02163    |
+  mass_jet_jet_jet_max_pT                  | 0.01584    | 0.02111    |
+  aplanarity_jet                           | 0.01106    | 0.02093    |
+  D_jet                                    | 0.01257    | 0.02067    |
+  R2_jet                                   | 0.01329    | 0.02018    |
+  H3_jet                                   | 0.00695    | 0.01993    |
+  H1_jet                                   | 0.01169    | 0.01935    |
+  sphericity_jet                           | 0.01358    | 0.01647    |
+  C_jet                                    | 0.01381    | 0.01400    |
+  minDeltaR_tag_tag                        | 0.04164    | 0.00000    |
+  avgDeltaR_jet_tag                        | 0.07625    | 0.00000    |
+  avgDeltaR_tag_tag                        | 0.07625    | 0.00000    |
+  mass_higgsLikeDijet2                     | 0.02499    | 0.00000    |
+  mass_tag_tag_min_deltaR                  | 0.02881    | 0.00000    |
+  mass_jet_tag_min_deltaR                  | 0.02881    | 0.00000    |
+  maxDeltaEta_tag_tag                      | 0.11050    | 0.00000    |
+  HT_tags                                  | 0.03753    | 0.00000    |
+  pT_jet_tag_min_deltaR                    | 0.05142    | 0.00000    |
+  pT_tag_tag_min_deltaR                    | 0.05142    | 0.00000    |
+  mass_jet_tag_tag_max_pT                  | 0.01584    | 0.00000    |
+  twist_jet_tag_max_mass                   | 0.06401    | 0.00000    |
+  twist_tag_tag_max_mass                   | 0.06401    | 0.00000    |
+  sphericity_tag                           | 0.01358    | 0.00000    |
+  aplanarity_tag                           | 0.01106    | 0.00000    |
+  circularity_tag                          | 0.00539    | 0.00000    |
+  isotropy_tag                             | 0.00492    | 0.00000    |
+  C_tag                                    | 0.01381    | 0.00000    |
+  D_tag                                    | 0.01257    | 0.00000    |
+  transSphericity_tag                      | 0.01137    | 0.00000    |
+  H0_tag                                   | 0.00677    | 0.00000    |
+  H1_tag                                   | 0.01169    | 0.00000    |
+  H2_tag                                   | 0.01341    | 0.00000    |
+  H3_tag                                   | 0.00695    | 0.00000    |
+  H4_tag                                   | 0.00961    | 0.00000    |
+  R1_tag                                   | 0.01878    | 0.00000    |
+  R2_tag                                   | 0.01329    | 0.00000    |
+  R3_tag                                   | 0.00683    | 0.00000    |
+  R4_tag                                   | 0.01058    | 0.00000    |
+
+  * variables to be removed (poor data/MC agreement):
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     minDeltaR_tag_tag
+     H0_tag
+     mass_jet_tag_min_deltaR
+     mass_jet_tag_tag_max_pT
+     pT_jet_tag_min_deltaR
+     avgDeltaR_jet_tag
+     isotropy_jet
+     sphericity_tag
+     H3_tag
+     D_jet
+     C_jet
+     C_tag
+     H3_jet
+     sphericity_jet
+     circularity_tag
+     mass_tag_tag_min_deltaR
+     transSphericity_tag
+     avgDeltaR_tag_tag
+     H4_tag
+     isotropy_tag
+     H2_tag
+     H4_jet
+     H1_jet
+     H1_tag
+     mass_jet_jet_jet_max_pT
+     R2_jet
+     R3_tag
+     maxDeltaEta_tag_tag
+     aplanarity_tag
+     twist_tag_tag_max_mass
+     HT_tags
+     D_tag
+     pT_tag_tag_min_deltaR
+     R2_tag
+     R4_tag
+     twist_jet_tag_max_mass
+     R1_tag
+     mass_higgsLikeDijet2
+
+  * final list of variables (ordered by Importance):
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["R1_jet","F","","R1_jet"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+["minDeltaR_jet_jet","F","","minDeltaR_jet_jet"]
+["twist_tag_tag_min_deltaR","F","","twist_tag_tag_min_deltaR"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
+["centrality_tags","F","","centrality_tags"]
+["H0_jet","F","","H0_jet"]
+["circularity_jet","F","","circularity_jet"]
+["R4_jet","F","","R4_jet"]
+["R3_jet","F","","R3_jet"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["transSphericity_jet","F","","transSphericity_jet"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["HT_jets","F","","HT_jets"]
+["H2_jet","F","","H2_jet"]
+["aplanarity_jet","F","","aplanarity_jet"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 4j2b
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  btagDiscriminatorAverage_untagged        | 0.16940    | 0.06424    |
+  ptSum_jets_leptons                       | 0.04097    | 0.04181    |
+  avgDeltaR_jet_tag                        | 0.04208    | 0.04130    |
+  pT_tag_tag_min_deltaR                    | 0.02442    | 0.03828    |
+  mass_tag_tag_min_deltaR                  | 0.00995    | 0.03419    |
+  HT_jets                                  | 0.03841    | 0.03326    |
+  centrality_tags                          | 0.00266    | 0.03315    |
+  median_mass_jet_jet                      | 0.00532    | 0.02983    |
+  pT_jet_tag_min_deltaR                    | 0.02475    | 0.02848    |
+  mass_jet_jet_min_deltaR                  | 0.00708    | 0.02824    |
+  R1_tag                                   | 0.01405    | 0.02694    |
+  centrality_jets_leps                     | 0.01120    | 0.02664    |
+  multiplicity_higgsLikeDijet15            | 0.01510    | 0.02612    |
+  maxDeltaEta_jet_jet                      | 0.02208    | 0.02611    |
+  mass_jet_tag_min_deltaR                  | 0.00645    | 0.02568    |
+  mass_jet_tag_tag_max_pT                  | 0.00713    | 0.02548    |
+  R1_jet                                   | 0.00699    | 0.02408    |
+  btagDiscriminatorAverage_tagged          | 0.00049    | 0.02370    |
+  mass_higgsLikeDijet                      | 0.01724    | 0.02361    |
+  H2_jet                                   | 0.02214    | 0.02346    |
+  minDeltaR_jet_jet                        | 0.01077    | 0.02208    |
+  H4_jet                                   | 0.01925    | 0.02099    |
+  H3_jet                                   | 0.01383    | 0.02058    |
+  mass_higgsLikeDijet2                     | 0.01444    | 0.01981    |
+  R3_jet                                   | 0.01033    | 0.01969    |
+  HT_tags                                  | 0.00645    | 0.01963    |
+  R2_jet                                   | 0.01973    | 0.01953    |
+  minDeltaR_tag_tag                        | 0.01904    | 0.01936    |
+  avgDeltaR_jet_jet                        | 0.03383    | 0.01866    |
+  circularity_jet                          | 0.00338    | 0.01857    |
+  H0_jet                                   | 0.01913    | 0.01807    |
+  isotropy_jet                             | 0.00355    | 0.01472    |
+  maxDeltaEta_tag_tag                      | 0.01940    | 0.01391    |
+  R4_jet                                   | 0.01768    | 0.01378    |
+  H1_tag                                   | 0.01062    | 0.01198    |
+  aplanarity_jet                           | 0.01346    | 0.01134    |
+  R2_tag                                   | 0.00042    | 0.01044    |
+  circularity_tag                          | 0.00022    | 0.00980    |
+  transSphericity_jet                      | 0.00738    | 0.00946    |
+  H0_tag                                   | 0.00044    | 0.00783    |
+  pT_jet_jet_min_deltaR                    | 0.01995    | 0.00767    |
+  twist_tag_tag_max_mass                   | 0.00417    | 0.00761    |
+  C_jet                                    | 0.01040    | 0.00674    |
+  R3_tag                                   | 0.00255    | 0.00642    |
+  twist_jet_tag_max_mass                   | 0.02398    | 0.00606    |
+  mass_jet_jet_jet_max_pT                  | 0.00556    | 0.00585    |
+  isotropy_tag                             | 0.00016    | 0.00426    |
+  H4_tag                                   | 0.00031    | 0.00363    |
+  C_tag                                    | 0.00021    | 0.00353    |
+  H1_jet                                   | 0.00541    | 0.00262    |
+  H2_tag                                   | 0.00048    | 0.00078    |
+  avgDeltaR_tag_tag                        | 0.01904    | 0.00000    |
+  mass_tag_tag_max_mass                    | 0.00995    | 0.00000    |
+  twist_jet_jet_max_mass                   | 0.02351    | 0.00000    |
+  twist_tag_tag_min_deltaR                 | 0.00417    | 0.00000    |
+  sphericity_jet                           | 0.00941    | 0.00000    |
+  D_jet                                    | 0.01363    | 0.00000    |
+  sphericity_tag                           | 0.00017    | 0.00000    |
+  aplanarity_tag                           | 0.00024    | 0.00000    |
+  D_tag                                    | 0.00014    | 0.00000    |
+  transSphericity_tag                      | 0.00017    | 0.00000    |
+  H3_tag                                   | 0.00192    | 0.00000    |
+  R4_tag                                   | 0.00031    | 0.00000    |
+
+  * variables to be removed (poor data/MC agreement):
+     minDeltaRJetJet
+     H3_jet
+     btagDiscriminatorAverage_untagged
+     H1_jet
+     R1_jet
+     centrality_tags
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     R4_jet
+     H3_tag
+     isotropy_tag
+     C_jet
+     R2_jet
+     sphericity_jet
+     avgDeltaR_tag_tag
+     C_tag
+     HT_jets
+     H2_tag
+     sphericity_tag
+     twist_tag_tag_min_deltaR
+     transSphericity_tag
+     R4_tag
+     mass_tag_tag_max_mass
+     isotropy_jet
+     H0_jet
+     H1_tag
+     D_jet
+
+  * final list of variables (ordered by Importance):
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["pT_jet_tag_min_deltaR","F","","pT_jet_tag_min_deltaR"]
+["mass_jet_jet_min_deltaR","F","","mass_jet_jet_min_deltaR"]
+["R1_tag","F","","R1_tag"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
+["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["H2_jet","F","","H2_jet"]
+["minDeltaR_jet_jet","F","","minDeltaR_jet_jet"]
+["H4_jet","F","","H4_jet"]
+["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
+["R3_jet","F","","R3_jet"]
+["HT_tags","F","","HT_tags"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["circularity_jet","F","","circularity_jet"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["aplanarity_jet","F","","aplanarity_jet"]
+["R2_tag","F","","R2_tag"]
+["circularity_tag","F","","circularity_tag"]
+["transSphericity_jet","F","","transSphericity_jet"]
+["H0_tag","F","","H0_tag"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["R3_tag","F","","R3_tag"]
+["twist_jet_tag_max_mass","F","","twist_jet_tag_max_mass"]
+["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+["H4_tag","F","","H4_tag"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 4j3b
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  btagDiscriminatorAverage_tagged          | 0.05754    | 0.05130    |
+  maxDeltaEta_tag_tag                      | 0.09462    | 0.04572    |
+  btagDiscriminatorAverage_untagged        | 0.04136    | 0.04240    |
+  mass_tag_tag_min_deltaR                  | 0.03019    | 0.04193    |
+  mass_tag_tag_max_mass                    | 0.02798    | 0.03600    |
+  ptSum_jets_leptons                       | 0.01829    | 0.03339    |
+  maxDeltaEta_jet_jet                      | 0.05193    | 0.02821    |
+  avgDeltaR_jet_tag                        | 0.05874    | 0.02791    |
+  R1_tag                                   | 0.00987    | 0.02776    |
+  multiplicity_higgsLikeDijet15            | 0.02262    | 0.02680    |
+  minDeltaR_jet_jet                        | 0.01141    | 0.02569    |
+  mass_jet_tag_min_deltaR                  | 0.01607    | 0.02562    |
+  avgDeltaR_tag_tag                        | 0.07018    | 0.02500    |
+  pT_tag_tag_min_deltaR                    | 0.02565    | 0.02285    |
+  median_mass_jet_jet                      | 0.01378    | 0.02063    |
+  mass_jet_tag_tag_max_pT                  | 0.02295    | 0.01955    |
+  mass_higgsLikeDijet                      | 0.02622    | 0.01910    |
+  mass_higgsLikeDijet2                     | 0.02255    | 0.01900    |
+  HT_jets                                  | 0.01896    | 0.01868    |
+  minDeltaR_tag_tag                        | 0.03894    | 0.01814    |
+  centrality_jets_leps                     | 0.02975    | 0.01811    |
+  R3_jet                                   | 0.01085    | 0.01727    |
+  H0_tag                                   | 0.01004    | 0.01646    |
+  mass_jet_jet_min_deltaR                  | 0.01314    | 0.01578    |
+  H3_jet                                   | 0.01264    | 0.01577    |
+  pT_jet_tag_min_deltaR                    | 0.02011    | 0.01557    |
+  H4_jet                                   | 0.01710    | 0.01514    |
+  mass_jet_jet_jet_max_pT                  | 0.01890    | 0.01510    |
+  D_jet                                    | 0.02626    | 0.01500    |
+  R1_jet                                   | 0.00393    | 0.01453    |
+  isotropy_jet                             | 0.00543    | 0.01410    |
+  circularity_jet                          | 0.00539    | 0.01406    |
+  R4_jet                                   | 0.01758    | 0.01313    |
+  H0_jet                                   | 0.01290    | 0.01223    |
+  H2_jet                                   | 0.02674    | 0.01154    |
+  avgDeltaR_jet_jet                        | 0.05372    | 0.01152    |
+  circularity_tag                          | 0.00502    | 0.01141    |
+  aplanarity_jet                           | 0.02414    | 0.01104    |
+  HT_tags                                  | 0.01610    | 0.01064    |
+  isotropy_tag                             | 0.00507    | 0.01025    |
+  twist_tag_tag_min_deltaR                 | 0.00230    | 0.01014    |
+  twist_jet_tag_max_mass                   | 0.04626    | 0.01006    |
+  H3_tag                                   | 0.01043    | 0.00995    |
+  H4_tag                                   | 0.01176    | 0.00983    |
+  centrality_tags                          | 0.03560    | 0.00921    |
+  R3_tag                                   | 0.00929    | 0.00812    |
+  twist_jet_jet_max_mass                   | 0.04397    | 0.00728    |
+  transSphericity_jet                      | 0.01808    | 0.00716    |
+  R2_jet                                   | 0.02849    | 0.00692    |
+  twist_tag_tag_max_mass                   | 0.04872    | 0.00663    |
+  R4_tag                                   | 0.01110    | 0.00660    |
+  H1_tag                                   | 0.00672    | 0.00641    |
+  R2_tag                                   | 0.01444    | 0.00631    |
+  aplanarity_tag                           | 0.01093    | 0.00624    |
+  D_tag                                    | 0.01240    | 0.00542    |
+  H1_jet                                   | 0.00269    | 0.00536    |
+  C_tag                                    | 0.01539    | 0.00475    |
+  pT_jet_jet_min_deltaR                    | 0.01580    | 0.00452    |
+  H2_tag                                   | 0.01581    | 0.00428    |
+  transSphericity_tag                      | 0.01315    | 0.00385    |
+  C_jet                                    | 0.02260    | 0.00232    |
+  sphericity_tag                           | 0.01485    | 0.00231    |
+  sphericity_jet                           | 0.02154    | 0.00202    |
+
+  * variables to be removed (poor data/MC agreement):
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     sphericity_jet
+     avgDeltaR_jet_jet
+     H0_jet
+     sphericity_tag
+     R2_jet
+     C_tag
+     H3_jet
+     twist_jet_jet_max_mass
+     circularity_jet
+     R4_tag
+     transSphericity_tag
+     HT_jets
+     isotropy_tag
+     H2_tag
+     H1_jet
+     H1_tag
+     R4_jet
+     mass_jet_jet_min_deltaR
+     aplanarity_jet
+     R3_tag
+     D_tag
+     pT_jet_jet_min_deltaR
+     mass_higgsLikeDijet2
+     C_jet
+
+  * final list of variables (ordered by Importance):
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
+["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
+["R1_tag","F","","R1_tag"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["minDeltaR_jet_jet","F","","minDeltaR_jet_jet"]
+["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
+["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["R3_jet","F","","R3_jet"]
+["H0_tag","F","","H0_tag"]
+["pT_jet_tag_min_deltaR","F","","pT_jet_tag_min_deltaR"]
+["H4_jet","F","","H4_jet"]
+["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+["D_jet","F","","D_jet"]
+["R1_jet","F","","R1_jet"]
+["isotropy_jet","F","","isotropy_jet"]
+["H2_jet","F","","H2_jet"]
+["circularity_tag","F","","circularity_tag"]
+["HT_tags","F","","HT_tags"]
+["twist_tag_tag_min_deltaR","F","","twist_tag_tag_min_deltaR"]
+["twist_jet_tag_max_mass","F","","twist_jet_tag_max_mass"]
+["H3_tag","F","","H3_tag"]
+["H4_tag","F","","H4_tag"]
+["centrality_tags","F","","centrality_tags"]
+["transSphericity_jet","F","","transSphericity_jet"]
+["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["R2_tag","F","","R2_tag"]
+["aplanarity_tag","F","","aplanarity_tag"]
+
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+
+ TMVA Method: 4j4b
+ -----------------
+
+  Variable                                 | Separation | Importance |
+  ---------------------------------------- | ---------- | ---------- |
+  maxDeltaEta_tag_tag                      | 0.09151    | 0.04942    |
+  mass_tag_tag_min_deltaR                  | 0.05815    | 0.04412    |
+  btagDiscriminatorAverage_tagged          | 0.02895    | 0.04258    |
+  multiplicity_higgsLikeDijet15            | 0.02524    | 0.03189    |
+  maxDeltaEta_jet_jet                      | 0.05976    | 0.02573    |
+  avgDeltaR_tag_tag                        | 0.06474    | 0.02315    |
+  R1_tag                                   | 0.01038    | 0.02200    |
+  twist_tag_tag_max_mass                   | 0.06564    | 0.02186    |
+  median_mass_jet_jet                      | 0.02485    | 0.02119    |
+  mass_jet_tag_tag_max_pT                  | 0.03404    | 0.02087    |
+  mass_jet_jet_jet_max_pT                  | 0.03643    | 0.02075    |
+  minDeltaR_tag_tag                        | 0.02866    | 0.02031    |
+  mass_tag_tag_max_mass                    | 0.03333    | 0.01953    |
+  aplanarity_tag                           | 0.04041    | 0.01945    |
+  mass_jet_tag_min_deltaR                  | 0.03165    | 0.01855    |
+  D_tag                                    | 0.04575    | 0.01847    |
+  pT_tag_tag_min_deltaR                    | 0.03175    | 0.01751    |
+  HT_tags                                  | 0.02119    | 0.01736    |
+  twist_tag_tag_min_deltaR                 | 0.01039    | 0.01673    |
+  minDeltaR_jet_jet                        | 0.01715    | 0.01672    |
+  avgDeltaR_jet_jet                        | 0.04354    | 0.01625    |
+  R1_jet                                   | 0.01046    | 0.01598    |
+  centrality_jets_leps                     | 0.03666    | 0.01585    |
+  R4_tag                                   | 0.02668    | 0.01500    |
+  R3_tag                                   | 0.01974    | 0.01495    |
+  mass_higgsLikeDijet2                     | 0.03127    | 0.01441    |
+  pT_jet_jet_min_deltaR                    | 0.01777    | 0.01441    |
+  R2_tag                                   | 0.04228    | 0.01427    |
+  centrality_tags                          | 0.04303    | 0.01403    |
+  H4_tag                                   | 0.02718    | 0.01389    |
+  H2_tag                                   | 0.03992    | 0.01339    |
+  transSphericity_tag                      | 0.02613    | 0.01333    |
+  R4_jet                                   | 0.01834    | 0.01309    |
+  sphericity_jet                           | 0.02823    | 0.01292    |
+  mass_higgsLikeDijet                      | 0.02956    | 0.01283    |
+  circularity_jet                          | 0.01100    | 0.01280    |
+  aplanarity_jet                           | 0.03152    | 0.01268    |
+  twist_jet_tag_max_mass                   | 0.04845    | 0.01250    |
+  transSphericity_jet                      | 0.02276    | 0.01225    |
+  H1_jet                                   | 0.00886    | 0.01212    |
+  D_jet                                    | 0.03561    | 0.01202    |
+  avgDeltaR_jet_tag                        | 0.04565    | 0.01165    |
+  circularity_tag                          | 0.01020    | 0.01158    |
+  mass_jet_jet_min_deltaR                  | 0.03033    | 0.01135    |
+  ptSum_jets_leptons                       | 0.00916    | 0.01121    |
+  twist_jet_jet_max_mass                   | 0.04778    | 0.01114    |
+  HT_jets                                  | 0.01608    | 0.01098    |
+  isotropy_tag                             | 0.00964    | 0.01093    |
+  H3_tag                                   | 0.02110    | 0.01080    |
+  isotropy_jet                             | 0.00875    | 0.01068    |
+  btagDiscriminatorAverage_untagged        | 0.00972    | 0.01060    |
+  C_jet                                    | 0.03027    | 0.01060    |
+  H4_jet                                   | 0.01613    | 0.01039    |
+  H1_tag                                   | 0.01091    | 0.01036    |
+  sphericity_tag                           | 0.03217    | 0.01008    |
+  H0_tag                                   | 0.02166    | 0.00952    |
+  H3_jet                                   | 0.01253    | 0.00924    |
+  H0_jet                                   | 0.01395    | 0.00898    |
+  pT_jet_tag_min_deltaR                    | 0.01672    | 0.00895    |
+  H2_jet                                   | 0.02244    | 0.00873    |
+  R3_jet                                   | 0.01191    | 0.00865    |
+  R2_jet                                   | 0.02848    | 0.00862    |
+  C_tag                                    | 0.03418    | 0.00781    |
+
+  * variables to be removed (poor data/MC agreement):
+
+  * variables to be removed (at least 1 correlation higher than 0.9):
+     pT_jet_tag_min_deltaR
+     avgDeltaR_jet_tag
+     transSphericity_jet
+     isotropy_jet
+     H0_jet
+     sphericity_tag
+     H3_tag
+     D_jet
+     C_jet
+     C_tag
+     twist_jet_jet_max_mass
+     R3_jet
+     isotropy_tag
+     H4_tag
+     HT_jets
+     H2_tag
+     H4_jet
+     H1_jet
+     H1_tag
+     mass_higgsLikeDijet
+     mass_jet_jet_jet_max_pT
+     mass_jet_jet_min_deltaR
+     R2_jet
+     D_tag
+
+  * final list of variables (ordered by Importance):
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
+["R1_tag","F","","R1_tag"]
+["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+["aplanarity_tag","F","","aplanarity_tag"]
+["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["HT_tags","F","","HT_tags"]
+["twist_tag_tag_min_deltaR","F","","twist_tag_tag_min_deltaR"]
+["minDeltaR_jet_jet","F","","minDeltaR_jet_jet"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["R1_jet","F","","R1_jet"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["R4_tag","F","","R4_tag"]
+["R3_tag","F","","R3_tag"]
+["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["R2_tag","F","","R2_tag"]
+["centrality_tags","F","","centrality_tags"]
+["transSphericity_tag","F","","transSphericity_tag"]
+["R4_jet","F","","R4_jet"]
+["sphericity_jet","F","","sphericity_jet"]
+["circularity_jet","F","","circularity_jet"]
+["aplanarity_jet","F","","aplanarity_jet"]
+["twist_jet_tag_max_mass","F","","twist_jet_tag_max_mass"]
+["circularity_tag","F","","circularity_tag"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+["H0_tag","F","","H0_tag"]
+["H3_jet","F","","H3_jet"]
+["H2_jet","F","","H2_jet"]
+
+----------------------------------------------------------------------------------------------------
