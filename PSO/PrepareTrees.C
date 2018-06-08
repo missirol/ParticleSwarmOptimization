@@ -168,8 +168,14 @@ config.close();
 
 if(UseFixedTrainTestSplitting)
 {
-  string selTrain = "("+Selection+") *  ("+UseFixedTrainTestSplitting_Train+")";
-  string selTest  = "("+Selection+") * !("+UseFixedTrainTestSplitting_Train+")";
+  string selTrain = " ("+UseFixedTrainTestSplitting_Train+")";
+  string selTest  = "!("+UseFixedTrainTestSplitting_Train+")";
+
+  if(Selection != "")
+  {
+    selTrain += " * ("+Selection+")";
+    selTest  += " * ("+Selection+")";
+  }
 
   std::cout << " Train = \"" << selTrain << "\"" << std::endl;
 
