@@ -196,6 +196,7 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    }
 
    thisTimer->Start();
+
    TFile *inputSTrain;
    TFile *inputBTrain;
    TTree *signalTrain;
@@ -212,21 +213,28 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    Double_t wSfChi2=0.0;
    Double_t wBfChi2=0.0;
 
-   if(UseFixedTrainTestSplitting==1){
-   inputSTrain = TFile::Open( "Signal_Train.root" );
-   inputBTrain = TFile::Open( "Background_Train.root" );
-   signalTrain     = (TTree*)inputSTrain->Get(SignalTreeName);
-   backgroundTrain = (TTree*)inputBTrain->Get(BackgroundTreeName);
-   factory->AddSignalTree    ( signalTrain,     1.0,TMVA::Types::kTraining );
-   factory->AddBackgroundTree( backgroundTrain, 1.0,TMVA::Types::kTraining );
-   inputSTest = TFile::Open( "Signal_Test.root" );
-   inputBTest = TFile::Open( "Background_Test.root" );
-   signalTest     = (TTree*)inputSTest->Get(SignalTreeName);
-   backgroundTest = (TTree*)inputBTest->Get(BackgroundTreeName);
-   factory->AddSignalTree    ( signalTest,     1.0,TMVA::Types::kTesting );
-   factory->AddBackgroundTree( backgroundTest, 1.0,TMVA::Types::kTesting );
-   wSfChi2=signalTest->GetMinimum(SigWeight)*signalTest->GetEntries();
-   wBfChi2=backgroundTest->GetMinimum(BkgWeight)*backgroundTest->GetEntries();
+   if(UseFixedTrainTestSplitting == 1)
+   {
+     inputSTrain = TFile::Open("Signal_Train.root");
+     inputBTrain = TFile::Open("Background_Train.root");
+
+     signalTrain     = (TTree*) inputSTrain->Get(SignalTreeName);
+     backgroundTrain = (TTree*) inputBTrain->Get(BackgroundTreeName);
+
+     factory->AddSignalTree    (signalTrain,     1.0, TMVA::Types::kTraining);
+     factory->AddBackgroundTree(backgroundTrain, 1.0, TMVA::Types::kTraining);
+
+     inputSTest = TFile::Open("Signal_Test.root");
+     inputBTest = TFile::Open("Background_Test.root");
+
+     signalTest     = (TTree*) inputSTest->Get(SignalTreeName);
+     backgroundTest = (TTree*) inputBTest->Get(BackgroundTreeName);
+
+     factory->AddSignalTree    (signalTest,     1.0, TMVA::Types::kTesting);
+     factory->AddBackgroundTree(backgroundTest, 1.0, TMVA::Types::kTesting);
+
+     wSfChi2 = signalTest    ->GetMinimum(SigWeight) * signalTest    ->GetEntries();
+     wBfChi2 = backgroundTest->GetMinimum(BkgWeight) * backgroundTest->GetEntries();
    }
    else
    {
@@ -481,8 +489,7 @@ void Particle()
  Double_t dumpVal;
  TString dumpName;
  Int_t UseFixedTrainTestSplitting = 0;
- 
-   
+
   //read Config File
   std::ifstream config("ParticleConfig.txt");
   TString dump="";

@@ -35,7 +35,9 @@ class PSOManager:
       self.TenBestMVAs=[[0.0,0.0,"",[],[],[]] for i in range(10)]
       #print self.TenBestMVAs
       self.KSThreshold=0.1
-      RunSystem="EKPSL5"
+
+      RunSystem = 'NAFSL6'
+
       self.NIterations=1
       self.FOM="ROCIntegral"
       self.FindBestVariables = 1
@@ -159,14 +161,23 @@ class PSOManager:
           self.BackgroundWeightExpression=line.split("=",1)[1]
         if "MethodType" in line:
           self.MethodType=line.split("=",1)[1]
+
         if "MethodParams" in line:
           self.MethodParams=line.split("=",1)[1]
 
-        if    "UseFixedTrainTestSplitting" in line:
-          self.UseFixedTrainTestSplitting = line.split("=", 1)[1]
+        if 'UseFixedTrainTestSplitting' in line:
 
-        if    "UseFixedTrainTestSplitting_Train" in line:
-          self.UseFixedTrainTestSplitting_Train = line.split("=", 1)[1]
+           arg = line.split('=', 1)[0].replace(' ','')
+
+           if arg == 'UseFixedTrainTestSplitting':
+              self.UseFixedTrainTestSplitting = line.split('=', 1)[1]
+
+        if 'UseFixedTrainTestSplitting_Train' in line:
+
+           arg = line.split('=', 1)[0].replace(' ','')
+
+           if arg == 'UseFixedTrainTestSplitting_Train':
+              self.UseFixedTrainTestSplitting_Train = line.split('=', 1)[1]
 
         if "SourceBackgroundTree" in line:
           self.BackgroundTreeName=line.split("=",1)[1]
@@ -185,8 +196,8 @@ class PSOManager:
           if coord not in self.Coordinates:
             self.Coordinates.append(coord)
             self.BestCoordinatesGlobal.append([coord[0],0.0])
-      #set up the que system
-      self.QueHelper=QueHelper(RunSystem)
+
+      self.QueHelper = QueHelper(RunSystem)
 
     def InitParticles(self):
 

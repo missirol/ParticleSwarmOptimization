@@ -80,7 +80,7 @@ class Particle:
             print "unusedVariables\n", self.additionalVariables
             print il, len(self.initialVariables), len(self.additionalVariables)
 
-      self.SaveTrainingsToTrees=SaveTrainingsToTrees
+      self.SaveTrainingsToTrees = SaveTrainingsToTrees
 
       self.UseFixedTrainTestSplitting       = UseFixedTrainTestSplitting
       self.UseFixedTrainTestSplitting_Train = UseFixedTrainTestSplitting_Train
@@ -159,7 +159,7 @@ class Particle:
 
     def WriteConfig(self):
       # write ConfigFile
-      configfile=open(self.Path+"/ParticleConfig.txt","w")
+      configfile = open(self.Path+"/ParticleConfig.txt","w")
       configfile.write("particleNumber "+str(self.particleNumber)+"\n")
       configfile.write("Iteration "+str(self.Iteration)+"\n")
       configfile.write("FOM "+str(self.FOM)+"\n")
@@ -172,8 +172,17 @@ class Particle:
       configfile.write("SignalTreeName "+str(self.SignalTreeName)+"\n")
       configfile.write("BackgroundTreeName "+str(self.BackgroundTreeName)+"\n")
 
-      configfile.write("UseFixedTrainTestSplitting "        +str(self.UseFixedTrainTestSplitting)      +  "\n")
-      configfile.write("UseFixedTrainTestSplitting_Train \""+str(self.UseFixedTrainTestSplitting_Train)+"\"\n")
+      configfile.write("UseFixedTrainTestSplitting "+str(self.UseFixedTrainTestSplitting)+"\n")
+
+      str_UseFixedTrainTestSplitting_Train = str(self.UseFixedTrainTestSplitting_Train)
+
+      while str_UseFixedTrainTestSplitting_Train.startswith('"') or str_UseFixedTrainTestSplitting_Train.startswith("'"):
+            str_UseFixedTrainTestSplitting_Train = str_UseFixedTrainTestSplitting_Train[1:]
+
+      while str_UseFixedTrainTestSplitting_Train.endswith('"') or str_UseFixedTrainTestSplitting_Train.endswith("'"):
+            str_UseFixedTrainTestSplitting_Train = str_UseFixedTrainTestSplitting_Train[:-1]
+
+      configfile.write("UseFixedTrainTestSplitting_Train \""+str_UseFixedTrainTestSplitting_Train+"\"\n")
 
       configfile.write("FindBestVariables "+str(self.FindBestVariables)+"\n")
       configfile.write("MaxVariablesInCombination "+str(self.MaxVariablesInCombination)+"\n")
@@ -197,13 +206,13 @@ class Particle:
       configfile.write("MethodParameters "+str(self.MethodParams)+"\n")
 
       configfile.write("--InitialVariables--"+"\n")
-      for var in self.initialVariables:
-        configfile.write(var+"\n")
+      for var in self.initialVariables: configfile.write(var+"\n")
       configfile.write("--EndInitVars--\n")
+
       configfile.write("--additionalVariables--\n")
-      for var in self.additionalVariables:
-        configfile.write(var+"\n")
+      for var in self.additionalVariables: configfile.write(var+"\n")
       configfile.write("--EndAddVars--\n")
+
       configfile.close()
 
     def StartEvaluation(self):
