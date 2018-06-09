@@ -210,6 +210,9 @@ class Particle:
       configfile.write("--EndInitVars--\n")
 
       configfile.write("--additionalVariables--\n")
+
+      if len(self.additionalVariables): KILL('AAA') #!!
+
       for var in self.additionalVariables: configfile.write(var+"\n")
       configfile.write("--EndAddVars--\n")
 
@@ -290,27 +293,32 @@ class Particle:
             cc=c[1]
             curVel=c[2]
             break
+
         rp=self.rand.Rndm()
         rg=self.rand.Rndm()
-        newVel=self.vw*curVel + self.vp*rp*(bcp-cc)+self.vg*rg*(bcg-cc)
-        newVel=cmp(newVel,0)*min(abs(newVel),coord[3])
-        if coord[4]=="int":
-          newVel=int(newVel)
-        elif coord[4]=="float":
-          newVel=float(newVel)
-        newcoord=cc+newVel
-        newcoord=abs(cmp(newcoord,0)*min(abs(newcoord),coord[2]))
-        newcoord=abs(cmp(newcoord,0)*max(abs(newcoord),coord[1]))
+
+        newVel = self.vw*curVel + self.vp*rp*(bcp-cc)+self.vg*rg*(bcg-cc)
+
+        newVel = cmp(newVel,0) * min(abs(newVel),coord[3])
+
+        if   coord[4] == 'int'  : newVel = int  (newVel)
+        elif coord[4] == 'float': newVel = float(newVel)
+
+        newcoord = cc + newVel
+        newcoord = abs(cmp(newcoord,0)*min(abs(newcoord),coord[2]))
+        newcoord = abs(cmp(newcoord,0)*max(abs(newcoord),coord[1]))
+
         if self.Verbose:
-          print "\nOld Coordinate ", coord[0],cc,curVel
-          print "best global ", bcg
-          print "best for this particle ", bcp
-        if self.Verbose:
-          print "New Coordinate ", newcoord, newVel
+           print "\nOld Coordinate ", coord[0],cc,curVel
+           print "best global ", bcg
+           print "best for this particle ", bcp
+
+           print "New Coordinate ", newcoord, newVel
+
         newCoords.append([coord[0],newcoord,newVel])
 
       self.currentCoordinates=newCoords
-#      print self.currentCoordinates
+
       self.WriteConfig()
 
     def GetResult(self):
@@ -346,20 +354,23 @@ class Particle:
           self.additionalVariables.append(vv)
 
       if ks<self.KSThreshold:
-        fom=0.0
-        ks=0.0
+         fom = 0.0
+         ks  = 0.0
 
       else:
         if fom>=self.BestFOM:
-          self.BestFOM=fom
-          self.BestKS=ks
-          self.BestCoordinates=[]
-          for coord in self.currentCoordinates:
-            self.BestCoordinates.append([coord[0],coord[1]])
+
+           self.BestFOM=fom
+           self.BestKS=ks
+           self.BestCoordinates=[]
+
+           for coord in self.currentCoordinates:
+               self.BestCoordinates.append([coord[0],coord[1]])
+
       if self.Verbose:
-        print "particle ", self.particleNumber
-        print self.BestCoordinates
-        print self.BestFOM
+         print "particle ", self.particleNumber
+         print self.BestCoordinates
+         print self.BestFOM
 
       RouteFile=open(self.Path+"/ParticleRoute.txt","a")
       Route=str(fom).replace("\n","")+" "+str(ks).replace("\n","")+" "
