@@ -205,14 +205,14 @@ class Particle:
       self.MethodParams=methodString
       configfile.write("MethodParameters "+str(self.MethodParams)+"\n")
 
+      if len(self.initialVariables) == 0:
+         KILL('particle.py -- WriteConfig: empty list of initial variables')
+
       configfile.write("--InitialVariables--"+"\n")
       for var in self.initialVariables: configfile.write(var+"\n")
       configfile.write("--EndInitVars--\n")
 
       configfile.write("--additionalVariables--\n")
-
-      if len(self.additionalVariables): KILL('AAA') #!!
-
       for var in self.additionalVariables: configfile.write(var+"\n")
       configfile.write("--EndAddVars--\n")
 
