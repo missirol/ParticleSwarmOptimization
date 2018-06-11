@@ -119,7 +119,7 @@ class QueHelper:
         'requirements = (OpSysAndVer == "SL6")',
         '#requirements = (OpSysAndVer == "SL6" || OpSysAndVer == "CentOS7")',
 
-        ' RequestMemory  = 4G',
+        ' RequestMemory  =  2000',
         '+RequestRuntime = 10800',
 
         'queue',
