@@ -14,6 +14,11 @@ class Particle:
 
       self.Path=Path
 
+      self.fpath_confHTC     = None
+      self.fpath_confHTC_err = None
+      self.fpath_confHTC_out = None
+      self.fpath_confHTC_log = None
+
       self.ExeFile = None
       self.RunFile = self.Path+'/run.sh'
 
@@ -124,9 +129,9 @@ class Particle:
       else:
 
          # HTCondor configuration script
-         config_fpath = self.Path+'/conf.htc'
+         self.fpath_confHTC = os.path.abspath(self.Path+'/conf.htc')
 
-         config_file = open(config_fpath, 'w')
+         config_file = open(self.fpath_confHTC, 'w')
          config_lines = self.QueHelper.GetConfigLines()
 
          for line in config_lines:
@@ -146,9 +151,9 @@ class Particle:
 
          run_file.write('#!/bin/sh')
          run_file.write('\n\n')
-         run_file.write('cd '+self.Path)
+         run_file.write('cd '+os.path.dirname(self.fpath_confHTC))
          run_file.write('\n')
-         run_file.write('condor_submit conf.htc')
+         run_file.write('condor_submit '+os.path.basename(self.fpath_confHTC))
          run_file.write('\n')
 
          run_file.close()
@@ -223,40 +228,80 @@ class Particle:
         self.JobID = self.QueHelper.StartJob(self.Path+'/run.sh')
 #        print self.JobID
 
+        fpath_dc = {}
+
+        with open(self.fpath_confHTC, 'r') as cfg_file:
+
+             cfg_lines = cfg_file.readlines()
+
+             for i_line in cfg_lines:
+                 i_line = i_line.replace('\n', '')
+                 i_line = i_line.replace(' ' , '')
+
+                 if   i_line.startswith('error=') : fpath_dc['err'] = i_line[len('error='):]
+                 elif i_line.startswith('output='): fpath_dc['out'] = i_line[len('output='):]
+                 elif i_line.startswith('log=')   : fpath_dc['log'] = i_line[len('log='):]
+
+        for i_type in ['err', 'out', 'log']:
+
+            if i_type not in fpath_dc:
+               KILL('particle.py -- StartEvaluation: path to job \"'+i_type+'\" file not found in HTCondor configuration file: '+self.fpath_confHTC)
+
+        self.fpath_confHTC_err = fpath_dc['err'].replace('$(Cluster).$(Process)', str(self.JobID))
+        self.fpath_confHTC_out = fpath_dc['out'].replace('$(Cluster).$(Process)', str(self.JobID))
+        self.fpath_confHTC_log = fpath_dc['log'].replace('$(Cluster).$(Process)', str(self.JobID))
+
         self.isRunning = True
+
+        return
 
     def ManageJob(self, jobID_dict):
 
-        job_exists = bool(str(self.JobID) in jobID_dict)
+        if os.path.isfile(self.fpath_confHTC_err) and (os.path.getsize(self.fpath_confHTC_err) != 0):
 
-        if not job_exists:
+           log_msg = 'job '+str(self.JobID)+' returned ERROR (stderr file not empty),'
 
-           self.isRunning = False
+           self.QueHelper.KillJob(str(self.JobID))
+
+           # resubmit
+           self.StartEvaluation()
+
+           log_msg += ' has been removed and resubmitted as job '+str(self.JobID)
+
+           WARNING('particle.py -- ManageJob: '+log_msg)
 
         else:
 
-           job_status = jobID_dict[str(self.JobID)]['STATUS']
+           job_exists = bool(str(self.JobID) in jobID_dict)
 
-           if bool(job_status == 'C'):
+           if not job_exists:
 
               self.isRunning = False
 
-           elif bool(job_status in ['H','X']):
-
-              log_msg = 'job '+str(self.JobID)+' found in status "'+job_status+'"'
-
-              self.QueHelper.KillJob(str(self.JobID))
-
-              # resubmit
-              self.StartEvaluation()
-
-              log_msg += ' has been removed and resubmitted as job '+str(self.JobID)
-
-              WARNING('particle.py -- ManageJob: '+log_msg)
-
            else:
 
-              self.isRunning = True
+              job_status = jobID_dict[str(self.JobID)]['STATUS']
+
+              if bool(job_status == 'C'):
+
+                 self.isRunning = False
+
+              elif bool(job_status in ['H','X']):
+
+                 log_msg = 'job '+str(self.JobID)+' found in status "'+job_status+'"'
+
+                 self.QueHelper.KillJob(str(self.JobID))
+
+                 # resubmit
+                 self.StartEvaluation()
+
+                 log_msg += ' has been removed and resubmitted as job '+str(self.JobID)
+
+                 WARNING('particle.py -- ManageJob: '+log_msg)
+
+              else:
+
+                 self.isRunning = True
 
         return
 
