@@ -171,26 +171,31 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
 
  void DoTraining(std::vector<BDTVar*> UsedVars,std::vector<BDTVar*> UnUsedVars,TString FOMType, TString FactoryString, TString PrepString, TString SigWeight, TString BkgWeight, TString SignalTreeName, TString BackgroundTreeName, TString MethodType, TString MethodString, int particleNumber, Double_t* testFOM, Double_t* testKS,Int_t UseFixedTrainTestSplitting, TString PlotName="NONE" ){
    std::cout<<"----------------------------------------------------------------"<<std::endl;
-   
+
    //prepare TMVA
    TMVA::IMethod* im;
    //timing studies
-    TStopwatch* thisTimer = new TStopwatch();
-    Double_t thisTreeTime=0.0;
-    Double_t thisTrainingTime=0.0;
-    Double_t thisTestingTime=0.0;
-    
+
+   TStopwatch* thisTimer = new TStopwatch();
+
+   Double_t thisTreeTime = 0.0;
+   Double_t thisTrainingTime = 0.0;
+   Double_t thisTestingTime = 0.0;
+
    TMVA::Tools::Instance();
+
    TString outfileName( "TMVAVars.root" );
+
    int nUsedVars=UsedVars.size();
 
    TFile* outputFile = TFile::Open( outfileName, "RECREATE" );
-   
+
    TMVA::Factory *factory = new TMVA::Factory( "TMVAVars", outputFile,FactoryString );
-   std::cout<<MethodString<<std::endl;
-   
+   std::cout << MethodString << std::endl;
+
    std::cout<<"Using Variables"<<std::endl;
-   for(int k=0; k<UsedVars.size(); k++){
+   for(int k=0; k<UsedVars.size(); k++)
+   {
      std::cout<<k<<" "<<UsedVars.at(k)->name<<std::endl; 
      factory->AddVariable(UsedVars.at(k)->name);
    }
@@ -408,6 +413,7 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
    TimeTreePreparation+=thisTreeTime;
    TimeTraining+=thisTrainingTime;
    TimeTesting+=thisTestingTime;
+
    delete thisTimer;
 
 // free all the memory
@@ -415,49 +421,58 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
 
 //    delete mvaRes;
 //    delete mvaResTrain;
-   delete myData;
+
+//!!   delete myData;
+
 //    delete mva_s;
 //    delete mva_b;
-//    std::cout<<"here1"<<std::endl;
+
 //    delete mva_effS;
 //    delete mva_effB;
+
    delete mva_ROCCurve_H;
+
 //    delete mva_s_tr;
 //    delete mva_b_tr;
-//    std::cout<<"here2"<<std::endl;
-   delete factory;
-//    std::cout<<"here3"<<std::endl;
-   if(UseFixedTrainTestSplitting==0){
-   delete signal;
-   delete background;
-   inputS->Close();
-   inputB->Close();
-//    std::cout<<"here4"<<std::endl;
-   delete inputS;
-   delete inputB;
-   }
-   else{
-   delete signalTrain;
-   delete backgroundTrain;
-   inputSTrain->Close();
-   inputBTrain->Close();
-//    std::cout<<"here4"<<std::endl;
-   delete inputSTrain;
-   delete inputBTrain;
-   delete signalTest;
-   delete backgroundTest;
-   inputSTest->Close();
-   inputBTest->Close();
-//    std::cout<<"here4"<<std::endl;
-   delete inputSTest;
-   delete inputBTest;   
-   }
-   outputFile->Close();
-   delete outputFile;
 
- }
-    
- 
+   delete factory;
+
+   if(UseFixedTrainTestSplitting == 0)
+   {
+//!!     delete signal;
+//!!     delete background;
+
+     inputS->Close();
+     inputB->Close();
+
+//!!     delete inputS;
+//!!     delete inputB;
+   }
+   else
+   {
+//!!     delete signalTrain;
+//!!     delete backgroundTrain;
+
+     inputSTrain->Close();
+     inputBTrain->Close();
+
+//!!     delete inputSTrain;
+//!!     delete inputBTrain;
+
+//!!     delete signalTest;
+//!!     delete backgroundTest;
+
+     inputSTest->Close();
+     inputBTest->Close();
+
+//!!     delete inputSTest;
+//!!     delete inputBTest;
+   }
+
+   outputFile->Close();
+//!!   delete outputFile;
+}
+
 void Particle()
 {
   TStopwatch* timerTotal=new TStopwatch();
@@ -915,6 +930,8 @@ void Particle()
   result.close();
 
   TimeTotal = timerTotal->RealTime();
+
+  delete timerTotal;
 
   std::cout<<"*******************************************************"<<std::endl;
   std::cout<<"* Total Time: "<<TimeTotal<<std::endl;
