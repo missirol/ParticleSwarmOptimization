@@ -2,7 +2,7 @@
 import argparse, os, subprocess
 
 from PSO.PSOManager import PSOManager
-from PSO.utils      import *
+from PSO.common     import *
 
 if __name__ == '__main__':
     ### args
