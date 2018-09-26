@@ -80,7 +80,7 @@ class QueHelper:
         "#!/bin/bash\n",
         "source /etc/profile.d/modules.sh\n",
         "module use -a /afs/desy.de/group/cms/modulefiles/\n",
-        "module load cmssw/"+self.SCRAM_ARCH+"\n",
+        "module load cmssw"+"\n",
         "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n",
         "export SCRAM_ARCH="+self.SCRAM_ARCH+"\n",
         "source $VO_CMS_SW_DIR/cmsset_default.sh\n",
