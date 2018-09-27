@@ -75,7 +75,7 @@ coord=["MaxDepth",2,3,1,"int"]
 ##  - if UseFixedTrainTestSplitting=0, TMVA will use built-in splitting
 ##
 UseFixedTrainTestSplitting=1
-UseFixedTrainTestSplitting_Train="MVA_index < 6"
+UseFixedTrainTestSplitting_Train="(eventNumber%2) == 0"
 
 SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
 SourceBackgroundTree=liteTreeTTH_step7_cate1
