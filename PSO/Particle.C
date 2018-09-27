@@ -258,8 +258,9 @@ Double_t GetChi2FOM(TH1D* histoSignal,Double_t SignalWeight, TH1D* histoBackgrou
      dataloader->AddSignalTree    (signal,     1.0);
      dataloader->AddBackgroundTree(background, 1.0);
    }
-   dataloader->SetBackgroundWeightExpression( SigWeight );
-   dataloader->SetSignalWeightExpression( BkgWeight );
+
+   dataloader->SetBackgroundWeightExpression( BkgWeight );
+   dataloader->SetSignalWeightExpression    ( SigWeight );
 
    std::cout << "Running TMVA::DataLoader::PrepareTrainingAndTestTree(\"\", \"\", \""+PrepString+"\")" << std::endl;
    dataloader->PrepareTrainingAndTestTree("", "", PrepString);
