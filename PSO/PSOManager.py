@@ -399,10 +399,23 @@ class PSOManager:
         bestBDTFile.close()
 
         if FinalMVAConfFile != None:
+
+           # disable Silent mode in FactoryString of .conf file
+           conf_FactoryString = str(self.FactoryString)
+
+           if conf_FactoryString.startswith('Silent:'):
+              conf_FactoryString = '!Silent:'+conf_FactoryString[len(':Silent'):]
+
+           if conf_FactoryString.endswith(':Silent'):
+              conf_FactoryString = conf_FactoryString[:-len(':Silent')]+':!Silent'
+
+           if ':Silent:' in conf_FactoryString:
+              conf_FactoryString = conf_FactoryString.replace(':Silent:', ':!Silent:')
+
            finalMVAConfFile = open(FinalMVAConfFile, 'w')
            finalMVAConfFile.write('[configuration]'+'\n')
            finalMVAConfFile.write('\n')
-           finalMVAConfFile.write('factory    = '+str(self.FactoryString)             +'\n')
+           finalMVAConfFile.write('factory    = '+str(conf_FactoryString)             +'\n')
            finalMVAConfFile.write('dataloader = '+str(self.PreparationString)         +'\n')
            finalMVAConfFile.write('\n')
            finalMVAConfFile.write('method = kBDT, BDTG, '+str(self.TenBestMVAs[0][2]) +'\n')
