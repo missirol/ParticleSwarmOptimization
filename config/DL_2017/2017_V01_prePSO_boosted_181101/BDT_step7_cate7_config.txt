@@ -4,7 +4,7 @@
 RunOn=NAFSL6
 
 ## Swarm Parameters
-NParticles=40
+NParticles=60
 NIterations=25
 wIneratia=0.729
 wMemory=1.49445
@@ -58,8 +58,8 @@ MethodParams=!H:!V:NTrees=100:BoostType=Grad:Shrinkage=0.01:UseBaggedBoost:Bagge
 ## Search Space:
 ##  - coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
 ##  - If min and max value are the same the value is not varied
-coord=["NTrees",100,1500,50,"int"]
-coord=["Shrinkage",0.001,0.05,0.002,"float"]
+coord=["NTrees",50,1500,50,"int"]
+coord=["Shrinkage",0.001,0.10,0.002,"float"]
 coord=["BaggedSampleFraction",0.1,0.9,0.05,"float"]
 coord=["nCuts",10,80,4,"int"]
 coord=["MaxDepth",2,3,1,"int"]
@@ -107,28 +107,28 @@ InitialVariables:
 ["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
 ["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
 ["HT_jets","F","","HT_jets"]
-["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
-["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
-["N_btags","F","","N_btags"]
-["R1_jet","F","","R1_jet"]
-["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
-["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
-["fatjet_subjets_Deta","F","","fatjet_subjets_Deta"]
-["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
-["transSphericity_jet","F","","transSphericity_jet"]
-["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
-["median_mass_jet_jet","F","","median_mass_jet_jet"]
-["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
-["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
-["fatjet_subjet_M_1","F","","fatjet_subjet_M_1"]
-["N_jets","F","","N_jets"]
-["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
-["centrality_tags","F","","centrality_tags"]
-["aplanarity_jet","F","","aplanarity_jet"]
-["fatjet_subjet_eta_1","F","","fatjet_subjet_eta_1"]
-["fatjet_subjet_phi_1","F","","fatjet_subjet_phi_1"]
-["centrality_jets_leps","F","","centrality_jets_leps"]
-["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+#["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+#["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+#["N_btags","F","","N_btags"]
+#["R1_jet","F","","R1_jet"]
+#["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
+#["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+#["fatjet_subjets_Deta","F","","fatjet_subjets_Deta"]
+#["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+#["transSphericity_jet","F","","transSphericity_jet"]
+#["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+#["median_mass_jet_jet","F","","median_mass_jet_jet"]
+#["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+#["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+#["fatjet_subjet_M_1","F","","fatjet_subjet_M_1"]
+#["N_jets","F","","N_jets"]
+#["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+#["centrality_tags","F","","centrality_tags"]
+#["aplanarity_jet","F","","aplanarity_jet"]
+#["fatjet_subjet_eta_1","F","","fatjet_subjet_eta_1"]
+#["fatjet_subjet_phi_1","F","","fatjet_subjet_phi_1"]
+#["centrality_jets_leps","F","","centrality_jets_leps"]
+#["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
 EndVariables
 
 ##---------------------------------------------------
