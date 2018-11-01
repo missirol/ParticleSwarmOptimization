@@ -1,0 +1,145 @@
+##Parameters for the Particle Swarm Optimization
+
+##RunOn = EKPSL5 | EKPSL5 | NAFSL5 | NAFSL6
+RunOn=NAFSL6
+
+## Swarm Parameters
+NParticles=40
+NIterations=15
+wIneratia=0.729
+wMemory=1.49445
+wSwarm=1.49445
+
+##FOM = ROCIntegral | Separation | rejB_vs_effS_0.1 | rejB_vs_effS_0.3 |rejB_vs_effS_0.5 | Chi2_B_muSB
+FOM=ROCIntegral
+KSThreshold=0.2
+
+# add/remove variables from initial list
+FindBestVariables=0
+
+# used only if FindBestVariables=1
+MaxVariablesInCombination=20
+
+# add variable only if "new FOM > ImprovementThreshold*FOM"
+ImprovementThreshold=1.005
+
+## repeat each training additional times with different random seeds for test/training splitting (0==no repetition)
+## only reasonable if SplitSeed=0 is in the PreparationString a few lines down
+## and if UseFixedTrainTestSplitting=0
+## FOM and KS will be taken as the worst of all trainings
+RepeatTrainingNTimes=0
+## draw random starting variables, 0== use predermined starting variables
+DrawNRandomAsStartingVars=0
+##NOTYET SaveTrainingsToTrees=False
+
+##TMVA Options
+FactoryString=!V:Silent:Color:!DrawProgressBar:Transformations=I:AnalysisType=Classification
+PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
+##if you want to limit the number of events do it either PreparationString or here
+#nTrain_Signal=
+#nTrain_Background=
+#nTest_Signal=
+#nTest_Background=
+##Weight expression, might need to be declared in WeightVariables furhter down
+## probably same syntax as in TTree::Draw
+SignalWeightExpression=weight
+BackgroundWeightExpression=weight
+
+##--------------------------------------------------
+## Method to train and test:
+##  - Only tested with BDT so far
+##  - You might want to think about how to handle NEGATIVE WEIGHTS
+##  - Parameters in MethodParams will be overwritten if they span the search space
+MethodType=TMVA::Types::kBDT
+MethodParams=!H:!V:NTrees=100:BoostType=Grad:Shrinkage=0.01:UseBaggedBoost:BaggedSampleFraction=0.5:nCuts=10:MaxDepth=2:NegWeightTreatment=IgnoreNegWeightsInTraining
+##--------------------------------------------------
+
+##--------------------------------------------------
+## Search Space:
+##  - coord=["Name",minValue,maxValue,maxVelocity,"int|float"]
+##  - If min and max value are the same the value is not varied
+coord=["NTrees",100,1500,50,"int"]
+coord=["Shrinkage",0.001,0.05,0.002,"float"]
+coord=["BaggedSampleFraction",0.1,0.9,0.05,"float"]
+coord=["nCuts",10,80,4,"int"]
+coord=["MaxDepth",2,3,1,"int"]
+##--------------------------------------------------
+
+##--------------------------------------------------
+## Source Trees:
+##
+##  - if UseFixedTrainTestSplitting=1,
+##    the input trees will be split in training/test samples
+##    with the string selector in "UseFixedTrainTestSplitting_Train"
+##
+##  - if UseFixedTrainTestSplitting=0, TMVA will use built-in splitting
+##
+UseFixedTrainTestSplitting=1
+UseFixedTrainTestSplitting_Train="(eventNumber%2) == 0"
+
+SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
+SourceBackgroundTree=liteTreeTTH_step7_cate2
+
+SourceSignalFile=PSO_input/signal_TrainingPlusTesting.root
+SourceSignalTree=liteTreeTTH_step7_cate2
+##--------------------------------------------------
+
+##--------------------------------------------------
+## use selections without quotation marks:
+##  - example: SelectionString=(N_Jets==4)&&(N_BTagsM==3)
+#SelectionString=TMath::Abs(CSV[0])<=1.0
+##--------------------------------------------------
+
+##------------------------------------------------
+##Variables in Format ["NAME","TYPE","LENGTH","VarExpression"]
+##IMPORTANT dont leave a blank line between the initial and the end variables line
+##variables the optimization starts with
+InitialVariables:
+["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
+["centrality_jets_leps","F","","centrality_jets_leps"]
+["avgDeltaR_jet_jet","F","","avgDeltaR_jet_jet"]
+["median_mass_jet_jet","F","","median_mass_jet_jet"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["R2_jet","F","","R2_jet"]
+["HT_tags","F","","HT_tags"]
+["pT_jet_tag_min_deltaR","F","","pT_jet_tag_min_deltaR"]
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
+["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
+["transSphericity_jet","F","","transSphericity_jet"]
+["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
+["R3_jet","F","","R3_jet"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["R1_tag","F","","R1_tag"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["mass_higgsLikeDijet2","F","","mass_higgsLikeDijet2"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
+["twist_jet_tag_max_mass","F","","twist_jet_tag_max_mass"]
+["H4_jet","F","","H4_jet"]
+["isotropy_jet","F","","isotropy_jet"]
+["R2_tag","F","","R2_tag"]
+["H0_tag","F","","H0_tag"]
+["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["aplanarity_jet","F","","aplanarity_jet"]
+["circularity_tag","F","","circularity_tag"]
+["R3_tag","F","","R3_tag"]
+["twist_jet_jet_max_mass","F","","twist_jet_jet_max_mass"]
+["aplanarity_tag","F","","aplanarity_tag"]
+["H4_tag","F","","H4_tag"]
+["D_tag","F","","D_tag"]
+EndVariables
+
+##---------------------------------------------------
+## variables the swarm can try
+AdditionalVariables:
+EndVariables
+
+##---------------------------------------------------
+## variables used for reweighting and stuff
+WeightVariables:
+["weight","F","","weight"]
+EndVariables
+##---------------------------------------------------
