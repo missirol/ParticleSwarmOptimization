@@ -95,18 +95,18 @@ SourceSignalTree=liteTreeTTH_step7_cate8
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
+["MEM","F","","MEM"]
 ["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
 ["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 ["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
-["MEM","F","","MEM"]
-["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
 ["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
-["H4_tag","F","","H4_tag"]
-["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
-["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
 ["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+["H4_tag","F","","H4_tag"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
 ["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
-["H0_tag","F","","H0_tag"]
 EndVariables
 
 ##---------------------------------------------------

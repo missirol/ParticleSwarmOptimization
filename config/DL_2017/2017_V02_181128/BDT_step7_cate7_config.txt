@@ -96,17 +96,17 @@ SourceSignalTree=liteTreeTTH_step7_cate7
 ##variables the optimization starts with
 InitialVariables:
 ["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["MEM","F","","MEM"]
 ["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
-["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
 ["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
-["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
 ["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
 ["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
-["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
 ["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
-["H0_jet","F","","H0_jet"]
-["MEM","F","","MEM"]
 ["twist_tag_tag_max_mass","F","","twist_tag_tag_max_mass"]
+["H0_jet","F","","H0_jet"]
+["avgDeltaR_jet_tag","F","","avgDeltaR_jet_tag"]
+["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
 EndVariables
 
 ##---------------------------------------------------
