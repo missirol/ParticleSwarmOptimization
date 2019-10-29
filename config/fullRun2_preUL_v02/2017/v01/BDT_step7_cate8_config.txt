@@ -96,13 +96,12 @@ SourceSignalTree=liteTreeTTH_step7_cate8
 ##variables the optimization starts with
 InitialVariables:
 ["MEM","F","","MEM"]
-["blr_transformed","F","","blr_transformed"]
+["blr_transformed","F","","TMath::Log(blr/(1-min(blr,0.9999)))"]
 ["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 ["HT_tags","F","","HT_tags"]
 ["mass_jet_tag_min_deltaR","F","","mass_jet_tag_min_deltaR"]
 ["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
 ["avgDeltaR_tag_tag","F","","avgDeltaR_tag_tag"]
-["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 ["minDeltaR_tag_tag","F","","minDeltaR_tag_tag"]
 ["H2_tag","F","","H2_tag"]
 ["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
