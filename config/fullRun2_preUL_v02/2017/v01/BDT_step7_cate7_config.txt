@@ -77,10 +77,10 @@ coord=["MaxDepth",2,3,1,"int"]
 UseFixedTrainTestSplitting=1
 UseFixedTrainTestSplitting_Train="(eventNumber%2) == 0"
 
-SourceBackgroundFile=PSO_input/background_TrainingPlusTesting.root
+SourceBackgroundFile=PSO_input/backgroundTrainingAndTesting.root
 SourceBackgroundTree=liteTreeTTH_step7_cate7
 
-SourceSignalFile=PSO_input/signal_TrainingPlusTesting.root
+SourceSignalFile=PSO_input/signalTrainingAndTesting.root
 SourceSignalTree=liteTreeTTH_step7_cate7
 ##--------------------------------------------------
 
