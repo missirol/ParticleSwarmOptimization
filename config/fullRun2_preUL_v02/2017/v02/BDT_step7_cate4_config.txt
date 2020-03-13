@@ -42,8 +42,8 @@ PreparationString=SplitMode=Random:NormMode=EqualNumEvents:!V
 #nTest_Background=
 ##Weight expression, might need to be declared in WeightVariables furhter down
 ## probably same syntax as in TTree::Draw
-SignalWeightExpression=weight
-BackgroundWeightExpression=weight
+SignalWeightExpression=weight2
+BackgroundWeightExpression=weight2
 
 ##--------------------------------------------------
 ## Method to train and test:
