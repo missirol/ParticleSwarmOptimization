@@ -36,7 +36,7 @@ class PSOManager:
       #print self.TenBestMVAs
       self.KSThreshold=0.1
 
-      RunSystem = 'NAFSL6'
+      RunSystem = 'NAFSL7'
 
       self.NIterations=1
       self.FOM="ROCIntegral"

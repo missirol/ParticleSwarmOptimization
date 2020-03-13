@@ -73,7 +73,7 @@ class QueHelper:
           "qsub -cwd -S /bin/bash -o INSERTPATHHERE/logs/\$JOB_NAME.o\$JOB_ID -e INSERTPATHHERE/logs/\$JOB_NAME.e\$JOB_ID -q 'medium' INSERTEXECSCRIPTHERE\n"
           ]
 
-    elif RunSystem == "NAFSL6":
+    elif RunSystem == "NAFSL7":
 
       self.ExecLines = [
 
@@ -116,7 +116,7 @@ class QueHelper:
         'should_transfer_files   = IF_NEEDED',
         'when_to_transfer_output = ON_EXIT',
 
-        'requirements = (OpSysAndVer == "SL6")',
+        'requirements = (OpSysAndVer == "CentOS7")',
         '#requirements = (OpSysAndVer == "SL6" || OpSysAndVer == "CentOS7")',
 
         ' RequestMemory  =  2000',
