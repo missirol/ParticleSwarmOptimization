@@ -1,7 +1,7 @@
 ##Parameters for the Particle Swarm Optimization
 
 ##RunOn = EKPSL5 | EKPSL5 | NAFSL5 | NAFSL6
-RunOn=NAFSL6
+RunOn=NAFSL7
 
 ## Swarm Parameters
 NParticles=40
@@ -95,6 +95,19 @@ SourceSignalTree=liteTreeTTH_step7_cate3
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
+["btagDiscriminatorAverage_untagged","F","","btagDiscriminatorAverage_untagged"]
+["N_btags_Loose","F","","N_btags_Loose"]
+["pT_jet_tag_min_deltaR","F","","pT_jet_tag_min_deltaR"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["R1_jet","F","","R1_jet"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["HT_tags","F","","HT_tags"]
+["H1_jet","F","","H1_jet"]
+["jet2_pt","F","","jet2_pt"]
+["jet3_pt","F","","jet3_pt"]
+["met_pt","F","","met_pt"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["mass_tag_tag_min_deltaR","F","","mass_tag_tag_min_deltaR"]
 EndVariables
 
 ##---------------------------------------------------

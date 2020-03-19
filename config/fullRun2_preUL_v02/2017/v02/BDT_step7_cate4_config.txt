@@ -1,7 +1,7 @@
 ##Parameters for the Particle Swarm Optimization
 
 ##RunOn = EKPSL5 | EKPSL5 | NAFSL5 | NAFSL6
-RunOn=NAFSL6
+RunOn=NAFSL7
 
 ## Swarm Parameters
 NParticles=40
@@ -95,6 +95,25 @@ SourceSignalTree=liteTreeTTH_step7_cate4
 ##IMPORTANT dont leave a blank line between the initial and the end variables line
 ##variables the optimization starts with
 InitialVariables:
+["btagDiscriminatorAverage_tagged","F","","btagDiscriminatorAverage_tagged"]
+["bjet3_btag","F","","bjet3_btag"]
+["maxDeltaEta_tag_tag","F","","maxDeltaEta_tag_tag"]
+["maxDeltaEta_jet_jet","F","","maxDeltaEta_jet_jet"]
+["N_btags_Tight","F","","N_btags_Tight"]
+["jet3_btag","F","","jet3_btag"]
+["jet3_pt","F","","jet3_pt"]
+["pT_jet_jet_min_deltaR","F","","pT_jet_jet_min_deltaR"]
+["pT_tag_tag_min_deltaR","F","","pT_tag_tag_min_deltaR"]
+["ptSum_jets_leptons","F","","ptSum_jets_leptons"]
+["multiplicity_higgsLikeDijet15","F","","multiplicity_higgsLikeDijet15"]
+["jet2_pt","F","","jet2_pt"]
+["R1_tag","F","","R1_tag"]
+["jet1_btag","F","","jet1_btag"]
+["mass_tag_tag_max_mass","F","","mass_tag_tag_max_mass"]
+["mass_jet_tag_tag_max_pT","F","","mass_jet_tag_tag_max_pT"]
+["mass_jet_jet_jet_max_pT","F","","mass_jet_jet_jet_max_pT"]
+["D_jet","F","","D_jet"]
+["mass_higgsLikeDijet","F","","mass_higgsLikeDijet"]
 EndVariables
 
 ##---------------------------------------------------
